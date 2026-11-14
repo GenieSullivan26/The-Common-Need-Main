@@ -2,9 +2,9 @@
 
 module Decidim
   module CommonNeed
-    # Handles Decidim Single Sign-On (Devise + Decidim::Verifications) for the
-    # Member, Volunteer, and Partner Non-Profit PWAs and redirects authenticated
-    # users to their role-specific PWA portal based on user type.
+    # Handles Decidim Single Sign-On and Account Registration (Devise + Decidim::Verifications),
+    # linking each Member, Volunteer, or Partner to their correct local Decidim instance
+    # based on their street address or ZIP code and directing them to their role PWA.
     class PwaSessionsController < ApplicationController
       layout false
 
@@ -17,6 +17,9 @@ module Decidim
           email: params[:email],
           password: params[:password],
           requested_user_type: params[:user_type],
+          name: params[:name],
+          address: params[:address],
+          mode: params[:mode].presence || "signin",
           user: current_user,
           organization: current_organization
         ).call

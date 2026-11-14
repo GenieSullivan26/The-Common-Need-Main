@@ -578,57 +578,69 @@
       <span id="pwa-status-auth-pill">PWA • 5G</span>
     </div>
 
+    <!-- ACTIVE INSTANCE LINK BANNER (Shown when authenticated into a PWA) -->
+    <div id="pwa-active-instance-bar" class="hidden" style="background:#0D061A; border-bottom:1.5px solid rgba(197,255,41,0.35); padding:6px 14px; font-family:ui-monospace, SFMono-Regular, monospace; font-size:10.5px; color:var(--lime-bright); display:flex; justify-content:space-between; align-items:center;">
+      <span id="pwa-active-instance-text">📍 Instance: East Oakland Local Node (#OAK-01)</span>
+      <span id="pwa-active-instance-host" style="color:var(--text-cream); opacity:0.8;">oakland-01.common-need.org</span>
+    </div>
+
     <!-- =========================================================
          0. SLEEK DECIDIM SIGN-ON & CREATE ACCOUNT GATE
          ========================================================= -->
-    <div id="decidim-sso-gate" class="hidden" style="display:flex; flex-direction:column; justify-content:center; flex:1; padding:28px 24px;">
-      <div style="text-align:center; margin-bottom:20px;">
+    <div id="decidim-sso-gate" class="hidden" style="display:flex; flex-direction:column; justify-content:center; flex:1; padding:24px 22px;">
+      <div style="text-align:center; margin-bottom:18px;">
         <span class="olive-badge" style="font-size:10px; letter-spacing:0.8px; padding:4px 10px;">THE COMMON NEED</span>
-        <h1 class="pantry-title" id="decidim-sso-heading" style="font-size:26px; margin:12px 0 6px;">Sign In</h1>
-        <p id="decidim-sso-subheading" style="font-size:13px; color:var(--text-cream); opacity:0.85;">
-          Sign in with Decidim to open your portal
+        <h1 class="pantry-title" id="decidim-sso-heading" style="font-size:25px; margin:10px 0 4px;">Sign In</h1>
+        <p id="decidim-sso-subheading" style="font-size:12.5px; color:var(--text-cream); opacity:0.85;">
+          Sign in with Decidim to open your local instance
         </p>
       </div>
 
-      <div class="dark-card" style="padding:22px 18px; border-radius:22px;">
+      <div class="dark-card" style="padding:20px 18px; border-radius:22px;">
         <div id="decidim-sso-role-label" style="font-size:11.5px; font-weight:600; color:var(--text-cream); margin-bottom:8px; text-align:center;">
           Sign in as
         </div>
 
-        <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:6px; background:#0D061A; padding:5px; border-radius:14px; margin-bottom:16px;">
-          <button type="button" id="sso-card-member" onclick="selectDecidimSsoType('member')" style="background:var(--lime-card); color:var(--text-white); border:1.5px solid var(--lime-bright); border-radius:10px; padding:9px 4px; font-size:12px; font-weight:700; cursor:pointer; transition:all 0.15s ease;">
+        <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:6px; background:#0D061A; padding:5px; border-radius:14px; margin-bottom:14px;">
+          <button type="button" id="sso-card-member" onclick="selectDecidimSsoType('member')" style="background:var(--lime-card); color:var(--text-white); border:1.5px solid var(--lime-bright); border-radius:10px; padding:8px 4px; font-size:12px; font-weight:700; cursor:pointer; transition:all 0.15s ease;">
             🛍️ Member
           </button>
-          <button type="button" id="sso-card-volunteer" onclick="selectDecidimSsoType('volunteer')" style="background:transparent; color:var(--text-cream); border:1.5px solid transparent; border-radius:10px; padding:9px 4px; font-size:12px; font-weight:700; cursor:pointer; transition:all 0.15s ease;">
+          <button type="button" id="sso-card-volunteer" onclick="selectDecidimSsoType('volunteer')" style="background:transparent; color:var(--text-cream); border:1.5px solid transparent; border-radius:10px; padding:8px 4px; font-size:12px; font-weight:700; cursor:pointer; transition:all 0.15s ease;">
             🚚 Volunteer
           </button>
-          <button type="button" id="sso-card-nonprofit" onclick="selectDecidimSsoType('nonprofit')" style="background:transparent; color:var(--text-cream); border:1.5px solid transparent; border-radius:10px; padding:9px 4px; font-size:12px; font-weight:700; cursor:pointer; transition:all 0.15s ease;">
+          <button type="button" id="sso-card-nonprofit" onclick="selectDecidimSsoType('nonprofit')" style="background:transparent; color:var(--text-cream); border:1.5px solid transparent; border-radius:10px; padding:8px 4px; font-size:12px; font-weight:700; cursor:pointer; transition:all 0.15s ease;">
             🏢 Partner
           </button>
         </div>
 
         <div id="decidim-sso-name-group" class="hidden">
-          <label id="decidim-sso-name-label" style="font-size:12px; font-weight:600; color:var(--text-cream); display:block; margin-bottom:5px;">Full Name</label>
-          <input type="text" id="decidim-sso-name" class="dark-input" placeholder="Your name" style="padding:11px 13px; font-size:13.5px; border-radius:12px; margin-bottom:13px;">
+          <label id="decidim-sso-name-label" style="font-size:12px; font-weight:600; color:var(--text-cream); display:block; margin-bottom:4px;">Full Name</label>
+          <input type="text" id="decidim-sso-name" class="dark-input" placeholder="Your name" style="padding:10px 12px; font-size:13px; border-radius:12px; margin-bottom:11px;">
         </div>
 
-        <label style="font-size:12px; font-weight:600; color:var(--text-cream); display:block; margin-bottom:5px;">Email</label>
-        <input type="email" id="decidim-sso-email" class="dark-input" value="rosa@oakland-node.org" placeholder="you@example.org" style="padding:11px 13px; font-size:13.5px; border-radius:12px; margin-bottom:13px;">
+        <label style="font-size:12px; font-weight:600; color:var(--text-cream); display:block; margin-bottom:4px;">Email</label>
+        <input type="email" id="decidim-sso-email" class="dark-input" value="rosa@oakland-node.org" placeholder="you@example.org" style="padding:10px 12px; font-size:13px; border-radius:12px; margin-bottom:11px;">
 
-        <label style="font-size:12px; font-weight:600; color:var(--text-cream); display:block; margin-bottom:5px;">Password</label>
-        <input type="password" id="decidim-sso-password" class="dark-input" value="solidarity-oak-01" placeholder="••••••••" style="padding:11px 13px; font-size:13.5px; border-radius:12px; margin-bottom:18px;">
+        <label style="font-size:12px; font-weight:600; color:var(--text-cream); display:block; margin-bottom:4px;">Address or ZIP Code</label>
+        <input type="text" id="decidim-sso-address" class="dark-input" value="1420 62nd Ave, Oakland, CA 94621" placeholder="Street address or ZIP code" oninput="updateDecidimInstancePreview(this.value)" style="padding:10px 12px; font-size:13px; border-radius:12px; margin-bottom:6px;">
+        <div id="decidim-sso-instance-pill" class="mono-sub" style="display:block; width:100%; margin-bottom:11px; font-size:10.5px; padding:5px 9px; border-radius:8px;">
+          📍 Linked Instance: East Oakland Local Node (#OAK-01)
+        </div>
 
-        <button id="decidim-sso-submit-btn" class="cta-lime-btn" style="width:100%; font-size:14.5px; padding:13px; border-radius:14px; margin-top:0;" onclick="submitDecidimSignOn()">
+        <label style="font-size:12px; font-weight:600; color:var(--text-cream); display:block; margin-bottom:4px;">Password</label>
+        <input type="password" id="decidim-sso-password" class="dark-input" value="solidarity-oak-01" placeholder="••••••••" style="padding:10px 12px; font-size:13px; border-radius:12px; margin-bottom:15px;">
+
+        <button id="decidim-sso-submit-btn" class="cta-lime-btn" style="width:100%; font-size:14px; padding:12px; border-radius:14px; margin-top:0;" onclick="submitDecidimSignOn()">
           Sign In →
         </button>
 
-        <div id="decidim-sso-switch-prompt" style="text-align:center; margin-top:14px; font-size:12.5px; color:var(--text-cream);">
+        <div id="decidim-sso-switch-prompt" style="text-align:center; margin-top:13px; font-size:12.5px; color:var(--text-cream);">
           Don't have an account?
           <button type="button" onclick="toggleDecidimAuthMode('register')" style="background:none; border:none; color:var(--lime-bright); font-weight:700; font-size:12.5px; cursor:pointer; text-decoration:underline; padding:0; margin-left:3px;">Create an account</button>
         </div>
       </div>
 
-      <div style="text-align:center; margin-top:16px; font-size:11.5px; color:var(--text-cream); opacity:0.7;">
+      <div style="text-align:center; margin-top:14px; font-size:11.5px; color:var(--text-cream); opacity:0.7;">
         🔒 Secured by Decidim Single Sign-On
       </div>
     </div>
@@ -2711,34 +2723,115 @@
     let selectedDecidimSsoType = 'member';
     let decidimAuthMode = 'signin';
 
+    const DECIDIM_FEDERATED_INSTANCES = [
+      {
+        code: '#BRK-02',
+        name: 'Berkeley Cooperative Node',
+        host: 'berkeley-02.common-need.org',
+        zips: ['94701', '94702', '94703', '94704', '94705', '94706', '94707', '94708', '94709', '94710', '94720'],
+        keywords: /berkeley|shattuck|telegraph|albany|university ave/i
+      },
+      {
+        code: '#RCH-03',
+        name: 'Richmond / West County Node',
+        host: 'richmond-03.common-need.org',
+        zips: ['94801', '94803', '94804', '94805', '94806', '94530'],
+        keywords: /richmond|san pablo|el cerrito|pinole|west county|macdonald/i
+      },
+      {
+        code: '#SLN-04',
+        name: 'South County Solidarity Node',
+        host: 'southcounty-04.common-need.org',
+        zips: ['94577', '94578', '94579', '94580', '94541', '94544', '94545'],
+        keywords: /san leandro|hayward|san lorenzo|castro valley|ashland|cherryland/i
+      },
+      {
+        code: '#WOK-05',
+        name: 'West Oakland Commons Node',
+        host: 'westoakland-05.common-need.org',
+        zips: ['94607', '94608', '94609', '94611', '94612', '94618'],
+        keywords: /west oakland|emeryville|temescal|mandela|adeline|7th st/i
+      },
+      {
+        code: '#OAK-01',
+        name: 'East Oakland Local Node',
+        host: 'oakland-01.common-need.org',
+        zips: ['94601', '94602', '94603', '94605', '94606', '94619', '94621'],
+        keywords: /east oakland|fruitvale|san antonio|macarthur|62nd|international|oakland/i
+      }
+    ];
+
     const DECIDIM_SSO_PROFILES = {
       member: {
         userType: 'member',
         name: 'Rosa Morales',
         shortLabel: 'Rosa M. (Member)',
         email: 'rosa@oakland-node.org',
-        handlerBanner: '✓ Active Handler: Decidim::User (Unconditional Solidarity • Zero Means-Testing) → Target: MemberPortal',
-        portalLabel: 'Member PWA (Decidim::CommonNeed::MemberPortal)'
+        address: '1420 62nd Ave, Oakland, CA 94621',
+        portalLabel: 'Member PWA'
       },
       volunteer: {
         userType: 'volunteer',
         name: 'Marcus Vance',
         shortLabel: 'Marcus V. (Courier)',
         email: 'marcus@oakland-node.org',
-        handlerBanner: '✓ Active Handler: Decidim::Verifications::VolunteerCourierHandler (Batch #OAK-409) → Target: VolunteerPortal',
-        portalLabel: 'Volunteer Courier PWA (Decidim::Courier::VolunteerPortal)'
+        address: '3115 San Pablo Ave, Oakland, CA 94608',
+        portalLabel: 'Volunteer PWA'
       },
       nonprofit: {
         userType: 'nonprofit',
         name: 'Elena Rostova',
         shortLabel: 'Elena R. (501c3)',
         email: 'elena@eastoaklandpantry.org',
-        handlerBanner: '✓ Active Handler: Decidim::Verifications::NonProfitHandler (501c3 EIN #94-3108422) → Target: PartnerPortal',
-        portalLabel: 'Partner Non-Profit PWA (Decidim::Services::PartnerPortal)'
+        address: '7800 MacArthur Blvd, Oakland, CA 94605',
+        portalLabel: 'Partner PWA'
       }
     };
 
-    function selectDecidimSsoType(userType, preserveEmail) {
+    function resolveDecidimInstanceFromAddress(rawAddress) {
+      const addr = (rawAddress || '').trim();
+      if (addr) {
+        const zipMatch = addr.match(/\b(\d{5})\b/);
+        if (zipMatch) {
+          const zip = zipMatch[1];
+          const byZip = DECIDIM_FEDERATED_INSTANCES.find(inst => inst.zips.includes(zip));
+          if (byZip) return byZip;
+        }
+        const byKeyword = DECIDIM_FEDERATED_INSTANCES.find(inst => inst.keywords.test(addr));
+        if (byKeyword) return byKeyword;
+
+        if (zipMatch) {
+          const zip = zipMatch[1];
+          return {
+            code: `#LOC-${zip.slice(0, 3)}`,
+            name: `Neighborhood Local Node (${zip})`,
+            host: `node-${zip}.common-need.org`
+          };
+        }
+        const cleanCity = addr.split(',')[0].trim().slice(0, 22);
+        const prefix = cleanCity.replace(/[^a-zA-Z]/g, '').slice(0, 3).toUpperCase() || 'LOC';
+        return {
+          code: `#${prefix}-01`,
+          name: `${cleanCity} Local Node`,
+          host: `${cleanCity.toLowerCase().replace(/[^a-z0-9]+/g, '-')}.common-need.org`
+        };
+      }
+      return DECIDIM_FEDERATED_INSTANCES[DECIDIM_FEDERATED_INSTANCES.length - 1];
+    }
+
+    function updateDecidimInstancePreview(rawAddress) {
+      const pillEl = document.getElementById('decidim-sso-instance-pill');
+      if (!pillEl) return;
+      const trimmed = (rawAddress || '').trim();
+      if (!trimmed) {
+        pillEl.textContent = '📍 Enter your address or ZIP to link your local Decidim instance';
+        return;
+      }
+      const inst = resolveDecidimInstanceFromAddress(trimmed);
+      pillEl.textContent = `📍 Linked Instance: ${inst.name} (${inst.code})`;
+    }
+
+    function selectDecidimSsoType(userType, preserveInputs) {
       if (!DECIDIM_SSO_PROFILES[userType]) userType = 'member';
       selectedDecidimSsoType = userType;
       ['member', 'volunteer', 'nonprofit'].forEach(type => {
@@ -2763,8 +2856,13 @@
       }
       const profile = DECIDIM_SSO_PROFILES[userType];
       const emailEl = document.getElementById('decidim-sso-email');
-      if (emailEl && !preserveEmail && decidimAuthMode === 'signin') {
-        emailEl.value = profile.email;
+      const addrEl = document.getElementById('decidim-sso-address');
+      if (!preserveInputs && decidimAuthMode === 'signin') {
+        if (emailEl) emailEl.value = profile.email;
+        if (addrEl) {
+          addrEl.value = profile.address;
+          updateDecidimInstancePreview(profile.address);
+        }
       }
     }
 
@@ -2779,16 +2877,21 @@
       const submitBtnEl = document.getElementById('decidim-sso-submit-btn');
       const switchPromptEl = document.getElementById('decidim-sso-switch-prompt');
       const emailEl = document.getElementById('decidim-sso-email');
+      const addrEl = document.getElementById('decidim-sso-address');
       const passEl = document.getElementById('decidim-sso-password');
 
       if (headingEl) headingEl.textContent = isRegister ? 'Create Account' : 'Sign In';
-      if (subheadingEl) subheadingEl.textContent = isRegister ? 'Create a Decidim account to open your portal' : 'Sign in with Decidim to open your portal';
+      if (subheadingEl) subheadingEl.textContent = isRegister ? 'Create a Decidim account linked to your local instance' : 'Sign in with Decidim to open your local instance';
       if (roleLabelEl) roleLabelEl.textContent = isRegister ? 'Create account as' : 'Sign in as';
       if (nameGroupEl) nameGroupEl.classList.toggle('hidden', !isRegister);
       if (submitBtnEl) submitBtnEl.textContent = isRegister ? 'Create Account →' : 'Sign In →';
 
       if (isRegister) {
         if (emailEl) emailEl.value = '';
+        if (addrEl) {
+          addrEl.value = '';
+          updateDecidimInstancePreview('');
+        }
         if (passEl) passEl.value = '';
         if (switchPromptEl) {
           switchPromptEl.innerHTML = `
@@ -2799,6 +2902,10 @@
       } else {
         const profile = DECIDIM_SSO_PROFILES[selectedDecidimSsoType] || DECIDIM_SSO_PROFILES.member;
         if (emailEl && !emailEl.value) emailEl.value = profile.email;
+        if (addrEl && !addrEl.value) {
+          addrEl.value = profile.address;
+          updateDecidimInstancePreview(profile.address);
+        }
         if (passEl && !passEl.value) passEl.value = 'solidarity-oak-01';
         if (switchPromptEl) {
           switchPromptEl.innerHTML = `
@@ -2839,13 +2946,27 @@
 
     function renderStatusBarAuthPill(session) {
       const pillEl = document.getElementById('pwa-status-auth-pill');
-      if (!pillEl) return;
+      const instBarEl = document.getElementById('pwa-active-instance-bar');
+      const instTextEl = document.getElementById('pwa-active-instance-text');
+      const instHostEl = document.getElementById('pwa-active-instance-host');
+
       if (session && session.authenticated && DECIDIM_SSO_PROFILES[session.userType]) {
-        pillEl.innerHTML = `
-          <button onclick="signOutDecidim()" style="background:rgba(197,255,41,0.14); color:var(--lime-bright); border:1px solid var(--lime-bright); border-radius:8px; padding:2px 8px; font-size:10px; font-weight:700; cursor:pointer; font-family:inherit;">Sign Out</button>
-        `;
+        if (pillEl) {
+          pillEl.innerHTML = `
+            <span style="display:inline-flex; align-items:center; gap:5px;">
+              <span style="font-size:10px; color:var(--lime-bright);">${session.instanceCode || '#OAK-01'}</span>
+              <button onclick="signOutDecidim()" style="background:rgba(197,255,41,0.14); color:var(--lime-bright); border:1px solid var(--lime-bright); border-radius:8px; padding:2px 8px; font-size:10px; font-weight:700; cursor:pointer; font-family:inherit;">Sign Out</button>
+            </span>
+          `;
+        }
+        if (instBarEl) {
+          instBarEl.classList.remove('hidden');
+          if (instTextEl) instTextEl.textContent = `📍 ${session.instanceName || 'East Oakland Local Node'} (${session.instanceCode || '#OAK-01'})`;
+          if (instHostEl) instHostEl.textContent = session.instanceHost || 'oakland-01.common-need.org';
+        }
       } else {
-        pillEl.textContent = 'PWA • 5G';
+        if (pillEl) pillEl.textContent = 'PWA • 5G';
+        if (instBarEl) instBarEl.classList.add('hidden');
       }
     }
 
@@ -2862,21 +2983,26 @@
       renderStatusBarAuthPill(null);
     }
 
-    function completeDecidimSignOn(resolvedType, customEmail, customName, isNewAccount) {
+    function completeDecidimSignOn(resolvedType, customEmail, customName, customAddress, isNewAccount) {
       const profile = DECIDIM_SSO_PROFILES[resolvedType] || DECIDIM_SSO_PROFILES.member;
+      const finalAddress = customAddress || profile.address;
+      const inst = resolveDecidimInstanceFromAddress(finalAddress);
       const session = {
         authenticated: true,
         userType: profile.userType,
         name: customName || profile.name,
         email: customEmail || profile.email,
-        node: '#OAK-01',
+        address: finalAddress,
+        instanceCode: inst.code,
+        instanceName: inst.name,
+        instanceHost: inst.host,
         signedInAt: new Date().toISOString()
       };
       try {
         sessionStorage.setItem('common_need_decidim_sso', JSON.stringify(session));
       } catch (e) {}
 
-      // If in standalone PWA mode, update URL query param to match the authenticated user type's PWA
+      // If in standalone PWA mode, update URL query param to match the authenticated user type's PWA and linked instance
       if (window.__LOCKED_PWA_ROLE__) {
         window.__LOCKED_PWA_ROLE__ = profile.userType;
         const switcher = document.getElementById('top-role-switcher');
@@ -2884,22 +3010,25 @@
         try {
           const nextUrl = new URL(window.location.href);
           nextUrl.searchParams.set('role', profile.userType);
+          nextUrl.searchParams.set('instance', inst.code.replace('#', ''));
           window.history.replaceState({}, '', nextUrl.toString());
         } catch (e) {}
       }
 
       switchRole(profile.userType);
       renderStatusBarAuthPill(session);
-      const actionVerb = isNewAccount ? 'Decidim Account Created' : 'Decidim SSO Verified';
-      showToast(`✓ ${actionVerb} (${session.email}) — Directed to ${profile.portalLabel}`);
+      const actionVerb = isNewAccount ? 'Account Created & Linked' : 'Signed In & Linked';
+      showToast(`✓ ${actionVerb} to ${inst.name} (${inst.code}) — Opened ${profile.portalLabel}`);
     }
 
     function submitDecidimSignOn() {
       const nameEl = document.getElementById('decidim-sso-name');
       const emailEl = document.getElementById('decidim-sso-email');
+      const addrEl = document.getElementById('decidim-sso-address');
       const passEl = document.getElementById('decidim-sso-password');
       const name = nameEl ? nameEl.value.trim() : '';
       const email = emailEl ? emailEl.value.trim() : '';
+      const address = addrEl ? addrEl.value.trim() : '';
       const password = passEl ? passEl.value : '';
       const isRegister = (decidimAuthMode === 'register');
 
@@ -2911,6 +3040,10 @@
         showToast('⚠️ Please enter your email address.');
         return;
       }
+      if (!address) {
+        showToast('⚠️ Please enter your street address or ZIP code to link your local instance.');
+        return;
+      }
       if (!password || password.length < 4) {
         showToast('⚠️ Please enter a password (at least 4 characters).');
         return;
@@ -2918,7 +3051,7 @@
       const resolvedType = isRegister
         ? selectedDecidimSsoType
         : resolveDecidimUserTypeFromEmail(email, selectedDecidimSsoType);
-      completeDecidimSignOn(resolvedType, email, name, isRegister);
+      completeDecidimSignOn(resolvedType, email, name, address, isRegister);
     }
 
     function quickDecidimDemoSignIn(userType) {

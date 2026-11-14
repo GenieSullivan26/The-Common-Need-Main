@@ -19,42 +19,58 @@ RSpec.describe "The Common Need 5-Role PWA Suite System Specs", type: :system do
   describe "Decidim Sign-On Security Authentication & Role-Based PWA Dispatcher" do
     before { visit "/?role=member" }
 
-    it "renders the sleek Decidim Sign-On & Create Account gate (#decidim-sso-gate) for Member, Volunteer, and Partner user types" do
+    it "renders the sleek Decidim Sign-On & Create Account gate (#decidim-sso-gate) with address-to-instance linking" do
       expect(page).to have_css("#decidim-sso-gate")
       expect(page).to have_content("Sign In")
-      expect(page).to have_content("Sign in with Decidim to open your portal")
+      expect(page).to have_content("Sign in with Decidim to open your local instance")
+      expect(page).to have_content("Address or ZIP Code")
+      expect(page).to have_content("Linked Instance: East Oakland Local Node (#OAK-01)")
       expect(page).to have_content("Don't have an account?")
       expect(page).to have_content("Create an account")
       expect(page).to have_content("Secured by Decidim Single Sign-On")
     end
 
-    it "authenticates Member, Volunteer, and Partner Decidim accounts and directs each to the matching PWA based on user type" do
+    it "authenticates or creates Member, Volunteer, and Partner Decidim accounts, links them to their correct instance based on address, and directs each to the matching PWA" do
       member_auth = Decidim::CommonNeed::DecidimSignOnService.new(
         email: "rosa@oakland-node.org",
-        password: "solidarity-oak-01"
+        password: "solidarity-oak-01",
+        address: "1420 62nd Ave, Oakland, CA 94621"
       ).call
       expect(member_auth[:authenticated]).to eq(true)
       expect(member_auth[:user_type]).to eq("member")
+      expect(member_auth[:organization_node]).to eq("#OAK-01")
+      expect(member_auth[:instance_name]).to eq("East Oakland Local Node")
       expect(member_auth[:target_portal]).to eq("Decidim::CommonNeed::MemberPortal")
-      expect(member_auth[:redirect_path]).to eq("/?role=member")
 
       volunteer_auth = Decidim::CommonNeed::DecidimSignOnService.new(
-        email: "marcus@oakland-node.org",
-        password: "solidarity-oak-01"
+        email: "marcus@berkeley-node.org",
+        password: "solidarity-oak-01",
+        requested_user_type: "volunteer",
+        name: "Marcus Vance",
+        address: "2100 Shattuck Ave, Berkeley, CA 94704",
+        mode: "register"
       ).call
       expect(volunteer_auth[:authenticated]).to eq(true)
+      expect(volunteer_auth[:created_account]).to eq(true)
       expect(volunteer_auth[:user_type]).to eq("volunteer")
+      expect(volunteer_auth[:organization_node]).to eq("#BRK-02")
+      expect(volunteer_auth[:instance_name]).to eq("Berkeley Cooperative Node")
       expect(volunteer_auth[:target_portal]).to eq("Decidim::Courier::VolunteerPortal")
-      expect(volunteer_auth[:redirect_path]).to eq("/?role=volunteer")
 
       partner_auth = Decidim::CommonNeed::DecidimSignOnService.new(
-        email: "elena@eastoaklandpantry.org",
-        password: "solidarity-oak-01"
+        email: "elena@richmondpantry.org",
+        password: "solidarity-oak-01",
+        requested_user_type: "nonprofit",
+        name: "Richmond Mutual Aid Sanctuary",
+        address: "3200 Macdonald Ave, Richmond, CA 94804",
+        mode: "register"
       ).call
       expect(partner_auth[:authenticated]).to eq(true)
+      expect(partner_auth[:created_account]).to eq(true)
       expect(partner_auth[:user_type]).to eq("nonprofit")
+      expect(partner_auth[:organization_node]).to eq("#RCH-03")
+      expect(partner_auth[:instance_name]).to eq("Richmond / West County Node")
       expect(partner_auth[:target_portal]).to eq("Decidim::Services::PartnerPortal")
-      expect(partner_auth[:redirect_path]).to eq("/?role=nonprofit")
     end
   end
 
