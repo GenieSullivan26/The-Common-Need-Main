@@ -579,23 +579,23 @@
     </div>
 
     <!-- =========================================================
-         0. SLEEK DECIDIM SIGN-ON GATE
+         0. SLEEK DECIDIM SIGN-ON & CREATE ACCOUNT GATE
          ========================================================= -->
-    <div id="decidim-sso-gate" class="hidden" style="display:flex; flex-direction:column; justify-content:center; flex:1; padding:32px 24px;">
-      <div style="text-align:center; margin-bottom:24px;">
+    <div id="decidim-sso-gate" class="hidden" style="display:flex; flex-direction:column; justify-content:center; flex:1; padding:28px 24px;">
+      <div style="text-align:center; margin-bottom:20px;">
         <span class="olive-badge" style="font-size:10px; letter-spacing:0.8px; padding:4px 10px;">THE COMMON NEED</span>
-        <h1 class="pantry-title" style="font-size:26px; margin:12px 0 6px;">Sign In</h1>
-        <p style="font-size:13px; color:var(--text-cream); opacity:0.85;">
+        <h1 class="pantry-title" id="decidim-sso-heading" style="font-size:26px; margin:12px 0 6px;">Sign In</h1>
+        <p id="decidim-sso-subheading" style="font-size:13px; color:var(--text-cream); opacity:0.85;">
           Sign in with Decidim to open your portal
         </p>
       </div>
 
       <div class="dark-card" style="padding:22px 18px; border-radius:22px;">
-        <div style="font-size:11.5px; font-weight:600; color:var(--text-cream); margin-bottom:8px; text-align:center;">
+        <div id="decidim-sso-role-label" style="font-size:11.5px; font-weight:600; color:var(--text-cream); margin-bottom:8px; text-align:center;">
           Sign in as
         </div>
 
-        <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:6px; background:#0D061A; padding:5px; border-radius:14px; margin-bottom:18px;">
+        <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:6px; background:#0D061A; padding:5px; border-radius:14px; margin-bottom:16px;">
           <button type="button" id="sso-card-member" onclick="selectDecidimSsoType('member')" style="background:var(--lime-card); color:var(--text-white); border:1.5px solid var(--lime-bright); border-radius:10px; padding:9px 4px; font-size:12px; font-weight:700; cursor:pointer; transition:all 0.15s ease;">
             🛍️ Member
           </button>
@@ -607,18 +607,28 @@
           </button>
         </div>
 
+        <div id="decidim-sso-name-group" class="hidden">
+          <label id="decidim-sso-name-label" style="font-size:12px; font-weight:600; color:var(--text-cream); display:block; margin-bottom:5px;">Full Name</label>
+          <input type="text" id="decidim-sso-name" class="dark-input" placeholder="Your name" style="padding:11px 13px; font-size:13.5px; border-radius:12px; margin-bottom:13px;">
+        </div>
+
         <label style="font-size:12px; font-weight:600; color:var(--text-cream); display:block; margin-bottom:5px;">Email</label>
-        <input type="email" id="decidim-sso-email" class="dark-input" value="rosa@oakland-node.org" placeholder="you@example.org" style="padding:11px 13px; font-size:13.5px; border-radius:12px; margin-bottom:14px;">
+        <input type="email" id="decidim-sso-email" class="dark-input" value="rosa@oakland-node.org" placeholder="you@example.org" style="padding:11px 13px; font-size:13.5px; border-radius:12px; margin-bottom:13px;">
 
         <label style="font-size:12px; font-weight:600; color:var(--text-cream); display:block; margin-bottom:5px;">Password</label>
         <input type="password" id="decidim-sso-password" class="dark-input" value="solidarity-oak-01" placeholder="••••••••" style="padding:11px 13px; font-size:13.5px; border-radius:12px; margin-bottom:18px;">
 
-        <button class="cta-lime-btn" style="width:100%; font-size:14.5px; padding:13px; border-radius:14px; margin-top:0;" onclick="submitDecidimSignOn()">
+        <button id="decidim-sso-submit-btn" class="cta-lime-btn" style="width:100%; font-size:14.5px; padding:13px; border-radius:14px; margin-top:0;" onclick="submitDecidimSignOn()">
           Sign In →
         </button>
+
+        <div id="decidim-sso-switch-prompt" style="text-align:center; margin-top:14px; font-size:12.5px; color:var(--text-cream);">
+          Don't have an account?
+          <button type="button" onclick="toggleDecidimAuthMode('register')" style="background:none; border:none; color:var(--lime-bright); font-weight:700; font-size:12.5px; cursor:pointer; text-decoration:underline; padding:0; margin-left:3px;">Create an account</button>
+        </div>
       </div>
 
-      <div style="text-align:center; margin-top:18px; font-size:11.5px; color:var(--text-cream); opacity:0.7;">
+      <div style="text-align:center; margin-top:16px; font-size:11.5px; color:var(--text-cream); opacity:0.7;">
         🔒 Secured by Decidim Single Sign-On
       </div>
     </div>
@@ -2699,6 +2709,7 @@
     }
 
     let selectedDecidimSsoType = 'member';
+    let decidimAuthMode = 'signin';
 
     const DECIDIM_SSO_PROFILES = {
       member: {
@@ -2739,11 +2750,64 @@
           card.style.border = isSelected ? '1.5px solid var(--lime-bright)' : '1.5px solid transparent';
         }
       });
+      const nameLabelEl = document.getElementById('decidim-sso-name-label');
+      const nameInputEl = document.getElementById('decidim-sso-name');
+      if (nameLabelEl && nameInputEl) {
+        if (userType === 'nonprofit') {
+          nameLabelEl.textContent = 'Organization Name';
+          nameInputEl.placeholder = 'Non-profit or hub name';
+        } else {
+          nameLabelEl.textContent = 'Full Name';
+          nameInputEl.placeholder = 'Your name';
+        }
+      }
       const profile = DECIDIM_SSO_PROFILES[userType];
       const emailEl = document.getElementById('decidim-sso-email');
-      if (emailEl && !preserveEmail) {
+      if (emailEl && !preserveEmail && decidimAuthMode === 'signin') {
         emailEl.value = profile.email;
       }
+    }
+
+    function toggleDecidimAuthMode(mode) {
+      decidimAuthMode = (mode === 'register') ? 'register' : 'signin';
+      const isRegister = (decidimAuthMode === 'register');
+
+      const headingEl = document.getElementById('decidim-sso-heading');
+      const subheadingEl = document.getElementById('decidim-sso-subheading');
+      const roleLabelEl = document.getElementById('decidim-sso-role-label');
+      const nameGroupEl = document.getElementById('decidim-sso-name-group');
+      const submitBtnEl = document.getElementById('decidim-sso-submit-btn');
+      const switchPromptEl = document.getElementById('decidim-sso-switch-prompt');
+      const emailEl = document.getElementById('decidim-sso-email');
+      const passEl = document.getElementById('decidim-sso-password');
+
+      if (headingEl) headingEl.textContent = isRegister ? 'Create Account' : 'Sign In';
+      if (subheadingEl) subheadingEl.textContent = isRegister ? 'Create a Decidim account to open your portal' : 'Sign in with Decidim to open your portal';
+      if (roleLabelEl) roleLabelEl.textContent = isRegister ? 'Create account as' : 'Sign in as';
+      if (nameGroupEl) nameGroupEl.classList.toggle('hidden', !isRegister);
+      if (submitBtnEl) submitBtnEl.textContent = isRegister ? 'Create Account →' : 'Sign In →';
+
+      if (isRegister) {
+        if (emailEl) emailEl.value = '';
+        if (passEl) passEl.value = '';
+        if (switchPromptEl) {
+          switchPromptEl.innerHTML = `
+            Already have an account?
+            <button type="button" onclick="toggleDecidimAuthMode('signin')" style="background:none; border:none; color:var(--lime-bright); font-weight:700; font-size:12.5px; cursor:pointer; text-decoration:underline; padding:0; margin-left:3px;">Sign in</button>
+          `;
+        }
+      } else {
+        const profile = DECIDIM_SSO_PROFILES[selectedDecidimSsoType] || DECIDIM_SSO_PROFILES.member;
+        if (emailEl && !emailEl.value) emailEl.value = profile.email;
+        if (passEl && !passEl.value) passEl.value = 'solidarity-oak-01';
+        if (switchPromptEl) {
+          switchPromptEl.innerHTML = `
+            Don't have an account?
+            <button type="button" onclick="toggleDecidimAuthMode('register')" style="background:none; border:none; color:var(--lime-bright); font-weight:700; font-size:12.5px; cursor:pointer; text-decoration:underline; padding:0; margin-left:3px;">Create an account</button>
+          `;
+        }
+      }
+      selectDecidimSsoType(selectedDecidimSsoType, isRegister);
     }
 
     function resolveDecidimUserTypeFromEmail(email, fallbackType) {
@@ -2787,6 +2851,7 @@
 
     function openDecidimSignOn(defaultType) {
       const targetType = DECIDIM_SSO_PROFILES[defaultType] ? defaultType : (DECIDIM_SSO_PROFILES[window.__LOCKED_PWA_ROLE__] ? window.__LOCKED_PWA_ROLE__ : selectedDecidimSsoType);
+      toggleDecidimAuthMode('signin');
       selectDecidimSsoType(targetType);
       ['member', 'volunteer', 'nonprofit', 'localnode', 'network'].forEach(r => {
         const viewEl = document.getElementById('role-view-' + r);
@@ -2797,12 +2862,12 @@
       renderStatusBarAuthPill(null);
     }
 
-    function completeDecidimSignOn(resolvedType, customEmail) {
+    function completeDecidimSignOn(resolvedType, customEmail, customName, isNewAccount) {
       const profile = DECIDIM_SSO_PROFILES[resolvedType] || DECIDIM_SSO_PROFILES.member;
       const session = {
         authenticated: true,
         userType: profile.userType,
-        name: profile.name,
+        name: customName || profile.name,
         email: customEmail || profile.email,
         node: '#OAK-01',
         signedInAt: new Date().toISOString()
@@ -2825,24 +2890,35 @@
 
       switchRole(profile.userType);
       renderStatusBarAuthPill(session);
-      showToast(`✓ Decidim SSO Verified (${session.email}) — Directed to ${profile.portalLabel}`);
+      const actionVerb = isNewAccount ? 'Decidim Account Created' : 'Decidim SSO Verified';
+      showToast(`✓ ${actionVerb} (${session.email}) — Directed to ${profile.portalLabel}`);
     }
 
     function submitDecidimSignOn() {
+      const nameEl = document.getElementById('decidim-sso-name');
       const emailEl = document.getElementById('decidim-sso-email');
       const passEl = document.getElementById('decidim-sso-password');
+      const name = nameEl ? nameEl.value.trim() : '';
       const email = emailEl ? emailEl.value.trim() : '';
       const password = passEl ? passEl.value : '';
+      const isRegister = (decidimAuthMode === 'register');
+
+      if (isRegister && !name) {
+        showToast('⚠️ Please enter your name to create an account.');
+        return;
+      }
       if (!email) {
-        showToast('⚠️ Please enter your Decidim email or community handle.');
+        showToast('⚠️ Please enter your email address.');
         return;
       }
       if (!password || password.length < 4) {
-        showToast('⚠️ Please enter your Local Node password or passkey.');
+        showToast('⚠️ Please enter a password (at least 4 characters).');
         return;
       }
-      const resolvedType = resolveDecidimUserTypeFromEmail(email, selectedDecidimSsoType);
-      completeDecidimSignOn(resolvedType, email);
+      const resolvedType = isRegister
+        ? selectedDecidimSsoType
+        : resolveDecidimUserTypeFromEmail(email, selectedDecidimSsoType);
+      completeDecidimSignOn(resolvedType, email, name, isRegister);
     }
 
     function quickDecidimDemoSignIn(userType) {

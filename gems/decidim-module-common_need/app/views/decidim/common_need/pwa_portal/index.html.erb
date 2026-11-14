@@ -526,23 +526,23 @@
     </div>
 
     <!-- =========================================================
-         0. SLEEK DECIDIM SIGN-ON GATE
+         0. SLEEK DECIDIM SIGN-ON & CREATE ACCOUNT GATE
          ========================================================= -->
-    <div id="decidim-sso-gate" class="hidden" style="display:flex; flex-direction:column; justify-content:center; flex:1; padding:32px 24px;">
-      <div style="text-align:center; margin-bottom:24px;">
+    <div id="decidim-sso-gate" class="hidden" style="display:flex; flex-direction:column; justify-content:center; flex:1; padding:28px 24px;">
+      <div style="text-align:center; margin-bottom:20px;">
         <span class="olive-badge" style="font-size:10px; letter-spacing:0.8px; padding:4px 10px;">THE COMMON NEED</span>
-        <h1 class="pantry-title" style="font-size:26px; margin:12px 0 6px;">Sign In</h1>
-        <p style="font-size:13px; color:var(--text-cream); opacity:0.85;">
+        <h1 class="pantry-title" id="decidim-sso-heading" style="font-size:26px; margin:12px 0 6px;">Sign In</h1>
+        <p id="decidim-sso-subheading" style="font-size:13px; color:var(--text-cream); opacity:0.85;">
           Sign in with Decidim to open your portal
         </p>
       </div>
 
       <div class="dark-card" style="padding:22px 18px; border-radius:22px;">
-        <div style="font-size:11.5px; font-weight:600; color:var(--text-cream); margin-bottom:8px; text-align:center;">
+        <div id="decidim-sso-role-label" style="font-size:11.5px; font-weight:600; color:var(--text-cream); margin-bottom:8px; text-align:center;">
           Sign in as
         </div>
 
-        <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:6px; background:#0D061A; padding:5px; border-radius:14px; margin-bottom:18px;">
+        <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:6px; background:#0D061A; padding:5px; border-radius:14px; margin-bottom:16px;">
           <button type="button" id="sso-card-member" onclick="selectDecidimSsoType('member')" style="background:var(--lime-card); color:var(--text-white); border:1.5px solid var(--lime-bright); border-radius:10px; padding:9px 4px; font-size:12px; font-weight:700; cursor:pointer;">
             🛍️ Member
           </button>
@@ -554,18 +554,28 @@
           </button>
         </div>
 
+        <div id="decidim-sso-name-group" class="hidden">
+          <label id="decidim-sso-name-label" style="font-size:12px; font-weight:600; color:var(--text-cream); display:block; margin-bottom:5px;">Full Name</label>
+          <input type="text" id="decidim-sso-name" class="dark-input" placeholder="Your name" style="padding:11px 13px; font-size:13.5px; border-radius:12px; margin-bottom:13px;">
+        </div>
+
         <label style="font-size:12px; font-weight:600; color:var(--text-cream); display:block; margin-bottom:5px;">Email</label>
-        <input type="email" id="decidim-sso-email" class="dark-input" value="rosa@oakland-node.org" placeholder="you@example.org" style="padding:11px 13px; font-size:13.5px; border-radius:12px; margin-bottom:14px;">
+        <input type="email" id="decidim-sso-email" class="dark-input" value="rosa@oakland-node.org" placeholder="you@example.org" style="padding:11px 13px; font-size:13.5px; border-radius:12px; margin-bottom:13px;">
 
         <label style="font-size:12px; font-weight:600; color:var(--text-cream); display:block; margin-bottom:5px;">Password</label>
         <input type="password" id="decidim-sso-password" class="dark-input" value="solidarity-oak-01" placeholder="••••••••" style="padding:11px 13px; font-size:13.5px; border-radius:12px; margin-bottom:18px;">
 
-        <button class="cta-lime-btn" style="width:100%; font-size:14.5px; padding:13px; border-radius:14px; margin-top:0;" onclick="submitDecidimSignOn()">
+        <button id="decidim-sso-submit-btn" class="cta-lime-btn" style="width:100%; font-size:14.5px; padding:13px; border-radius:14px; margin-top:0;" onclick="submitDecidimSignOn()">
           Sign In →
         </button>
+
+        <div id="decidim-sso-switch-prompt" style="text-align:center; margin-top:14px; font-size:12.5px; color:var(--text-cream);">
+          Don't have an account?
+          <button type="button" onclick="toggleDecidimAuthMode('register')" style="background:none; border:none; color:var(--lime-bright); font-weight:700; font-size:12.5px; cursor:pointer; text-decoration:underline; padding:0; margin-left:3px;">Create an account</button>
+        </div>
       </div>
 
-      <div style="text-align:center; margin-top:18px; font-size:11.5px; color:var(--text-cream); opacity:0.7;">
+      <div style="text-align:center; margin-top:16px; font-size:11.5px; color:var(--text-cream); opacity:0.7;">
         🔒 Secured by Decidim Single Sign-On
       </div>
     </div>

@@ -46,16 +46,19 @@ module Decidim
         }
       }.freeze
 
-      def initialize(email:, password: nil, requested_user_type: nil, user: nil, organization: nil)
+      def initialize(email:, password: nil, requested_user_type: nil, name: nil, mode: "signin", user: nil, organization: nil)
         @email = email.to_s.strip.downcase
         @password = password.to_s
         @requested_user_type = normalize_user_type(requested_user_type)
+        @name = name.to_s.strip.presence
+        @mode = mode.to_s
         @user = user
         @organization = organization
       end
 
       def call
         return failure("Email or Decidim handle is required") if @email.blank? && @user.nil?
+        return failure("Name is required to create an account") if @mode == "register" && @name.blank?
         return failure("Invalid password or local node passkey") if @user.nil? && @password.present? && @password.length < 4
 
         resolved_type = resolve_user_type
@@ -63,6 +66,7 @@ module Decidim
 
         {
           authenticated: true,
+          created_account: @mode == "register",
           provider: "decidim_devise_sso",
           organization_node: Decidim::CommonNeed.local_node_code,
           user_type: resolved_type,
@@ -137,7 +141,7 @@ module Decidim
         demo = DEMO_ACCOUNTS[@email] || DEMO_ACCOUNTS.values.find { |acc| acc[:user_type] == resolved_type }
         {
           id: @user&.respond_to?(:id) ? @user.id : demo[:id],
-          name: @user&.respond_to?(:name) ? @user.name : demo[:name],
+          name: @name || (@user&.respond_to?(:name) ? @user.name : demo[:name]),
           email: @email.presence || demo[:email],
           user_type: resolved_type,
           verification_handler: demo[:verification_handler],
