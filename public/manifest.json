@@ -1,0 +1,10 @@
+{
+  "name": "The Common Need • Federated Mutual Aid Network",
+  "short_name": "CommonNeed",
+  "description": "Offline-First 5-Role Federated Mutual Aid PWA Suite (Member, Volunteer Courier, Partner Non-Profit, Local Node Admin, Central Hub Federation)",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#120924",
+  "theme_color": "#95C623",
+  "orientation": "portrait-primary"
+}

@@ -1,0 +1,39 @@
+# Render Blueprint (https://render.com/docs/blueprint-spec)
+# Connect GenieSullivan26/The-Common-Need-Main on Render to provision the full stack in 1 click.
+services:
+  - type: web
+    name: the-common-need-pwa
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: starter
+    healthCheckPath: /manifest.json
+    envVars:
+      - key: RAILS_ENV
+        value: production
+      - key: PORT
+        value: 8080
+      - key: LOCAL_NODE_CODE
+        value: "#OAK-01"
+      - key: HOUSEHOLD_PII_ON_HUB_BYTES
+        value: "0"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: common-need-postgis
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: common-need-redis
+          property: connectionString
+
+  - type: redis
+    name: common-need-redis
+    plan: starter
+    ipAllowList: []
+
+databases:
+  - name: common-need-postgis
+    databaseName: the_common_need_production
+    user: common_need
+    plan: starter
+    postgresMajorVersion: "16"

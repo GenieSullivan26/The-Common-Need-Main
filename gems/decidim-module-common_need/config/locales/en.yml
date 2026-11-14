@@ -1,0 +1,279 @@
+---
+en:
+  activemodel:
+    attributes:
+      ai_paperwork:
+        care_basket_id: Care basket
+        delivery_mode: Delivery mode
+        household_size: Household size
+        language_preference: Language preference
+        situation_notes: Situation notes & priority instructions
+        template_name: Guided paperwork template
+      care_basket_checkout:
+        bring_up_porch_steps: Bring up porch steps (4 steps)
+        care_basket_id: Care basket
+        delivery_notes: Handoff & accessibility notes
+        dropoff_block_label: Neighborhood block / dropoff label
+        latitude: Dropoff latitude (SRID 4326)
+        longitude: Dropoff longitude (SRID 4326)
+        wait_60s_at_door: Wait 60 seconds at door for mobility needs
+      confirm_stop:
+        confirmed_at: Confirmed timestamp
+        consolidation_notes: Consolidation & parcel notes
+        delivery_id: Delivery batch
+        route_stop_id: Route stop
+        stop_number: Stop number
+      federated_node:
+        deployment_mode: Deployment mode
+        domain: Node domain (FQDN)
+        household_pii_bytes_on_hub: Household PII bytes stored on Central Hub
+        name: Community node name
+        node_code: Node identifier code
+        osrm_region: Offline OSRM routing region
+      inter_node_transfer:
+        inter_node_request_id: Inter-node solidarity request
+        manifest_summary: Surplus transfer manifest summary
+        request_code: Request code
+        source_node_codes: Source peered node codes
+        target_node_code: Target requesting node code
+      non_profit_handler:
+        collective_charter_accepted: Accept Unconditional Solidarity & Zero-Means-Testing Charter
+        ein_number: 501(c)(3) / Cooperative EIN (XX-XXXXXXX)
+        hub_address: Physical neighborhood hub or loading ramp address
+        organization_name: Partner organization or mutual-aid collective name
+      partner_event:
+        category_tags: Community category tags
+        description: Event & clinic accessibility description
+        event_day: Event day
+        event_time_label: Event time window
+        home_delivery_kit_enabled: Enable home-delivered event care box
+        hub_slug: Hosting partner hub
+        latitude: Event latitude (SRID 4326)
+        location_address: Event street address or plaza
+        longitude: Event longitude (SRID 4326)
+        title: Community event or clinic title
+      surplus_item:
+        category_key: Community taxonomy category
+        description: Item description & storage notes
+        dietary_and_safety_tags: Dietary, cultural & safety tags
+        hub_id: Partner neighborhood hub
+        latitude: Pickup latitude (SRID 4326)
+        longitude: Pickup longitude (SRID 4326)
+        stock_quantity: Available share quantity
+        title: Surplus item or service title
+        weight_lbs: Estimated weight per share (lbs)
+  decidim:
+    authorization_handlers:
+      non_profit_handler:
+        explanation: Verify your 501(c)(3) non-profit, worker cooperative, or neighborhood mutual-aid collective to publish surplus inventory, stage loading ramp crates, and host community calendar clinics on Node #OAK-01.
+        fields:
+          collective_charter_accepted: I affirm our organization enforces Zero Means-Testing and shares 0 bytes of household PII externally
+          ein_number: 501(c)(3) EIN or Fiscal Sponsor Tax ID (e.g., 94-3184920)
+          hub_address: Neighborhood Hub Street Address
+          organization_name: Organization or Collective Name
+        name: Partner Non-Profit & Mutual Aid Collective Verification
+    common_need:
+      admin:
+        title: The Common Need — Local Node #OAK-01 Administration
+      categories:
+        all: "🌐 All (19)"
+        arts: "🎨 Arts"
+        co_ops: "🌻 Co-ops"
+        education: "📚 Education"
+        employment: "🛠️ Employment"
+        food: "🍎 Food"
+        garden: "🌱 Garden"
+        health: "😷 Health"
+        housing: "🏠 Housing"
+        legal_aid: "⚖️ Legal aid"
+        medical: "🩺 Medical"
+        mental_health: "🧠 Mental health"
+        mutual_aid: "🤝 Mutual Aid"
+        pets: "🐾 Pets"
+        public_safety: "🛟 Public safety"
+        public_sector: "🏛️ Public sector"
+        recreation: "⚽ Recreation"
+        social_services: "📋 Social services"
+        veteran_services: "🎖️ Veteran services"
+        youth_services: "🎒 Youth services"
+      cells:
+        calendar_event_card:
+          deliver_box_cta: "🚚 Request Event Box Delivery"
+          prefill_forms_cta: "🤖 Pre-Fill Clinic Forms"
+          rsvp_confirmed: "✓ RSVP Confirmed on Local Node"
+          rsvp_cta: "+ RSVP on Local Node"
+        delivery_update_banner:
+          arriving_default: "Arriving Today, 2:35 PM – 2:50 PM"
+          arriving_narrowed: "Next Stop! Arriving 2:38 PM – 2:45 PM"
+          badge_low_data: "LOW-DATA DYNAMIC WINDOW • ZERO MAP TILES"
+          header_label: "⏱️ DELIVERY UPDATES"
+          milestone_1: "1. Shift Claimed ✓"
+          milestone_2: "2. Hubs Loaded ✓"
+          milestone_3: "3. Next Stop"
+          milestone_3_done: "3. Next Stop ✓"
+          milestone_4: "4. Delivered"
+          window_default: "Window: 2:35 PM – 2:50 PM (2 Stops Away)"
+          window_narrowed: "Window: 2:38 PM – 2:45 PM (You Are Next!)"
+        hub_card:
+          audit_score_suffix: "Member Audit"
+          distance_suffix: "mi away"
+          no_means_testing_badge: "NO MEANS-TESTING"
+        item_card:
+          add_share: "+ Add Share"
+          ai_paperwork_trigger: "🤖 Auto-Fill"
+          decrement_aria: "Decrease share quantity"
+          increment_aria: "Increase share quantity"
+        route_stop_card:
+          confirm_delivery: "✓ Confirm Delivery"
+          confirm_pickup: "✓ Confirm Pickup"
+          confirmed_prefix: "✓ Confirmed"
+          window_recalc_hint: "📝 Confirming pickup recalculates and narrows Stop #3's arrival window."
+      commands:
+        claim_volunteer_shift:
+          invalid: "Could not claim volunteer shift."
+          success: "Volunteer shift claimed and logged to local Timebank (#OAK-01)."
+        confirm_stop:
+          invalid: "Could not confirm route stop."
+          success: "Stop confirmed! Downstream arrival window narrowed to 2:38 PM – 2:45 PM (You Are Next!)."
+        create_delivery:
+          invalid: "Could not dispatch Care Basket delivery."
+          success: "Care Basket dispatched to Volunteer Courier pool (BATCH #OAK-409) with zero means-testing."
+        create_partner_event:
+          invalid: "Could not publish partner calendar event."
+          success: "Event published to Local Node #OAK-01 Member Calendar."
+        dispatch_inter_node_transfer:
+          invalid: "Could not dispatch inter-node solidarity transfer."
+          success: "Inter-node surplus transfer approved and routed across peered nodes."
+        peer_federated_node:
+          invalid: "Could not provision federated node. Verify zero household PII bytes on Central Hub."
+          success: "Sovereign local node provisioned and peered with 0 bytes of household PII on Central Hub."
+        post_surplus_item:
+          invalid: "Could not post surplus inventory item."
+          success: "Surplus inventory published to Local Node #OAK-01 Catalog."
+        verify_and_stage_crates:
+          invalid: "Could not stage crates at loading ramp."
+          success: "Crates verified and staged at loading ramp for Volunteer Courier pickup."
+      forms:
+        ai_paperwork:
+          delivery_modes:
+            courier: "🚚 Print at Hub & Include in My Courier Delivery"
+            pdf: "📄 Generate Encrypted Local PDF"
+          templates:
+            housing: "Housing: Emergency Rent Relief & Habitability Packet"
+            legal_aid: "Legal Aid: Eviction Defense & Record Expungement Intake"
+            public_sector: "Public Sector: Municipal ID & Paratransit Fee Waiver"
+            social_services: "Social Services: CalFresh / SNAP, Medi-Cal & LIHEAP Packet"
+            veteran_services: "Veteran Services: VA Disability Claim & DD-214 Support Packet"
+        errors:
+          means_testing_prohibited: "Zero-Means-Testing violation: income, payment, or means-testing fields are strictly prohibited."
+          zero_pii_violation: "Zero-Knowledge Federation violation: household PII bytes on Central Hub must equal 0."
+      portals:
+        federation_hub:
+          badge: "ZERO HOUSEHOLD PII ON HUB"
+          subtitle: "Federation Incubator, Area Support & Network Governance"
+          tabs:
+            area_requests: "2. Area Requests"
+            deploy_nodes: "1. Deploy Nodes"
+            network_votes: "3. Network Votes"
+            telemetry: "4. Telemetry"
+          tag: "FEDERATION CENTRAL HUB • 14 NODES PEERED"
+        local_node_admin:
+          badge: "LOCAL SERVER ADMIN"
+          subtitle: "Oakland Node #OAK-01 • Admin, Moderation & Votes"
+          tabs:
+            analytics: "1. Analytics"
+            partners: "2. Partners"
+            requests: "3. Requests"
+            votes: "4. Votes"
+          tag: "LOCAL NODE ADMIN • NODE #OAK-01"
+        member_portal:
+          access_value: "UNCONDITIONAL SOLIDARITY"
+          badge: "ZERO MEANS-TESTING"
+          subtitle: "Oakland Node #OAK-01 • Multi-Hub Care & Governance"
+          tabs:
+            ai_helper: "2. AI Helper"
+            basket: "3. Basket"
+            browse: "1. Browse"
+            calendar: "4. Calendar"
+            vote: "5. Vote"
+          tag: "THE COMMON NEED • MEMBER PWA"
+        partner_portal:
+          badge: "VERIFIED PARTNER HUB"
+          subtitle: "East Oakland Collective Pantry • Partner Portal"
+          tabs:
+            audit: "3. Audit"
+            handoff: "1. Handoff"
+            stock: "2. Stock"
+          tag: "PARTNER NON-PROFIT • NODE #OAK-01"
+        volunteer_portal:
+          badge: "OFFLINE OSRM READY"
+          subtitle: "Batch #OAK-409 • Deep East Oakland → Fruitvale Loop"
+          tabs:
+            route: "1. Route"
+            shifts: "2. Shifts"
+          tag: "VOLUNTEER COURIER • MARCUS T."
+      role_switcher:
+        federation: "🌐 5. Central Hub"
+        member: "🏠 1. Member"
+        node_admin: "🏛️ 4. Local Node"
+        partner: "🤝 3. Partner"
+        volunteer: "🚲 2. Volunteer"
+      security:
+        external_ai_prohibited: "External cloud AI endpoints are strictly prohibited on sovereign node #OAK-01."
+        zero_knowledge_federation: "0 Bytes of household PII or coordinates ever leave local community nodes."
+    components:
+      common_need:
+        name: The Common Need (5-Role Mutual Aid & Federation PWA)
+        settings:
+          global:
+            federation_zero_pii_enforced: Enforce Zero Household PII (0 Bytes) on Federation Central Hub
+            local_node_code: Sovereign Local Node Code
+            local_ollama_enabled: Enable 100% Local Ollama AI & Encrypted Paperwork Co-Pilot (127.0.0.1:11434)
+            max_delivery_radius_meters: Default PostGIS Spatial Search Radius (meters)
+            zero_means_testing_enforced: Strictly Enforce Zero Means-Testing (No Income or ID Barriers)
+          step:
+            allow_basket_checkout: Allow Unconditional Solidarity Care Basket Checkout
+            allow_network_voting: Allow 1-Member-1-Vote Local & Federated Governance Ballots
+            allow_surplus_posting: Allow Verified Partner Non-Profits to Post Live Surplus Inventory
+    events:
+      common_need:
+        crates_staged_at_ramp:
+          email_intro: "Partner Hub has verified and staged crates at the loading ramp for %{batch_code}."
+          email_outro: "Thank you for coordinating solidarity logistics on Local Node #OAK-01."
+          email_subject: "Crates Staged at Loading Ramp (%{batch_code})"
+          notification_title: "Loading ramp crates verified and staged for <strong>%{batch_code}</strong>."
+        delivery_dispatched:
+          email_intro: "Your Multi-Hub Care Basket has been dispatched in %{batch_code} with zero means-testing."
+          email_outro: "Track your low-data dynamic arrival window in the Member PWA."
+          email_subject: "Care Basket Dispatched (%{batch_code})"
+          notification_title: "Care Basket dispatched in <strong>%{batch_code}</strong> (%{handoff_instructions})."
+        federated_node_peered:
+          email_intro: "A new sovereign community node (%{node_code} • %{domain}) has been peered to the Federation."
+          email_outro: "Zero-Knowledge Federation verified: 0 bytes of household PII stored on Central Hub."
+          email_subject: "New Federated Node Peered (%{node_code})"
+          notification_title: "Sovereign node <strong>%{node_code}</strong> (%{domain}) peered with 0 bytes of household PII."
+        inter_node_transfer_dispatched:
+          email_intro: "Inter-node solidarity request %{request_code} has been fulfilled and dispatched to %{target_node_code}."
+          email_outro: "Mutual aid across peered community nodes strengthens regional resilience."
+          email_subject: "Inter-Node Surplus Transfer Dispatched (%{request_code})"
+          notification_title: "Inter-node request <strong>%{request_code}</strong> routed to %{target_node_code}."
+        partner_event_published:
+          email_intro: "A new community event or clinic (%{title}) has been published for %{event_day}."
+          email_outro: "View event details, RSVP, or request an event care box in the Member PWA Calendar."
+          email_subject: "New Community Event on Local Node #OAK-01: %{title}"
+          notification_title: "New partner event published: <strong>%{title}</strong> (%{event_day})."
+        route_stop_confirmed:
+          email_intro: "Volunteer courier confirmed pickup Stop #2. Your arrival window is now narrowed to 2:38 PM – 2:45 PM."
+          email_outro: "Low-data dynamic window update delivered with zero map tile overhead."
+          email_subject: "Delivery Window Narrowed: 2:38 PM – 2:45 PM (You Are Next!)"
+          notification_title: "<strong>%{window_headline}</strong> — Volunteer courier is heading to your block next."
+        surplus_item_posted:
+          email_intro: "New surplus shares have been posted to the Local Node #OAK-01 catalog."
+          email_outro: "Browse all 19 community categories in the Member PWA."
+          email_subject: "New Surplus Shares Available on Node #OAK-01"
+          notification_title: "New surplus shares posted in category <strong>%{category_key}</strong> (%{stock_quantity} available)."
+        volunteer_shift_claimed:
+          email_intro: "You have signed up for a community bulk distribution shift (+%{hours_contributed} Timebank hrs)."
+          email_outro: "Offline OSRM turn-by-turn routes are cached and ready on your device."
+          email_subject: "Volunteer Distribution Shift Claimed (#OAK-01)"
+          notification_title: "Volunteer shift claimed (+<strong>%{hours_contributed} hrs</strong> logged to Local Timebank)."

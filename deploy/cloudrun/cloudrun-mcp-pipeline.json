@@ -1,0 +1,43 @@
+{
+  "mcpServer": "cloudrun-mcp",
+  "project": "the-common-need-network",
+  "region": "us-west1",
+  "nodeCode": "#OAK-01",
+  "infrastructure": {
+    "database": {
+      "engine": "POSTGRES_17",
+      "extensions": ["postgis"],
+      "srid": 4326,
+      "dataSovereignty": "local_node_only"
+    },
+    "cache": {
+      "engine": "REDIS_7_0",
+      "purpose": "ActionCable Turbo Streams & Sidekiq Queue"
+    },
+    "osrmRoutingEngine": {
+      "serviceName": "the-common-need-osrm",
+      "manifest": "deploy/cloudrun/osrm-service.yaml",
+      "dataset": "norcal-latest.osrm"
+    }
+  },
+  "services": [
+    {
+      "name": "the-common-need-pwa",
+      "manifest": "deploy/cloudrun/service.yaml",
+      "dockerfile": "Dockerfile",
+      "port": 8080,
+      "routes": {
+        "root": "/",
+        "memberPortal": "/member",
+        "volunteerCourierPortal": "/volunteer",
+        "partnerNonProfitPortal": "/partner",
+        "localNodeAdminPortal": "/local_node",
+        "centralHubFederationPortal": "/federation",
+        "pwaManifest": "/manifest.json",
+        "serviceWorker": "/service-worker.js",
+        "offlineOsrmBundle": "/volunteer/routes/OAK-409/offline_bundle.json",
+        "zeroKnowledgeTelemetry": "/federation/telemetry.json"
+      }
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require_relative "../config/boot"
+require_relative "../config/application"
+require_relative "../lib/generators/decidim/component/component_generator"
+
+command = ARGV.shift
+
+case command
+when "generate", "g"
+  generator_name = ARGV.shift
+  target_name = ARGV.shift
+  if generator_name == "decidim:component" && target_name
+    Decidim::Generators::ComponentGenerator.new(target_name).invoke!
+  else
+    warn "Usage: bin/rails generate decidim:component <component_name>"
+    exit 1
+  end
+when "server", "s"
+  exec("ruby", File.expand_path("preview_server.rb", __dir__))
+else
+  puts "The Common Need • Decidim v0.32 Rails CLI (Commands: generate decidim:component <name>, server)"
+end

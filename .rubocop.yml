@@ -1,0 +1,44 @@
+# frozen_string_literal: true
+
+AllCops:
+  TargetRubyVersion: 3.1
+  NewCops: enable
+  Exclude:
+    - "vendor/**/*"
+    - "node_modules/**/*"
+    - "db/schema.rb"
+
+Style/FrozenStringLiteralComment:
+  Enabled: true
+  EnforcedStyle: always
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+Style/Documentation:
+  Enabled: false
+
+Metrics/BlockLength:
+  Max: 250
+  Exclude:
+    - "spec/**/*"
+    - "gems/**/spec/**/*"
+    - "gems/**/db/**/*"
+    - "gems/**/lib/**/seeds.rb"
+    - "gems/**/lib/**/engine.rb"
+    - "gems/**/lib/**/component.rb"
+
+Metrics/MethodLength:
+  Max: 45
+
+Metrics/AbcSize:
+  Max: 45
+
+Metrics/ClassLength:
+  Max: 250
+
+Layout/LineLength:
+  Max: 140
+  Exclude:
+    - "gems/**/db/seeds.rb"
+    - "gems/**/lib/**/seeds.rb"

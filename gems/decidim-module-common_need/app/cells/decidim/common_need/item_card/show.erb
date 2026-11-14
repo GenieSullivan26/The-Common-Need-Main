@@ -1,0 +1,30 @@
+<div class="item-lime-card" data-category="<%= category_slug %>" data-catalog-filter-target="itemCard">
+  <div>
+    <span class="cat-tag-chip"><%= category_chip_label %></span>
+    <div class="item-title"><%= title %></div>
+    <div class="mono-sub" style="margin:0;"><%= tags_summary %></div>
+    <div style="font-size:11px; color:#F4F7E8; margin-top:2px;"><%= yield_and_stock_summary %></div>
+  </div>
+
+  <% if action_type == :stepper %>
+    <div class="stepper-pill">
+      <span onclick="adjustQty('<%= j stepper_key %>', -1)">−</span>
+      <span id="qty-<%= stepper_key %>"><%= initial_qty %></span>
+      <span onclick="adjustQty('<%= j stepper_key %>', 1)">+</span>
+    </div>
+  <% elsif action_type == :ai_paperwork %>
+    <button class="olive-badge"
+            style="cursor:pointer; border-color:var(--lime-bright);"
+            data-action="click->paperwork-copilot#openPaperworkFor"
+            data-paperwork-title="<%= paperwork_template_title %>"
+            onclick="openAiPaperworkFor('<%= j paperwork_template_title %>')">
+      <%= button_label %>
+    </button>
+  <% else %>
+    <button class="olive-badge"
+            style="cursor:pointer;"
+            onclick="addItemToBasket(this, '<%= j basket_item_name %>', '<%= j basket_hub_label %>')">
+      <%= button_label %>
+    </button>
+  <% end %>
+</div>

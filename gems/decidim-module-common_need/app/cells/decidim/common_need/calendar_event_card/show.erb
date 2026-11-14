@@ -1,0 +1,42 @@
+<div class="dark-card calendar-event-card"
+     data-calendar-view-target="eventCard"
+     data-day="<%= day_code %>"
+     data-org="<%= org_code %>"
+     data-topic="<%= topic_code %>"
+     data-lat="<%= latitude %>"
+     data-lng="<%= longitude %>"
+     data-location="<%= location_label %>"
+     data-keywords="<%= search_keywords %>">
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+    <span class="cat-tag-chip" style="margin:0;"><%= category_chip %></span>
+    <span class="olive-badge"><%= date_time_badge %></span>
+  </div>
+  <div class="pantry-title" style="font-size:15px;"><%= title %></div>
+  <div class="mono-sub" style="margin:4px 0;"><%= host_and_location_sub %></div>
+  <div class="item-lime-card" style="flex-direction:column; align-items:flex-start; font-size:12px; line-height:1.4; margin:6px 0;">
+    <div><%= description %></div>
+    <div style="font-family:monospace; font-size:10.5px; color:var(--bg-outer); background:var(--lime-bright); padding:2px 6px; border-radius:4px; font-weight:800; margin-top:4px;">
+      <%= accessibility_badge %>
+    </div>
+  </div>
+  <div style="display:flex; gap:6px; margin-top:6px;">
+    <button class="olive-badge"
+            style="flex:1; cursor:pointer; padding:8px; text-align:center; border-color:var(--lime-bright);"
+            onclick="rsvpPartnerEvent(this, '<%= j rsvp_title %>')">
+      <%= rsvp_button_label %>
+    </button>
+    <% if secondary_action_type == :ai_paperwork %>
+      <button class="olive-badge"
+              style="flex:1; cursor:pointer; padding:8px; text-align:center; background:var(--bg-outer);"
+              onclick="openAiPaperworkFor('<%= j secondary_payload_title %>')">
+        <%= secondary_button_label %>
+      </button>
+    <% else %>
+      <button class="olive-badge"
+              style="flex:1; cursor:pointer; padding:8px; text-align:center; background:var(--bg-outer);"
+              onclick="addItemToBasket(this, '<%= j secondary_payload_title %>', '<%= j secondary_hub_label %>')">
+        <%= secondary_button_label %>
+      </button>
+    <% end %>
+  </div>
+</div>

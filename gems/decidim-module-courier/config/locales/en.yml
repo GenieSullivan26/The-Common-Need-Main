@@ -1,0 +1,19 @@
+---
+en:
+  decidim:
+    components:
+      courier:
+        name: Courier & Mutual Aid Logistics
+        settings:
+          global:
+            osrm_endpoint: Self-Hosted Local OSRM Endpoint
+            offline_tile_caching_enabled: Offline Leaflet & OSRM Caching Enabled
+            zero_means_testing_enforced: Zero Means-Testing Enforced
+          step:
+            allow_shift_claiming: Allow Volunteer Shift Claiming
+            allow_stop_confirmation: Allow Real-Time Stop Confirmation
+    courier:
+      workflows:
+        member: Member Care Basket & Low-Data Delivery Tracker
+        volunteer: Volunteer Courier Offline OSRM Route Navigator
+        partner_non_profit: Partner Non-Profit Loading Ramp & Surplus Publisher

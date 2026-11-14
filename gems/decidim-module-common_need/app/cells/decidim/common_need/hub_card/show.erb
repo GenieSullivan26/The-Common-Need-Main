@@ -1,0 +1,13 @@
+<div class="dark-card member-hub-card" data-catalog-filter-target="hubCard">
+  <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+    <span class="olive-badge"><%= badge_label %></span>
+    <span class="mono-sub" style="margin:0;"><%= audit_score_text %></span>
+  </div>
+  <div class="pantry-title"><%= title %></div>
+  <div class="mono-sub"><%= subtitle_with_distance %></div>
+  <hr style="border-color: var(--lime-bright); margin: 6px 0;">
+
+  <% items.each do |item| %>
+    <%= cell("decidim/common_need/item_card", item, hub_label: hub_label).call %>
+  <% end %>
+</div>

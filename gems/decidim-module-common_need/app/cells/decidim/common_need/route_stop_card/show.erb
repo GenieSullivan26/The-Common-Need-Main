@@ -1,0 +1,34 @@
+<div class="dark-card" data-offline-sync-target="stopCard" data-stop-number="<%= stop_number %>">
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+    <span class="mono-sub" style="margin:0;"><%= stop_type_label %></span>
+    <% if confirmed? %>
+      <span class="mono-sub" style="margin:0; border:1px solid var(--lime-bright);"><%= confirmed_badge_text %></span>
+    <% elsif dropoff? %>
+      <button class="olive-badge"
+              style="cursor:pointer;"
+              data-action="click->offline-sync#confirmStop"
+              data-stop-number="<%= stop_number %>"
+              onclick="this.textContent='✓ Delivered'; showToast('Stop #<%= stop_number %> household delivery confirmed!')">
+        <%= action_button_label %>
+      </button>
+    <% else %>
+      <button class="olive-badge"
+              style="cursor:pointer; border-color:var(--lime-bright);"
+              data-action="click->offline-sync#confirmStop"
+              data-stop-number="<%= stop_number %>"
+              onclick="confirmVolunteerStop(<%= stop_number %>)">
+        <%= action_button_label %>
+      </button>
+    <% end %>
+  </div>
+  <div style="font-size:14px; font-weight:800; margin-bottom:4px;"><%= title %></div>
+  <div class="mono-sub"><%= subtitle_or_handoff %></div>
+  <% if parcel_summary.present? %>
+    <div class="item-lime-card" style="flex-direction:column; align-items:flex-start; font-size:12px;">
+      <div><%= parcel_summary %></div>
+      <% if window_recalc_note.present? %>
+        <div style="font-size:11px; margin-top:4px;"><%= window_recalc_note %></div>
+      <% end %>
+    </div>
+  <% end %>
+</div>

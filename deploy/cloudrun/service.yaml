@@ -1,0 +1,50 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: the-common-need-pwa
+  annotations:
+    run.googleapis.com/ingress: all
+    run.googleapis.com/description: "The Common Need • Decidim v0.32 + Courier Logistics 5-Role PWA Suite (#OAK-01)"
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/minScale: "1"
+        autoscaling.knative.dev/maxScale: "10"
+        run.googleapis.com/cpu-throttling: "false"
+        run.googleapis.com/startup-cpu-boost: "true"
+    spec:
+      containerConcurrency: 80
+      timeoutSeconds: 300
+      containers:
+        - name: decidim-common-need-pwa
+          image: us-west1-docker.pkg.dev/the-common-need-network/common-need-containers/the-common-need-pwa:latest
+          ports:
+            - name: http1
+              containerPort: 8080
+          env:
+            - name: RAILS_ENV
+              value: "production"
+            - name: LOCAL_NODE_CODE
+              value: "#OAK-01"
+            - name: LOCAL_OSRM_URL
+              value: "https://the-common-need-osrm-oak01.a.run.app"
+            - name: LOCAL_OLLAMA_URL
+              value: "http://127.0.0.1:11434/api/generate"
+            - name: HOUSEHOLD_PII_ON_HUB_BYTES
+              value: "0"
+          resources:
+            limits:
+              cpu: "2000m"
+              memory: "2Gi"
+          startupProbe:
+            httpGet:
+              path: /manifest.json
+              port: 8080
+            periodSeconds: 10
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /manifest.json
+              port: 8080
+            periodSeconds: 30

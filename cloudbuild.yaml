@@ -1,0 +1,65 @@
+steps:
+  # 1. Run RSpec & Security Verification Suite (Zero-Means-Testing + Zero-PII Federation)
+  - name: "ruby:3.4-slim-bookworm"
+    id: "verify-rspec-suite"
+    entrypoint: "ruby"
+    args:
+      - "-I"
+      - "gems/decidim-module-common_need/spec"
+      - "-r"
+      - "spec_helper"
+      - "-e"
+      - 'Dir["gems/decidim-module-common_need/spec/**/*_spec.rb"].sort.each { |f| load f }'
+
+  # 2. Build Decidim + Courier PWA Container Image
+  - name: "gcr.io/cloud-builders/docker"
+    id: "build-decidim-pwa-image"
+    args:
+      - "build"
+      - "-t"
+      - "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_AR_REPO}/the-common-need-pwa:${SHORT_SHA}"
+      - "-t"
+      - "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_AR_REPO}/the-common-need-pwa:latest"
+      - "."
+
+  # 3. Push Image to Artifact Registry
+  - name: "gcr.io/cloud-builders/docker"
+    id: "push-decidim-pwa-image"
+    args:
+      - "push"
+      - "--all-tags"
+      - "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_AR_REPO}/the-common-need-pwa"
+
+  # 4. Deploy Self-Hosted OSRM Routing Engine to Cloud Run
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    id: "deploy-osrm-cloudrun"
+    entrypoint: "gcloud"
+    args:
+      - "run"
+      - "services"
+      - "replace"
+      - "deploy/cloudrun/osrm-service.yaml"
+      - "--region=${_REGION}"
+
+  # 5. Deploy Decidim Common Need + Courier 5-Role PWA to Cloud Run
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    id: "deploy-decidim-pwa-cloudrun"
+    entrypoint: "gcloud"
+    args:
+      - "run"
+      - "deploy"
+      - "the-common-need-pwa"
+      - "--image=${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_AR_REPO}/the-common-need-pwa:${SHORT_SHA}"
+      - "--region=${_REGION}"
+      - "--platform=managed"
+      - "--allow-unauthenticated"
+      - "--port=8080"
+      - "--set-env-vars=RAILS_ENV=production,LOCAL_NODE_CODE=#OAK-01,HOUSEHOLD_PII_ON_HUB_BYTES=0"
+
+substitutions:
+  _REGION: "us-west1"
+  _AR_REPO: "common-need-containers"
+
+images:
+  - "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_AR_REPO}/the-common-need-pwa:${SHORT_SHA}"
+  - "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_AR_REPO}/the-common-need-pwa:latest"

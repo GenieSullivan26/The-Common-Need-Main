@@ -1,0 +1,24 @@
+default: &default
+  adapter: postgis
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  host: <%= ENV.fetch("DB_HOST", "127.0.0.1") %>
+  port: <%= ENV.fetch("DB_PORT", 5432) %>
+  username: <%= ENV.fetch("DB_USER", "common_need") %>
+  password: <%= ENV.fetch("DB_PASSWORD", "") %>
+  schema_search_path: "public,postgis"
+  variables:
+    statement_timeout: 5000
+
+development:
+  <<: *default
+  database: the_common_need_development
+
+test:
+  <<: *default
+  database: the_common_need_test
+
+production:
+  <<: *default
+  url: <%= ENV["DATABASE_URL"] %>
+  database: <%= ENV.fetch("DB_NAME", "the_common_need_production") %>
