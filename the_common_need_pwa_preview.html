@@ -575,115 +575,51 @@
     <div class="status-bar">
       <span>9:41 AM</span>
       <div class="notch-pill"></div>
-      <span id="pwa-status-auth-pill">
-        <button onclick="openDecidimSignOn()" style="background:rgba(197,255,41,0.15); color:var(--lime-bright); border:1px solid var(--lime-bright); border-radius:6px; padding:2px 6px; font-size:10px; font-weight:700; cursor:pointer; font-family:inherit;">🔐 Decidim SSO</button>
-      </span>
+      <span id="pwa-status-auth-pill">PWA • 5G</span>
     </div>
 
     <!-- =========================================================
-         0. DECIDIM SIGN-ON SECURITY AUTHENTICATION GATE
-            (Decidim::Devise::SessionsController + Decidim::Verifications)
+         0. SLEEK DECIDIM SIGN-ON GATE
          ========================================================= -->
-    <div id="decidim-sso-gate" class="hidden" style="display:flex; flex-direction:column; flex:1;">
-      <div class="pwa-header">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
-          <span class="olive-badge">DECIDIM v0.32+ • DEVISE + VERIFICATIONS SSO</span>
-          <span class="mono-sub" style="margin:0;">NODE #OAK-01</span>
-        </div>
-        <div class="pantry-title" style="font-size:18px; margin-top:4px;">Decidim Security Sign-On</div>
-        <div style="font-size:11.5px; color:var(--text-cream); line-height:1.35;">
-          Authenticate with your sovereign Local Node (<code style="color:var(--lime-bright);">Decidim::Organization</code>) credentials to automatically route to your verified <b>Member</b>, <b>Volunteer Courier</b>, or <b>501(c)(3) Partner</b> PWA.
-        </div>
+    <div id="decidim-sso-gate" class="hidden" style="display:flex; flex-direction:column; justify-content:center; flex:1; padding:32px 24px;">
+      <div style="text-align:center; margin-bottom:24px;">
+        <span class="olive-badge" style="font-size:10px; letter-spacing:0.8px; padding:4px 10px;">THE COMMON NEED</span>
+        <h1 class="pantry-title" style="font-size:26px; margin:12px 0 6px;">Sign In</h1>
+        <p style="font-size:13px; color:var(--text-cream); opacity:0.85;">
+          Sign in with Decidim to open your portal
+        </p>
       </div>
 
-      <div class="pwa-body">
-        <div class="dark-card">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-            <span style="font-family:monospace; font-size:11.5px; font-weight:700; color:var(--lime-bright);">
-              🔐 1. SELECT DECIDIM USER TYPE
-            </span>
-            <span class="olive-badge" style="font-size:9.5px;">ROLE ROUTER</span>
-          </div>
+      <div class="dark-card" style="padding:22px 18px; border-radius:22px;">
+        <div style="font-size:11.5px; font-weight:600; color:var(--text-cream); margin-bottom:8px; text-align:center;">
+          Sign in as
+        </div>
 
-          <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:12px;">
-            <div id="sso-card-member" onclick="selectDecidimSsoType('member')" style="background:var(--lime-card); border:2px solid var(--lime-bright); border-radius:12px; padding:9px 11px; cursor:pointer; transition:all 0.15s ease;">
-              <div style="display:flex; justify-content:space-between; align-items:center;">
-                <span style="font-size:13px; font-weight:800; color:var(--text-white);">🛍️ Community Member</span>
-                <span class="mono-sub" style="margin:0; font-size:10px;" id="sso-badge-member">✓ SELECTED</span>
-              </div>
-              <div style="font-size:11px; color:var(--text-cream); margin-top:3px;">
-                <code>Decidim::User</code> • Unconditional Solidarity (Zero Means-Testing) → <b>Directs to Member PWA</b>
-              </div>
-            </div>
-
-            <div id="sso-card-volunteer" onclick="selectDecidimSsoType('volunteer')" style="background:#0D061A; border:1.5px solid rgba(197,255,41,0.4); border-radius:12px; padding:9px 11px; cursor:pointer; transition:all 0.15s ease;">
-              <div style="display:flex; justify-content:space-between; align-items:center;">
-                <span style="font-size:13px; font-weight:800; color:var(--text-white);">🚚 Volunteer Courier</span>
-                <span class="mono-sub" style="margin:0; font-size:10px;" id="sso-badge-volunteer">SELECT</span>
-              </div>
-              <div style="font-size:11px; color:var(--text-cream); margin-top:3px;">
-                <code>Decidim::Verifications::VolunteerCourierHandler</code> • OSRM &amp; Timebank → <b>Directs to Volunteer PWA</b>
-              </div>
-            </div>
-
-            <div id="sso-card-nonprofit" onclick="selectDecidimSsoType('nonprofit')" style="background:#0D061A; border:1.5px solid rgba(197,255,41,0.4); border-radius:12px; padding:9px 11px; cursor:pointer; transition:all 0.15s ease;">
-              <div style="display:flex; justify-content:space-between; align-items:center;">
-                <span style="font-size:13px; font-weight:800; color:var(--text-white);">🏢 Partner Non-Profit</span>
-                <span class="mono-sub" style="margin:0; font-size:10px;" id="sso-badge-nonprofit">SELECT</span>
-              </div>
-              <div style="font-size:11px; color:var(--text-cream); margin-top:3px;">
-                <code>Decidim::Verifications::NonProfitHandler</code> • 501(c)(3) EIN Verified → <b>Directs to Partner PWA</b>
-              </div>
-            </div>
-          </div>
-
-          <hr style="border-color: rgba(197,255,41,0.35); margin: 10px 0;">
-
-          <div style="font-family:monospace; font-size:11.5px; font-weight:700; color:var(--lime-bright); margin-bottom:6px;">
-            🔑 2. DECIDIM CREDENTIALS (DEVISE + WARDEN)
-          </div>
-
-          <label style="font-size:11px; color:var(--text-cream); display:block; margin-bottom:3px;">Decidim Email or Community Handle</label>
-          <input type="email" id="decidim-sso-email" class="dark-input" value="rosa@oakland-node.org" placeholder="e.g. rosa@oakland-node.org" style="margin-bottom:8px;">
-
-          <label style="font-size:11px; color:var(--text-cream); display:block; margin-bottom:3px;">Local Node Password / Passkey</label>
-          <input type="password" id="decidim-sso-password" class="dark-input" value="solidarity-oak-01" placeholder="••••••••••••" style="margin-bottom:8px;">
-
-          <div class="mono-sub" id="decidim-sso-handler-banner" style="display:block; width:100%; margin-bottom:10px; line-height:1.35;">
-            ✓ Active Handler: Decidim::User (Unconditional Solidarity • Zero Means-Testing) → Target: MemberPortal
-          </div>
-
-          <button class="cta-lime-btn" style="width:100%; font-size:13px; padding:11px;" onclick="submitDecidimSignOn()">
-            🔐 SIGN IN WITH DECIDIM &amp; LAUNCH PWA →
+        <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:6px; background:#0D061A; padding:5px; border-radius:14px; margin-bottom:18px;">
+          <button type="button" id="sso-card-member" onclick="selectDecidimSsoType('member')" style="background:var(--lime-card); color:var(--text-white); border:1.5px solid var(--lime-bright); border-radius:10px; padding:9px 4px; font-size:12px; font-weight:700; cursor:pointer; transition:all 0.15s ease;">
+            🛍️ Member
+          </button>
+          <button type="button" id="sso-card-volunteer" onclick="selectDecidimSsoType('volunteer')" style="background:transparent; color:var(--text-cream); border:1.5px solid transparent; border-radius:10px; padding:9px 4px; font-size:12px; font-weight:700; cursor:pointer; transition:all 0.15s ease;">
+            🚚 Volunteer
+          </button>
+          <button type="button" id="sso-card-nonprofit" onclick="selectDecidimSsoType('nonprofit')" style="background:transparent; color:var(--text-cream); border:1.5px solid transparent; border-radius:10px; padding:9px 4px; font-size:12px; font-weight:700; cursor:pointer; transition:all 0.15s ease;">
+            🏢 Partner
           </button>
         </div>
 
-        <div class="dark-card">
-          <div style="font-family:monospace; font-size:11.5px; font-weight:700; color:var(--lime-bright); margin-bottom:4px;">
-            ⚡ ONE-TAP VERIFIED DECIDIM DEMO SIGN-ON
-          </div>
-          <div style="font-size:11px; color:var(--text-cream); margin-bottom:8px; line-height:1.35;">
-            Tap any verified <code style="color:var(--lime-bright);">Decidim::User</code> profile below to test role-based authentication and automatic redirection:
-          </div>
-          <div style="display:flex; flex-direction:column; gap:6px;">
-            <button class="olive-badge" style="width:100%; text-align:left; padding:8px 10px; cursor:pointer; display:flex; justify-content:space-between; align-items:center;" onclick="quickDecidimDemoSignIn('member')">
-              <span>🛍️ <b>Rosa Morales</b> (rosa@oakland-node.org)</span>
-              <span style="color:var(--lime-bright); font-family:monospace;">→ Member PWA</span>
-            </button>
-            <button class="olive-badge" style="width:100%; text-align:left; padding:8px 10px; cursor:pointer; display:flex; justify-content:space-between; align-items:center;" onclick="quickDecidimDemoSignIn('volunteer')">
-              <span>🚚 <b>Marcus Vance</b> (marcus@oakland-node.org)</span>
-              <span style="color:var(--lime-bright); font-family:monospace;">→ Volunteer PWA</span>
-            </button>
-            <button class="olive-badge" style="width:100%; text-align:left; padding:8px 10px; cursor:pointer; display:flex; justify-content:space-between; align-items:center;" onclick="quickDecidimDemoSignIn('nonprofit')">
-              <span>🏢 <b>Elena Rostova</b> (501c3 EIN #94-3108422)</span>
-              <span style="color:var(--lime-bright); font-family:monospace;">→ Partner PWA</span>
-            </button>
-          </div>
-        </div>
+        <label style="font-size:12px; font-weight:600; color:var(--text-cream); display:block; margin-bottom:5px;">Email</label>
+        <input type="email" id="decidim-sso-email" class="dark-input" value="rosa@oakland-node.org" placeholder="you@example.org" style="padding:11px 13px; font-size:13.5px; border-radius:12px; margin-bottom:14px;">
 
-        <div class="lime-dashed-banner">
-          🛡️ <b>DECIDIM MULTITENANCY &amp; DATA SOVEREIGNTY:</b> Authentication tokens and <code style="color:var(--bg-outer); font-weight:700;">Decidim::Authorization</code> grants stay 100% on your neighborhood's local PostgreSQL instance (<b>Node #OAK-01</b>). 0 Bytes of household PII are shared externally.
-        </div>
+        <label style="font-size:12px; font-weight:600; color:var(--text-cream); display:block; margin-bottom:5px;">Password</label>
+        <input type="password" id="decidim-sso-password" class="dark-input" value="solidarity-oak-01" placeholder="••••••••" style="padding:11px 13px; font-size:13.5px; border-radius:12px; margin-bottom:18px;">
+
+        <button class="cta-lime-btn" style="width:100%; font-size:14.5px; padding:13px; border-radius:14px; margin-top:0;" onclick="submitDecidimSignOn()">
+          Sign In →
+        </button>
+      </div>
+
+      <div style="text-align:center; margin-top:18px; font-size:11.5px; color:var(--text-cream); opacity:0.7;">
+        🔒 Secured by Decidim Single Sign-On
       </div>
     </div>
 
@@ -2796,24 +2732,17 @@
       selectedDecidimSsoType = userType;
       ['member', 'volunteer', 'nonprofit'].forEach(type => {
         const card = document.getElementById('sso-card-' + type);
-        const badge = document.getElementById('sso-badge-' + type);
         const isSelected = (type === userType);
         if (card) {
-          card.style.background = isSelected ? 'var(--lime-card)' : '#0D061A';
-          card.style.border = isSelected ? '2px solid var(--lime-bright)' : '1.5px solid rgba(197,255,41,0.4)';
-        }
-        if (badge) {
-          badge.textContent = isSelected ? '✓ SELECTED' : 'SELECT';
+          card.style.background = isSelected ? 'var(--lime-card)' : 'transparent';
+          card.style.color = isSelected ? 'var(--text-white)' : 'var(--text-cream)';
+          card.style.border = isSelected ? '1.5px solid var(--lime-bright)' : '1.5px solid transparent';
         }
       });
       const profile = DECIDIM_SSO_PROFILES[userType];
       const emailEl = document.getElementById('decidim-sso-email');
       if (emailEl && !preserveEmail) {
         emailEl.value = profile.email;
-      }
-      const bannerEl = document.getElementById('decidim-sso-handler-banner');
-      if (bannerEl) {
-        bannerEl.textContent = profile.handlerBanner;
       }
     }
 
@@ -2848,17 +2777,11 @@
       const pillEl = document.getElementById('pwa-status-auth-pill');
       if (!pillEl) return;
       if (session && session.authenticated && DECIDIM_SSO_PROFILES[session.userType]) {
-        const shortLabel = DECIDIM_SSO_PROFILES[session.userType].shortLabel;
         pillEl.innerHTML = `
-          <span style="display:inline-flex; align-items:center; gap:5px;">
-            <span style="font-size:10px; color:var(--lime-bright);">🔒 ${shortLabel}</span>
-            <button onclick="signOutDecidim()" style="background:#0D061A; color:#FFFFFF; border:1px solid var(--lime-bright); border-radius:6px; padding:2px 6px; font-size:9.5px; font-weight:700; cursor:pointer; font-family:inherit;">Sign Out</button>
-          </span>
+          <button onclick="signOutDecidim()" style="background:rgba(197,255,41,0.14); color:var(--lime-bright); border:1px solid var(--lime-bright); border-radius:8px; padding:2px 8px; font-size:10px; font-weight:700; cursor:pointer; font-family:inherit;">Sign Out</button>
         `;
       } else {
-        pillEl.innerHTML = `
-          <button onclick="openDecidimSignOn()" style="background:rgba(197,255,41,0.15); color:var(--lime-bright); border:1px solid var(--lime-bright); border-radius:6px; padding:2px 6px; font-size:10px; font-weight:700; cursor:pointer; font-family:inherit;">🔐 Decidim SSO</button>
-        `;
+        pillEl.textContent = 'PWA • 5G';
       }
     }
 

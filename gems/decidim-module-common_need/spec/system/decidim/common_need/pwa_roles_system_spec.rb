@@ -19,12 +19,11 @@ RSpec.describe "The Common Need 5-Role PWA Suite System Specs", type: :system do
   describe "Decidim Sign-On Security Authentication & Role-Based PWA Dispatcher" do
     before { visit "/?role=member" }
 
-    it "renders the Decidim Sign-On Security Authentication gate (#decidim-sso-gate) for Member, Volunteer, and Partner user types" do
+    it "renders the sleek Decidim Sign-On gate (#decidim-sso-gate) for Member, Volunteer, and Partner user types" do
       expect(page).to have_css("#decidim-sso-gate")
-      expect(page).to have_content("DECIDIM v0.32+ • DEVISE + VERIFICATIONS SSO")
-      expect(page).to have_content("Decidim Security Sign-On")
-      expect(page).to have_content("Decidim::Verifications::VolunteerCourierHandler")
-      expect(page).to have_content("Decidim::Verifications::NonProfitHandler")
+      expect(page).to have_content("Sign In")
+      expect(page).to have_content("Sign in with Decidim to open your portal")
+      expect(page).to have_content("Secured by Decidim Single Sign-On")
     end
 
     it "authenticates Member, Volunteer, and Partner Decidim accounts and directs each to the matching PWA based on user type" do
