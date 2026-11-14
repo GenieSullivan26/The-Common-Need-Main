@@ -23,6 +23,7 @@ end
 require "decidim/common_need/version"
 require "decidim/common_need/osrm_routing_service"
 require "decidim/common_need/federation_telemetry_service"
+require "decidim/common_need/decidim_sign_on_service"
 
 PORT = Integer(ENV.fetch("PORT", 8080))
 ROOT_DIR = File.expand_path("..", __dir__)
@@ -37,7 +38,9 @@ ROLE_PATH_MAP = {
   "/localnode" => "localnode",
   "/node_admin" => "localnode",
   "/federation" => "network",
-  "/network" => "network"
+  "/network" => "network",
+  "/sign_in" => "login",
+  "/login" => "login"
 }.freeze
 
 ROLE_QUERY_ALIASES = {
@@ -49,7 +52,9 @@ ROLE_QUERY_ALIASES = {
   "localnode" => "localnode",
   "node_admin" => "localnode",
   "federation" => "network",
-  "network" => "network"
+  "network" => "network",
+  "login" => "login",
+  "sign_in" => "login"
 }.freeze
 
 MANIFEST_JSON = JSON.pretty_generate(
@@ -115,15 +120,23 @@ loop do
     when "/volunteer/routes/OAK-409/offline_bundle.json"
       content_type = "application/json; charset=utf-8"
       body = JSON.pretty_generate(Decidim::CommonNeed::OsrmRoutingService.new.offline_route_bundle)
+    when "/auth/decidim/sign_in.json"
+      content_type = "application/json; charset=utf-8"
+      auth_res = Decidim::CommonNeed::DecidimSignOnService.new(
+        email: query_params["email"],
+        password: query_params["password"] || "solidarity-oak-01",
+        requested_user_type: query_params["user_type"]
+      ).call
+      body = JSON.pretty_generate(auth_res)
     else
       html = File.read(PREVIEW_HTML_PATH)
       requested_role = ROLE_PATH_MAP[path] || ROLE_QUERY_ALIASES[query_params["role"].to_s.downcase]
-      if %w[member volunteer nonprofit localnode network].include?(requested_role)
+      if %w[member volunteer nonprofit localnode network login].include?(requested_role)
         html = html.sub(
           'class="role-switcher-box" id="top-role-switcher"',
           'class="role-switcher-box hidden" id="top-role-switcher"'
         )
-        boot_script = "<script>window.__LOCKED_PWA_ROLE__ = '#{requested_role}'; window.addEventListener('DOMContentLoaded', () => { const s = document.getElementById('top-role-switcher'); if (s) s.classList.add('hidden'); switchRole('#{requested_role}'); });</script></body>"
+        boot_script = "<script>window.__LOCKED_PWA_ROLE__ = '#{requested_role}'; applyLockedPwaRole();</script></body>"
         html = html.sub("</body>", boot_script)
       end
       body = html

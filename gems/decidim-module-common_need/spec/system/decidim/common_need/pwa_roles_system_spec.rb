@@ -16,6 +16,47 @@ RSpec.describe "The Common Need 5-Role PWA Suite System Specs", type: :system do
     end
   end
 
+  describe "Decidim Sign-On Security Authentication & Role-Based PWA Dispatcher" do
+    before { visit "/?role=member" }
+
+    it "renders the Decidim Sign-On Security Authentication gate (#decidim-sso-gate) for Member, Volunteer, and Partner user types" do
+      expect(page).to have_css("#decidim-sso-gate")
+      expect(page).to have_content("DECIDIM v0.32+ • DEVISE + VERIFICATIONS SSO")
+      expect(page).to have_content("Decidim Security Sign-On")
+      expect(page).to have_content("Decidim::Verifications::VolunteerCourierHandler")
+      expect(page).to have_content("Decidim::Verifications::NonProfitHandler")
+    end
+
+    it "authenticates Member, Volunteer, and Partner Decidim accounts and directs each to the matching PWA based on user type" do
+      member_auth = Decidim::CommonNeed::DecidimSignOnService.new(
+        email: "rosa@oakland-node.org",
+        password: "solidarity-oak-01"
+      ).call
+      expect(member_auth[:authenticated]).to eq(true)
+      expect(member_auth[:user_type]).to eq("member")
+      expect(member_auth[:target_portal]).to eq("Decidim::CommonNeed::MemberPortal")
+      expect(member_auth[:redirect_path]).to eq("/?role=member")
+
+      volunteer_auth = Decidim::CommonNeed::DecidimSignOnService.new(
+        email: "marcus@oakland-node.org",
+        password: "solidarity-oak-01"
+      ).call
+      expect(volunteer_auth[:authenticated]).to eq(true)
+      expect(volunteer_auth[:user_type]).to eq("volunteer")
+      expect(volunteer_auth[:target_portal]).to eq("Decidim::Courier::VolunteerPortal")
+      expect(volunteer_auth[:redirect_path]).to eq("/?role=volunteer")
+
+      partner_auth = Decidim::CommonNeed::DecidimSignOnService.new(
+        email: "elena@eastoaklandpantry.org",
+        password: "solidarity-oak-01"
+      ).call
+      expect(partner_auth[:authenticated]).to eq(true)
+      expect(partner_auth[:user_type]).to eq("nonprofit")
+      expect(partner_auth[:target_portal]).to eq("Decidim::Services::PartnerPortal")
+      expect(partner_auth[:redirect_path]).to eq("/?role=nonprofit")
+    end
+  end
+
   describe "Role 1: Member PWA Portal (Decidim::CommonNeed::MemberPortal)" do
     before { visit "/?role=member" }
 

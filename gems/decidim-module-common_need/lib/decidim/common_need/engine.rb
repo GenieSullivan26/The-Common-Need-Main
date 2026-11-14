@@ -14,6 +14,11 @@ module Decidim
       routes do
         root to: "pwa_portal#index"
 
+        # Decidim Sign-On Security Authentication & Role-Based PWA Dispatcher
+        get "/sign_in", to: "pwa_sessions#new", as: :pwa_sign_in
+        post "/sign_in", to: "pwa_sessions#create"
+        delete "/sign_out", to: "pwa_sessions#destroy", as: :pwa_sign_out
+
         # PWA Manifest & Offline Workbox/IndexedDB Service Worker
         get "/manifest.json", to: "pwa_manifest#manifest", as: :pwa_manifest, defaults: { format: :json }
         get "/service-worker.js", to: "pwa_manifest#service_worker", as: :pwa_service_worker, defaults: { format: :js }
@@ -127,6 +132,12 @@ module Decidim
       initializer "decidim_common_need.register_verifications" do
         Decidim::Verifications.register_workflow(:non_profit_handler) do |workflow|
           workflow.form = "Decidim::Verifications::NonProfitHandler"
+          workflow.expires_in = 1.year
+          workflow.renewable = true
+        end
+
+        Decidim::Verifications.register_workflow(:volunteer_courier_handler) do |workflow|
+          workflow.form = "Decidim::Verifications::VolunteerCourierHandler"
           workflow.expires_in = 1.year
           workflow.renewable = true
         end

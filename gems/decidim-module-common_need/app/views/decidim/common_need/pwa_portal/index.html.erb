@@ -522,7 +522,89 @@
     <div class="status-bar">
       <span>9:41 AM</span>
       <div class="notch-pill"></div>
-      <span>PWA • 5G</span>
+      <span id="pwa-status-auth-pill">
+        <button onclick="openDecidimSignOn()" style="background:rgba(197,255,41,0.15); color:var(--lime-bright); border:1px solid var(--lime-bright); border-radius:6px; padding:2px 6px; font-size:10px; font-weight:700; cursor:pointer; font-family:inherit;">🔐 Decidim SSO</button>
+      </span>
+    </div>
+
+    <!-- =========================================================
+         0. DECIDIM SIGN-ON SECURITY AUTHENTICATION GATE
+            (Decidim::Devise::SessionsController + Decidim::Verifications)
+         ========================================================= -->
+    <div id="decidim-sso-gate" class="hidden" style="display:flex; flex-direction:column; flex:1;">
+      <div class="pwa-header">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+          <span class="olive-badge">DECIDIM v0.32+ • DEVISE + VERIFICATIONS SSO</span>
+          <span class="mono-sub" style="margin:0;">NODE <%= current_local_node_code %></span>
+        </div>
+        <div class="pantry-title" style="font-size:18px; margin-top:4px;">Decidim Security Sign-On</div>
+        <div style="font-size:11.5px; color:var(--text-cream); line-height:1.35;">
+          Authenticate with your sovereign Local Node (<code style="color:var(--lime-bright);">Decidim::Organization</code>) credentials to automatically route to your verified <b>Member</b>, <b>Volunteer Courier</b>, or <b>501(c)(3) Partner</b> PWA.
+        </div>
+      </div>
+
+      <div class="pwa-body">
+        <div class="dark-card">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <span style="font-family:monospace; font-size:11.5px; font-weight:700; color:var(--lime-bright);">
+              🔐 1. SELECT DECIDIM USER TYPE
+            </span>
+            <span class="olive-badge" style="font-size:9.5px;">ROLE ROUTER</span>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:12px;">
+            <div id="sso-card-member" onclick="selectDecidimSsoType('member')" style="background:var(--lime-card); border:2px solid var(--lime-bright); border-radius:12px; padding:9px 11px; cursor:pointer;">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:13px; font-weight:800; color:var(--text-white);">🛍️ Community Member</span>
+                <span class="mono-sub" style="margin:0; font-size:10px;" id="sso-badge-member">✓ SELECTED</span>
+              </div>
+              <div style="font-size:11px; color:var(--text-cream); margin-top:3px;">
+                <code>Decidim::User</code> • Unconditional Solidarity (Zero Means-Testing) → <b>Directs to Member PWA</b>
+              </div>
+            </div>
+
+            <div id="sso-card-volunteer" onclick="selectDecidimSsoType('volunteer')" style="background:#0D061A; border:1.5px solid rgba(197,255,41,0.4); border-radius:12px; padding:9px 11px; cursor:pointer;">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:13px; font-weight:800; color:var(--text-white);">🚚 Volunteer Courier</span>
+                <span class="mono-sub" style="margin:0; font-size:10px;" id="sso-badge-volunteer">SELECT</span>
+              </div>
+              <div style="font-size:11px; color:var(--text-cream); margin-top:3px;">
+                <code>Decidim::Verifications::VolunteerCourierHandler</code> • OSRM &amp; Timebank → <b>Directs to Volunteer PWA</b>
+              </div>
+            </div>
+
+            <div id="sso-card-nonprofit" onclick="selectDecidimSsoType('nonprofit')" style="background:#0D061A; border:1.5px solid rgba(197,255,41,0.4); border-radius:12px; padding:9px 11px; cursor:pointer;">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:13px; font-weight:800; color:var(--text-white);">🏢 Partner Non-Profit</span>
+                <span class="mono-sub" style="margin:0; font-size:10px;" id="sso-badge-nonprofit">SELECT</span>
+              </div>
+              <div style="font-size:11px; color:var(--text-cream); margin-top:3px;">
+                <code>Decidim::Verifications::NonProfitHandler</code> • 501(c)(3) EIN Verified → <b>Directs to Partner PWA</b>
+              </div>
+            </div>
+          </div>
+
+          <hr style="border-color: rgba(197,255,41,0.35); margin: 10px 0;">
+
+          <div style="font-family:monospace; font-size:11.5px; font-weight:700; color:var(--lime-bright); margin-bottom:6px;">
+            🔑 2. DECIDIM CREDENTIALS (DEVISE + WARDEN)
+          </div>
+
+          <label style="font-size:11px; color:var(--text-cream); display:block; margin-bottom:3px;">Decidim Email or Community Handle</label>
+          <input type="email" id="decidim-sso-email" class="dark-input" value="rosa@oakland-node.org" placeholder="e.g. rosa@oakland-node.org" style="margin-bottom:8px;">
+
+          <label style="font-size:11px; color:var(--text-cream); display:block; margin-bottom:3px;">Local Node Password / Passkey</label>
+          <input type="password" id="decidim-sso-password" class="dark-input" value="solidarity-oak-01" placeholder="••••••••••••" style="margin-bottom:8px;">
+
+          <div class="mono-sub" id="decidim-sso-handler-banner" style="display:block; width:100%; margin-bottom:10px; line-height:1.35;">
+            ✓ Active Handler: Decidim::User (Unconditional Solidarity • Zero Means-Testing) → Target: MemberPortal
+          </div>
+
+          <button class="cta-lime-btn" style="width:100%; font-size:13px; padding:11px;" onclick="submitDecidimSignOn()">
+            🔐 SIGN IN WITH DECIDIM &amp; LAUNCH PWA →
+          </button>
+        </div>
+      </div>
     </div>
 
     <!-- =========================================================
