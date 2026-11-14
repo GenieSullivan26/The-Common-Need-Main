@@ -3,15 +3,24 @@
 require "spec_helper"
 
 RSpec.describe "The Common Need 5-Role PWA Suite System Specs", type: :system do
-  describe "Role 1: Member PWA Portal (Decidim::CommonNeed::MemberPortal)" do
-    before { visit "/?role=member" }
+  describe "Unified 5-Role PWA Suite (Root Portal)" do
+    before { visit "/" }
 
-    it "renders the 5-Role Switcher bar and Member header with NO MEANS-TESTING & UNCONDITIONAL SOLIDARITY" do
+    it "renders the top 5-Role Switcher bar only on the Unified 5-Role PWA Suite" do
+      expect(page).to have_css("#top-role-switcher")
       expect(page).to have_content("🛍️ Member")
       expect(page).to have_content("🚚 Volunteer")
       expect(page).to have_content("🏢 Partner")
       expect(page).to have_content("🌐 Local Node")
       expect(page).to have_content("📊 Central Hub")
+    end
+  end
+
+  describe "Role 1: Member PWA Portal (Decidim::CommonNeed::MemberPortal)" do
+    before { visit "/?role=member" }
+
+    it "hides the top 5-Role Switcher bar and renders Member header with NO MEANS-TESTING & UNCONDITIONAL SOLIDARITY" do
+      expect(page).not_to have_css("#top-role-switcher")
       expect(page).to have_content("NO MEANS-TESTING")
       expect(page).to have_content("UNCONDITIONAL SOLIDARITY")
     end
@@ -67,7 +76,8 @@ RSpec.describe "The Common Need 5-Role PWA Suite System Specs", type: :system do
   describe "Role 2: Volunteer Courier PWA Portal (Decidim::Courier::VolunteerPortal)" do
     before { visit "/?role=volunteer" }
 
-    it "renders OSRM Turn-by-Turn navigation, Leaflet route map, Web Speech API voice nav button, and Stop #2 confirmation" do
+    it "renders OSRM Turn-by-Turn navigation, Leaflet route map, Web Speech API voice nav button, and Stop #2 confirmation without the top role switcher" do
+      expect(page).not_to have_css("#top-role-switcher")
       expect(page).to have_content("THE COMMON NEED • VOLUNTEER PWA")
       expect(page).to have_content("BATCH #OAK-409")
       expect(page).to have_content("📶 Offline Ready")
@@ -88,7 +98,8 @@ RSpec.describe "The Common Need 5-Role PWA Suite System Specs", type: :system do
   describe "Role 3: Partner Non-Profit PWA Portal (Decidim::Services::PartnerPortal)" do
     before { visit "/?role=partner" }
 
-    it "renders Loading Ramp Handoff verification, Surplus Publisher, Event Publisher, and Accountability Ledger" do
+    it "renders Loading Ramp Handoff verification, Surplus Publisher, Event Publisher, and Accountability Ledger without the top role switcher" do
+      expect(page).not_to have_css("#top-role-switcher")
       expect(page).to have_content("THE COMMON NEED • NON-PROFIT PROVIDER PORTAL")
       expect(page).to have_content("LOCAL NODE 501(c)(3)")
       expect(page).to have_content("✓ Crates Verified & Staged at Loading Ramp")
@@ -101,7 +112,8 @@ RSpec.describe "The Common Need 5-Role PWA Suite System Specs", type: :system do
   describe "Role 4: Local Node Admin PWA Portal (Decidim::CommonNeed::LocalNodeAdmin)" do
     before { visit "/?role=node_admin" }
 
-    it "renders Node #OAK-01 Community Analytics, Partner 501(c)(3) Onboarding Queue, Moderation Queue, and Local Ballots" do
+    it "renders Node #OAK-01 Community Analytics, Partner 501(c)(3) Onboarding Queue, Moderation Queue, and Local Ballots without the top role switcher" do
+      expect(page).not_to have_css("#top-role-switcher")
       expect(page).to have_content("EAST OAKLAND LOCAL NODE • SOVEREIGN DASHBOARD")
       expect(page).to have_content("4 Community Hubs")
       expect(page).to have_content("312 Families")
@@ -115,7 +127,8 @@ RSpec.describe "The Common Need 5-Role PWA Suite System Specs", type: :system do
   describe "Role 5: Central Hub Federation PWA Portal (Decidim::CommonNeed::FederationHub)" do
     before { visit "/?role=federation" }
 
-    it "renders Federated Server Incubator, Area Support Desk (REQ #401), Network Proposals (#NET-88), and 0 Bytes PII Telemetry" do
+    it "renders Federated Server Incubator, Area Support Desk (REQ #401), Network Proposals (#NET-88), and 0 Bytes PII Telemetry without the top role switcher" do
+      expect(page).not_to have_css("#top-role-switcher")
       expect(page).to have_content("THE COMMON NEED • FEDERATION CENTRAL HUB")
       expect(page).to have_content("14 NODES PEERED")
       expect(page).to have_content("⚡ Generate Stack & Peer New Federated Node →")

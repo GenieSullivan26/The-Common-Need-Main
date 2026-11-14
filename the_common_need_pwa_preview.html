@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <meta name="theme-color" content="#95C623">
+  <link rel="manifest" href="./manifest.json">
   <title>The Common Need • Federated Mutual Aid Network</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -534,14 +535,38 @@
   <!-- IN-APP NOTIFICATION TOAST -->
   <div id="pwa-toast" class="pwa-toast hidden"></div>
 
-  <!-- ROLE SWITCHER -->
-  <div class="role-switcher-box">
+  <!-- ROLE SWITCHER (Visible only on the Unified 5-Role PWA Suite) -->
+  <div class="role-switcher-box" id="top-role-switcher">
     <button class="role-btn active" onclick="switchRole('member')" id="role-btn-member">🛍️ Member</button>
     <button class="role-btn" onclick="switchRole('volunteer')" id="role-btn-volunteer">🚚 Volunteer</button>
     <button class="role-btn" onclick="switchRole('nonprofit')" id="role-btn-nonprofit">🏢 Partner</button>
     <button class="role-btn" onclick="switchRole('localnode')" id="role-btn-localnode">🌐 Local Node</button>
     <button class="role-btn" onclick="switchRole('network')" id="role-btn-network">📊 Central Hub</button>
   </div>
+  <script>
+    (function() {
+      var aliases = {
+        member: 'member',
+        volunteer: 'volunteer',
+        partner: 'nonprofit',
+        nonprofit: 'nonprofit',
+        local_node: 'localnode',
+        localnode: 'localnode',
+        node_admin: 'localnode',
+        federation: 'network',
+        network: 'network'
+      };
+      var params = new URLSearchParams(window.location.search);
+      var rawRole = (params.get('role') || '').toLowerCase();
+      var pathSeg = (window.location.pathname.split('/').filter(Boolean).pop() || '').toLowerCase();
+      var lockedRole = aliases[rawRole] || aliases[pathSeg] || null;
+      window.__LOCKED_PWA_ROLE__ = lockedRole;
+      if (lockedRole) {
+        var switcher = document.getElementById('top-role-switcher');
+        if (switcher) switcher.classList.add('hidden');
+      }
+    })();
+  </script>
 
   <!-- PHONE FRAME -->
   <div class="phone-frame">
@@ -2004,8 +2029,10 @@
 
     function switchRole(role) {
       ['member', 'volunteer', 'nonprofit', 'localnode', 'network'].forEach(r => {
-        document.getElementById('role-view-' + r).classList.toggle('hidden', r !== role);
-        document.getElementById('role-btn-' + r).classList.toggle('active', r === role);
+        const viewEl = document.getElementById('role-view-' + r);
+        const btnEl = document.getElementById('role-btn-' + r);
+        if (viewEl) viewEl.classList.toggle('hidden', r !== role);
+        if (btnEl) btnEl.classList.toggle('active', r === role);
       });
       if (role === 'volunteer' && !leafletMap) {
         setTimeout(initLeafletMap, 200);
@@ -2621,6 +2648,21 @@
       });
       leafletMap.fitBounds(stopCoords, { padding: [20, 20] });
     }
+
+    function applyLockedPwaRole() {
+      if (window.__LOCKED_PWA_ROLE__) {
+        const switcher = document.getElementById("top-role-switcher");
+        if (switcher) switcher.classList.add("hidden");
+        switchRole(window.__LOCKED_PWA_ROLE__);
+      }
+    }
+    applyLockedPwaRole();
+    window.addEventListener("DOMContentLoaded", () => {
+      applyLockedPwaRole();
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("./service-worker.js").catch(() => {});
+      }
+    });
   </script>
 </body>
 </html>

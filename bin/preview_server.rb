@@ -34,7 +34,22 @@ ROLE_PATH_MAP = {
   "/partner" => "nonprofit",
   "/nonprofit" => "nonprofit",
   "/local_node" => "localnode",
-  "/federation" => "network"
+  "/localnode" => "localnode",
+  "/node_admin" => "localnode",
+  "/federation" => "network",
+  "/network" => "network"
+}.freeze
+
+ROLE_QUERY_ALIASES = {
+  "member" => "member",
+  "volunteer" => "volunteer",
+  "partner" => "nonprofit",
+  "nonprofit" => "nonprofit",
+  "local_node" => "localnode",
+  "localnode" => "localnode",
+  "node_admin" => "localnode",
+  "federation" => "network",
+  "network" => "network"
 }.freeze
 
 MANIFEST_JSON = JSON.pretty_generate(
@@ -102,9 +117,13 @@ loop do
       body = JSON.pretty_generate(Decidim::CommonNeed::OsrmRoutingService.new.offline_route_bundle)
     else
       html = File.read(PREVIEW_HTML_PATH)
-      requested_role = ROLE_PATH_MAP[path] || query_params["role"]
+      requested_role = ROLE_PATH_MAP[path] || ROLE_QUERY_ALIASES[query_params["role"].to_s.downcase]
       if %w[member volunteer nonprofit localnode network].include?(requested_role)
-        boot_script = "<script>window.addEventListener('DOMContentLoaded', () => switchRole('#{requested_role}'));</script></body>"
+        html = html.sub(
+          'class="role-switcher-box" id="top-role-switcher"',
+          'class="role-switcher-box hidden" id="top-role-switcher"'
+        )
+        boot_script = "<script>window.__LOCKED_PWA_ROLE__ = '#{requested_role}'; window.addEventListener('DOMContentLoaded', () => { const s = document.getElementById('top-role-switcher'); if (s) s.classList.add('hidden'); switchRole('#{requested_role}'); });</script></body>"
         html = html.sub("</body>", boot_script)
       end
       body = html

@@ -8,8 +8,22 @@ module Decidim
     class PwaPortalController < ApplicationController
       layout false
 
+      ROLE_ALIASES = {
+        "member" => "member",
+        "volunteer" => "volunteer",
+        "partner" => "nonprofit",
+        "nonprofit" => "nonprofit",
+        "local_node" => "localnode",
+        "localnode" => "localnode",
+        "node_admin" => "localnode",
+        "federation" => "network",
+        "network" => "network"
+      }.freeze
+
       def index
-        @active_role = params[:role].presence || "member"
+        resolved_role = ROLE_ALIASES[params[:role].to_s.downcase]
+        @unified_suite = resolved_role.nil?
+        @active_role = resolved_role || "member"
         @hubs = default_member_hubs
         @delivery_banner_state = default_delivery_banner_state
         @calendar_events = default_calendar_events

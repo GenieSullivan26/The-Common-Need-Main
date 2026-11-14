@@ -506,14 +506,16 @@
   <!-- IN-APP NOTIFICATION TOAST -->
   <div id="pwa-toast" class="pwa-toast hidden"></div>
 
-  <!-- ROLE SWITCHER -->
-  <div class="role-switcher-box">
-    <button class="role-btn active" onclick="switchRole('member')" id="role-btn-member">🛍️ Member</button>
-    <button class="role-btn" onclick="switchRole('volunteer')" id="role-btn-volunteer">🚚 Volunteer</button>
-    <button class="role-btn" onclick="switchRole('nonprofit')" id="role-btn-nonprofit">🏢 Partner</button>
-    <button class="role-btn" onclick="switchRole('localnode')" id="role-btn-localnode">🌐 Local Node</button>
-    <button class="role-btn" onclick="switchRole('network')" id="role-btn-network">📊 Central Hub</button>
-  </div>
+  <% if @unified_suite %>
+    <!-- ROLE SWITCHER (Visible only on the Unified 5-Role PWA Suite) -->
+    <div class="role-switcher-box" id="top-role-switcher">
+      <button class="role-btn active" onclick="switchRole('member')" id="role-btn-member">🛍️ Member</button>
+      <button class="role-btn" onclick="switchRole('volunteer')" id="role-btn-volunteer">🚚 Volunteer</button>
+      <button class="role-btn" onclick="switchRole('nonprofit')" id="role-btn-nonprofit">🏢 Partner</button>
+      <button class="role-btn" onclick="switchRole('localnode')" id="role-btn-localnode">🌐 Local Node</button>
+      <button class="role-btn" onclick="switchRole('network')" id="role-btn-network">📊 Central Hub</button>
+    </div>
+  <% end %>
 
   <!-- PHONE FRAME -->
   <div class="phone-frame">
@@ -1563,8 +1565,10 @@
 
     function switchRole(role) {
       ['member', 'volunteer', 'nonprofit', 'localnode', 'network'].forEach(r => {
-        document.getElementById('role-view-' + r).classList.toggle('hidden', r !== role);
-        document.getElementById('role-btn-' + r).classList.toggle('active', r === role);
+        const viewEl = document.getElementById('role-view-' + r);
+        const btnEl = document.getElementById('role-btn-' + r);
+        if (viewEl) viewEl.classList.toggle('hidden', r !== role);
+        if (btnEl) btnEl.classList.toggle('active', r === role);
       });
       if (role === 'volunteer' && !leafletMap) {
         setTimeout(initLeafletMap, 200);
@@ -2178,6 +2182,8 @@
       });
       leafletMap.fitBounds(stopCoords, { padding: [20, 20] });
     }
+
+    switchRole('<%= @active_role %>');
   </script>
 </body>
 </html>
