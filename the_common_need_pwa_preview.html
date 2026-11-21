@@ -733,7 +733,7 @@
          1. MEMBER PWA (Google Gemini-Inspired Conversational UI)
          ========================================================= -->
     <div id="role-view-member" style="display:flex; flex-direction:column; flex:1; position:relative;">
-      <!-- GEMINI-STYLE TOP BAR (Top-Left Dropdown Menu + Top-Right Profile & Sign Out) -->
+      <!-- TOP BAR (Top-Left Dropdown Menu + Top-Right Profile & Sign Out) -->
       <div id="member-gemini-topbar" style="display:flex; justify-content:space-between; align-items:center; padding:12px 18px 8px; position:relative; z-index:820;">
         <button type="button" id="member-top-menu-btn" onclick="toggleMemberNavDropdown()" style="background:transparent; border:none; color:var(--text-white); display:inline-flex; align-items:center; gap:12px; cursor:pointer; padding:6px 4px; font-family:inherit;">
           <span style="display:inline-flex; flex-direction:column; gap:5px; width:18px;">
@@ -742,13 +742,13 @@
           </span>
           <span style="font-size:17px; font-weight:600; letter-spacing:-0.2px; display:inline-flex; align-items:center; gap:6px;">
             <span>Common Need</span>
-            <span id="member-top-page-indicator" style="color:rgba(244,247,232,0.52); font-weight:400;">AI</span>
+            <span id="member-top-page-indicator" style="color:rgba(244,247,232,0.52); font-weight:400;">Resource Navigator</span>
             <span style="font-size:12px; color:rgba(244,247,232,0.52);">⌄</span>
           </span>
         </button>
 
         <div style="display:inline-flex; align-items:center; gap:10px;">
-          <button type="button" title="New AI Chat" onclick="resetMemberGeminiChat()" style="width:34px; height:34px; border-radius:50%; background:transparent; border:1.5px dashed rgba(244,247,232,0.35); color:var(--text-cream); display:inline-flex; align-items:center; justify-content:center; font-size:14px; cursor:pointer;">
+          <button type="button" title="New Resource Navigator Session" onclick="resetMemberGeminiChat()" style="width:34px; height:34px; border-radius:50%; background:transparent; border:1.5px dashed rgba(244,247,232,0.35); color:var(--text-cream); display:inline-flex; align-items:center; justify-content:center; font-size:14px; cursor:pointer;">
             ✎
           </button>
           <button type="button" id="member-top-profile-btn" onclick="openProfileModal()" style="background:linear-gradient(135deg, #C5FF29 0%, #6B5B1E 100%); padding:2px; border:none; border-radius:999px; cursor:pointer; display:inline-flex; align-items:center; gap:6px; box-shadow:0 4px 12px rgba(197,255,41,0.2);">
@@ -759,14 +759,14 @@
         </div>
       </div>
 
-      <!-- TOP-LEFT DROPDOWN MENU (Links to AI Home, Browse, Basket, Calendar, and Vote) -->
+      <!-- TOP-LEFT DROPDOWN MENU (Links to Resource Navigator, Browse, Basket, Calendar, and Vote) -->
       <div id="member-nav-dropdown" class="hidden" style="position:absolute; top:56px; left:16px; width:240px; background:rgba(24,13,46,0.98); backdrop-filter:blur(16px); border:1px solid rgba(197,255,41,0.32); border-radius:20px; padding:8px; box-shadow:0 20px 48px rgba(0,0,0,0.8); z-index:860; display:flex; flex-direction:column; gap:4px;">
         <div style="font-size:10px; font-weight:700; letter-spacing:0.6px; color:rgba(244,247,232,0.45); padding:6px 12px 2px;">
           DECIDIM MEMBER PORTAL
         </div>
         <button type="button" class="nav-tab active" id="m-nav-5" onclick="switchMemberTab(5)" style="flex-direction:row; justify-content:flex-start; gap:10px; padding:10px 12px; font-size:13px; border-radius:12px; width:100%;">
-          <span>🤖</span>
-          <span>AI Assistant</span>
+          <span>🧭</span>
+          <span>Resource Navigator</span>
         </button>
         <button type="button" class="nav-tab" id="m-nav-1" onclick="switchMemberTab(1)" style="flex-direction:row; justify-content:flex-start; gap:10px; padding:10px 12px; font-size:13px; border-radius:12px; width:100%;">
           <span>🛍️</span>
@@ -787,11 +787,11 @@
       </div>
 
       <div class="pwa-header hidden" id="member-pwa-header">
-        <!-- Search & Local AI Quick Bar -->
+        <!-- Search & Local Resource Navigator Quick Bar -->
         <div id="member-search-row" style="display:flex; gap:8px; margin-bottom:10px; align-items:center;">
           <input type="text" id="member-catalog-search" class="dark-input" style="margin:0; flex:1;" placeholder="🔍 Search food, health, legal, housing..." oninput="searchMemberCatalog(this.value)">
           <button class="olive-badge" style="cursor:pointer;" onclick="switchMemberTab(5)">
-            🤖 Ask Local AI
+            🧭 Resource Navigator
           </button>
         </div>
 
@@ -985,7 +985,7 @@
               <div class="mono-sub" style="margin:0;">Unlawful Detainer Answer + Wage Theft & Asylum Legal Aid</div>
               <div style="font-size:11px; color:#F4F7E8; margin-top:2px;">Yield: Licensed Legal Representation + Courier Court Filing</div>
             </div>
-            <button class="olive-badge" style="cursor:pointer; border-color:var(--lime-bright);" onclick="openAiPaperworkFor('Legal Aid Eviction Defense & Expungement Intake')">🤖 Start Legal</button>
+            <button class="olive-badge" style="cursor:pointer; border-color:var(--lime-bright);" onclick="openAiPaperworkFor('Legal Aid Eviction Defense & Expungement Intake')">🧭 Start Legal</button>
           </div>
 
           <!-- Category: Housing -->
@@ -996,7 +996,7 @@
               <div class="mono-sub" style="margin:0;">Tenant Habitability Repair Kit + Back-Rent Stabilization Grant</div>
               <div style="font-size:11px; color:#F4F7E8; margin-top:2px;">Yield: Eviction Prevention + Delivered Dehumidifier/Draft Seals</div>
             </div>
-            <button class="olive-badge" style="cursor:pointer; border-color:var(--lime-bright);" onclick="openAiPaperworkFor('Housing Rent Relief & Habitability Packet')">🤖 Housing Help</button>
+            <button class="olive-badge" style="cursor:pointer; border-color:var(--lime-bright);" onclick="openAiPaperworkFor('Housing Rent Relief & Habitability Packet')">🧭 Housing Help</button>
           </div>
 
           <!-- Category: Social services -->
@@ -1004,10 +1004,10 @@
             <div>
               <span class="cat-tag-chip">📋 SOCIAL SERVICES</span>
               <div class="item-title">CalFresh / SNAP, Medi-Cal, WIC & LIHEAP Utility Arrears Filing</div>
-              <div class="mono-sub" style="margin:0;">Local AI Auto-Fill + Bilingual Caseworker Verification</div>
+              <div class="mono-sub" style="margin:0;">Resource Navigator Auto-Fill + Bilingual Caseworker Verification</div>
               <div style="font-size:11px; color:#F4F7E8; margin-top:2px;">Yield: 3-Day Expedited Benefits + Courier Printed Form Delivery</div>
             </div>
-            <button class="olive-badge" style="cursor:pointer; border-color:var(--lime-bright);" onclick="openAiPaperworkFor('Social Services CalFresh, Medi-Cal & LIHEAP Packet')">🤖 Auto-Fill</button>
+            <button class="olive-badge" style="cursor:pointer; border-color:var(--lime-bright);" onclick="openAiPaperworkFor('Social Services CalFresh, Medi-Cal & LIHEAP Packet')">🧭 Auto-Fill</button>
           </div>
 
           <!-- Category: Public sector -->
@@ -1018,7 +1018,7 @@
               <div class="mono-sub" style="margin:0;">City/County Fee-Waiver Vouchers + East Bay Paratransit Setup</div>
               <div style="font-size:11px; color:#F4F7E8; margin-top:2px;">Yield: Official Municipal ID + No-Cost Regional Transit Access</div>
             </div>
-            <button class="olive-badge" style="cursor:pointer; border-color:var(--lime-bright);" onclick="openAiPaperworkFor('Public Sector Municipal ID & Paratransit Waiver')">🤖 Enroll Now</button>
+            <button class="olive-badge" style="cursor:pointer; border-color:var(--lime-bright);" onclick="openAiPaperworkFor('Public Sector Municipal ID & Paratransit Waiver')">🧭 Enroll Now</button>
           </div>
 
           <!-- Category: Veteran services -->
@@ -1029,7 +1029,7 @@
               <div class="mono-sub" style="margin:0;">Accredited Veteran Peer Advocate + Cold-Weather & Pantry Bundle</div>
               <div style="font-size:11px; color:#F4F7E8; margin-top:2px;">Yield: VA Benefits Navigation + Home-Delivered Veteran Care Tote</div>
             </div>
-            <button class="olive-badge" style="cursor:pointer; border-color:var(--lime-bright);" onclick="openAiPaperworkFor('Veteran Services VA Claim & DD-214 Support Packet')">🤖 VA Support</button>
+            <button class="olive-badge" style="cursor:pointer; border-color:var(--lime-bright);" onclick="openAiPaperworkFor('Veteran Services VA Claim & DD-214 Support Packet')">🧭 VA Support</button>
           </div>
         </div>
 
@@ -1263,10 +1263,10 @@
         </div>
       </div>
 
-      <!-- MEMBER TAB 5 (DEFAULT HOME): Google Gemini-Inspired Local AI Assistant & Context Box -->
+      <!-- MEMBER TAB 5 (DEFAULT HOME): Local Resource Navigator & Context Box -->
       <div class="pwa-body" id="member-tab-5" style="justify-content:space-between; padding:18px 18px 22px; background:radial-gradient(circle at 50% 42%, rgba(197,255,41,0.09) 0%, rgba(22,11,43,0.3) 58%, transparent 100%);">
         <div class="hidden">
-          LOCAL NODE AI ASSISTANT (decidim-ai) • ZERO EXTERNAL API • OFFLINE-CAPABLE LLM
+          LOCAL NODE RESOURCE NAVIGATOR • ZERO EXTERNAL API • OFFLINE-CAPABLE
         </div>
 
         <!-- CENTER HERO & CONVERSATION AREA -->
@@ -1284,14 +1284,14 @@
             </div>
           </div>
 
-          <!-- Interactive Local AI Chat Thread (Reveals when chatting) -->
+          <!-- Interactive Resource Navigator Thread (Reveals when chatting) -->
           <div id="local-ai-chat-log" class="hidden" style="width:100%; max-height:310px; overflow-y:auto; scrollbar-width:none; -ms-overflow-style:none; display:flex; flex-direction:column; gap:10px; padding:8px 2px; text-align:left; margin-top:10px;">
           </div>
 
           <!-- Guided Government & Non-Profit Paperwork Auto-Filler (Toggled via "Task" mode pill or "+" button) -->
           <div id="member-paperwork-task-panel" class="dark-card hidden" style="width:100%; text-align:left; margin-top:12px; padding:14px;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-              <span class="cat-tag-chip" style="margin:0;">ENCRYPTED LOCAL PAPERWORK CO-PILOT</span>
+              <span class="cat-tag-chip" style="margin:0;">ENCRYPTED LOCAL RESOURCE NAVIGATOR</span>
               <span class="olive-badge" style="padding:3px 9px; font-size:10px;">ZERO MEANS-TEST</span>
             </div>
             <div style="font-size:13.5px; font-weight:700; margin-bottom:6px;">📋 Auto-Fill Non-Profit & Government Forms</div>
@@ -1330,7 +1330,7 @@
           </div>
         </div>
 
-        <!-- BOTTOM MODE TOGGLE ("Chat" | "Task") & AI CHATBOT CONTEXT BOX -->
+        <!-- BOTTOM MODE TOGGLE ("Chat" | "Task") & RESOURCE NAVIGATOR CONTEXT BOX -->
         <div style="display:flex; flex-direction:column; align-items:center; gap:12px; width:100%;">
           <div style="display:inline-flex; align-items:center; gap:8px;">
             <button type="button" id="gemini-mode-chat-btn" onclick="toggleMemberGeminiMode('chat')" style="background:rgba(197,255,41,0.12); color:var(--text-white); border:1px solid rgba(197,255,41,0.42); border-radius:999px; padding:7px 18px; font-size:13px; font-weight:600; cursor:pointer; transition:all 0.15s ease;">
@@ -1341,16 +1341,16 @@
             </button>
           </div>
 
-          <!-- AI CHATBOT CONTEXT BOX -->
+          <!-- RESOURCE NAVIGATOR CONTEXT BOX -->
           <div id="member-gemini-context-box" style="width:100%; background:#1C1032; border:1.5px solid rgba(197,255,41,0.28); border-radius:36px; padding:9px 11px 9px 15px; display:flex; align-items:center; gap:10px; box-shadow:0 12px 34px rgba(0,0,0,0.6);">
-            <button type="button" title="Open Paperwork Co-Pilot & Context" onclick="toggleMemberGeminiMode('task')" style="background:transparent; border:none; color:rgba(244,247,232,0.82); font-size:24px; font-weight:300; line-height:1; cursor:pointer; padding:0 4px;">
+            <button type="button" title="Open Resource Navigator Forms & Context" onclick="toggleMemberGeminiMode('task')" style="background:transparent; border:none; color:rgba(244,247,232,0.82); font-size:24px; font-weight:300; line-height:1; cursor:pointer; padding:0 4px;">
               +
             </button>
             <input type="text" id="local-ai-user-input" placeholder="Ask The Common Need" onkeydown="if(event.key==='Enter') sendLocalAiMessage()" style="background:transparent; border:none; color:var(--text-white); font-size:15px; flex:1; outline:none; margin:0; padding:6px 0;">
             <button type="button" title="Voice Input" onclick="triggerMemberVoicePrompt()" style="background:transparent; border:none; color:rgba(244,247,232,0.78); font-size:16px; cursor:pointer; padding:4px;">
               🎙️
             </button>
-            <button type="button" title="Send to Local Node AI" onclick="sendLocalAiMessage()" style="width:38px; height:38px; border-radius:50%; background:var(--lime-bright); color:#120924; border:none; display:inline-flex; align-items:center; justify-content:center; font-size:17px; font-weight:900; cursor:pointer; flex-shrink:0; box-shadow:0 4px 14px rgba(197,255,41,0.3);">
+            <button type="button" title="Send to Resource Navigator" onclick="sendLocalAiMessage()" style="width:38px; height:38px; border-radius:50%; background:var(--lime-bright); color:#120924; border:none; display:inline-flex; align-items:center; justify-content:center; font-size:17px; font-weight:900; cursor:pointer; flex-shrink:0; box-shadow:0 4px 14px rgba(197,255,41,0.3);">
               ↑
             </button>
           </div>
@@ -1549,7 +1549,7 @@
                   + Reserve Clinic Slot
                 </button>
                 <button class="olive-badge" style="flex:1; cursor:pointer; padding:8px; text-align:center; background:var(--bg-outer);" onclick="openAiPaperworkFor('Legal Aid Eviction Defense & Expungement Intake')">
-                  🤖 Pre-Fill Clinic Forms
+                  🧭 Pre-Fill Clinic Forms
                 </button>
               </div>
             </div>
@@ -1645,7 +1645,7 @@
                   + RSVP on Local Node
                 </button>
                 <button class="olive-badge" style="flex:1; cursor:pointer; padding:8px; text-align:center; background:var(--bg-outer);" onclick="openAiPaperworkFor('Public Sector Municipal ID & Paratransit Waiver')">
-                  🤖 Prepare ID Waiver
+                  🧭 Prepare ID Waiver
                 </button>
               </div>
             </div>
@@ -2263,14 +2263,14 @@
         if (navEl) navEl.classList.toggle('active', i === tabIndex);
       });
       const pageNames = {
-        5: 'AI',
+        5: 'Resource Navigator',
         1: 'Browse',
         2: 'Basket',
         6: 'Calendar',
         4: 'Vote'
       };
       const indicatorEl = document.getElementById('member-top-page-indicator');
-      if (indicatorEl) indicatorEl.textContent = pageNames[tabIndex] || 'AI';
+      if (indicatorEl) indicatorEl.textContent = pageNames[tabIndex] || 'Resource Navigator';
 
       const showCatalogControls = (tabIndex === 1);
       const headerEl = document.getElementById('member-pwa-header');
@@ -2629,7 +2629,7 @@
       aiBubble.style.cssText = 'background:rgba(27,15,51,0.92); border:1px solid rgba(255,255,255,0.1); border-radius:18px 18px 18px 4px; padding:12px 14px; font-size:12.5px; line-height:1.5; color:var(--text-cream);';
       aiBubble.innerHTML = `
         <div style="font-size:10.5px; color:var(--lime-bright); font-weight:700; margin-bottom:4px; display:flex; align-items:center; gap:5px;">
-          <span>COMMON NEED LOCAL AI • #OAK-01</span>
+          <span>🧭 COMMON NEED RESOURCE NAVIGATOR • #OAK-01</span>
         </div>
         ${replyHtml}
       `;
@@ -2660,7 +2660,7 @@
       if (mode === 'pdf') {
         showToast(`Generated encrypted PDF for "${formName}" in your local #OAK-01 vault!`);
       } else {
-        addItemToBasket(null, formName, 'Paperwork Co-Pilot • Fruitvale Hub');
+        addItemToBasket(null, formName, 'Resource Navigator • Fruitvale Hub');
       }
     }
 

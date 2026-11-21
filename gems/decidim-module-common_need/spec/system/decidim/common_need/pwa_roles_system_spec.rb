@@ -90,7 +90,7 @@ RSpec.describe "The Common Need 5-Role PWA Suite System Specs", type: :system do
   describe "Role 1: Member PWA Portal (Decidim::CommonNeed::MemberPortal)" do
     before { visit "/?role=member" }
 
-    it "hides the top 5-Role Switcher bar and renders the Google Gemini-inspired Member header with top-left dropdown menu, top-right profile/sign-out button, and AI chatbot context box" do
+    it "hides the top 5-Role Switcher bar and renders the Member header with top-left dropdown menu, top-right profile/sign-out button, and Resource Navigator context box" do
       expect(page).not_to have_css("#top-role-switcher")
       expect(page).to have_css("#member-gemini-topbar")
       expect(page).to have_css("#member-top-menu-btn")
@@ -99,6 +99,7 @@ RSpec.describe "The Common Need 5-Role PWA Suite System Specs", type: :system do
       expect(page).to have_css("#pwa-profile-signout-btn")
       expect(page).to have_css("#member-gemini-context-box")
       expect(page).to have_content("What can I help with,")
+      expect(page).to have_content("Resource Navigator")
       expect(page).to have_content("Browse")
       expect(page).to have_content("Basket (2)")
       expect(page).to have_content("Calendar")
@@ -119,8 +120,8 @@ RSpec.describe "The Common Need 5-Role PWA Suite System Specs", type: :system do
       expect(page).to have_content("San Antonio Arts, Youth, Education & Worker Center")
     end
 
-    it "renders Tab 2 (100% Local AI & Paperwork Co-Pilot) with 5 guided templates and ZERO EXTERNAL API badge" do
-      expect(page).to have_content("LOCAL NODE AI ASSISTANT (decidim-ai)")
+    it "renders the Local Resource Navigator with 5 guided paperwork templates and ZERO EXTERNAL API badge" do
+      expect(page).to have_content("LOCAL NODE RESOURCE NAVIGATOR")
       expect(page).to have_content("ZERO EXTERNAL API")
       expect(page).to have_content("Social Services: CalFresh / SNAP, Medi-Cal & LIHEAP Packet")
       expect(page).to have_content("Legal Aid: Eviction Defense & Record Expungement Intake")

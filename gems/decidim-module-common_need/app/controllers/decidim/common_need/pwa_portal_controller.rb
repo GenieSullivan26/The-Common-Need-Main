@@ -167,7 +167,7 @@ module Decidim
                 tags_summary: "Unlawful Detainer Answer + Wage Theft & Asylum Legal Aid",
                 yield_summary: "Yield: Licensed Legal Representation + Courier Court Filing",
                 action_type: :ai_paperwork,
-                button_label: "🤖 Start Legal",
+                button_label: "🧭 Start Legal",
                 paperwork_template: "Legal Aid Eviction Defense & Expungement Intake"
               },
               {
@@ -177,17 +177,17 @@ module Decidim
                 tags_summary: "Tenant Habitability Repair Kit + Back-Rent Stabilization Grant",
                 yield_summary: "Yield: Eviction Prevention + Delivered Dehumidifier/Draft Seals",
                 action_type: :ai_paperwork,
-                button_label: "🤖 Housing Help",
+                button_label: "🧭 Housing Help",
                 paperwork_template: "Housing Rent Relief & Habitability Packet"
               },
               {
                 category: "social_services",
                 category_chip: "📋 SOCIAL SERVICES",
                 title: "CalFresh / SNAP, Medi-Cal, WIC & LIHEAP Utility Arrears Filing",
-                tags_summary: "Local AI Auto-Fill + Bilingual Caseworker Verification",
+                tags_summary: "Resource Navigator Auto-Fill + Bilingual Caseworker Verification",
                 yield_summary: "Yield: 3-Day Expedited Benefits + Courier Printed Form Delivery",
                 action_type: :ai_paperwork,
-                button_label: "🤖 Auto-Fill",
+                button_label: "🧭 Auto-Fill",
                 paperwork_template: "Social Services CalFresh, Medi-Cal & LIHEAP Packet"
               },
               {
@@ -197,7 +197,7 @@ module Decidim
                 tags_summary: "City/County Fee-Waiver Vouchers + East Bay Paratransit Setup",
                 yield_summary: "Yield: Official Municipal ID + No-Cost Regional Transit Access",
                 action_type: :ai_paperwork,
-                button_label: "🤖 Enroll Now",
+                button_label: "🧭 Enroll Now",
                 paperwork_template: "Public Sector Municipal ID & Paratransit Waiver"
               },
               {
@@ -207,7 +207,7 @@ module Decidim
                 tags_summary: "Accredited Veteran Peer Advocate + Cold-Weather & Pantry Bundle",
                 yield_summary: "Yield: VA Benefits Navigation + Home-Delivered Veteran Care Tote",
                 action_type: :ai_paperwork,
-                button_label: "🤖 VA Support",
+                button_label: "🧭 VA Support",
                 paperwork_template: "Veteran Services VA Claim & DD-214 Support Packet"
               }
             ]
@@ -329,7 +329,7 @@ module Decidim
             rsvp_label: "+ Reserve Clinic Slot",
             rsvp_title: "Tenant Legal, CalFresh & VA Clinic",
             secondary_action_type: :ai_paperwork,
-            secondary_label: "🤖 Pre-Fill Clinic Forms",
+            secondary_label: "🧭 Pre-Fill Clinic Forms",
             secondary_payload_title: "Legal Aid Eviction Defense & Expungement Intake"
           },
           {
@@ -412,7 +412,7 @@ module Decidim
             rsvp_label: "+ RSVP on Local Node",
             rsvp_title: "Mobile Municipal ID & Transit Enrollment",
             secondary_action_type: :ai_paperwork,
-            secondary_label: "🤖 Prepare ID Waiver",
+            secondary_label: "🧭 Prepare ID Waiver",
             secondary_payload_title: "Public Sector Municipal ID & Paratransit Waiver"
           }
         ]

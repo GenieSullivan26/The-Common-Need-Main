@@ -674,7 +674,7 @@
          1. MEMBER PWA (Decidim::CommonNeed::MemberPortal • Gemini-Inspired UI)
          ========================================================= -->
     <div id="role-view-member" data-controller="catalog-filter paperwork-copilot" style="display:flex; flex-direction:column; flex:1; position:relative;">
-      <!-- GEMINI-STYLE TOP BAR (Top-Left Dropdown Menu + Top-Right Profile & Sign Out) -->
+      <!-- TOP BAR (Top-Left Dropdown Menu + Top-Right Profile & Sign Out) -->
       <div id="member-gemini-topbar" style="display:flex; justify-content:space-between; align-items:center; padding:12px 18px 8px; position:relative; z-index:820;">
         <button type="button" id="member-top-menu-btn" onclick="toggleMemberNavDropdown()" style="background:transparent; border:none; color:var(--text-white); display:inline-flex; align-items:center; gap:12px; cursor:pointer; padding:6px 4px; font-family:inherit;">
           <span style="display:inline-flex; flex-direction:column; gap:5px; width:18px;">
@@ -683,13 +683,13 @@
           </span>
           <span style="font-size:17px; font-weight:600; letter-spacing:-0.2px; display:inline-flex; align-items:center; gap:6px;">
             <span>Common Need</span>
-            <span id="member-top-page-indicator" style="color:rgba(244,247,232,0.52); font-weight:400;">AI</span>
+            <span id="member-top-page-indicator" style="color:rgba(244,247,232,0.52); font-weight:400;">Resource Navigator</span>
             <span style="font-size:12px; color:rgba(244,247,232,0.52);">⌄</span>
           </span>
         </button>
 
         <div style="display:inline-flex; align-items:center; gap:10px;">
-          <button type="button" title="New AI Chat" onclick="resetMemberGeminiChat()" style="width:34px; height:34px; border-radius:50%; background:transparent; border:1.5px dashed rgba(244,247,232,0.35); color:var(--text-cream); display:inline-flex; align-items:center; justify-content:center; font-size:14px; cursor:pointer;">
+          <button type="button" title="New Resource Navigator Session" onclick="resetMemberGeminiChat()" style="width:34px; height:34px; border-radius:50%; background:transparent; border:1.5px dashed rgba(244,247,232,0.35); color:var(--text-cream); display:inline-flex; align-items:center; justify-content:center; font-size:14px; cursor:pointer;">
             ✎
           </button>
           <button type="button" id="member-top-profile-btn" onclick="openProfileModal()" style="background:linear-gradient(135deg, #C5FF29 0%, #6B5B1E 100%); padding:2px; border:none; border-radius:999px; cursor:pointer; display:inline-flex; align-items:center; gap:6px; box-shadow:0 4px 12px rgba(197,255,41,0.2);">
@@ -700,14 +700,14 @@
         </div>
       </div>
 
-      <!-- TOP-LEFT DROPDOWN MENU (Links to AI Home, Browse, Basket, Calendar, and Vote) -->
+      <!-- TOP-LEFT DROPDOWN MENU (Links to Resource Navigator, Browse, Basket, Calendar, and Vote) -->
       <div id="member-nav-dropdown" class="hidden" style="position:absolute; top:56px; left:16px; width:240px; background:rgba(24,13,46,0.98); backdrop-filter:blur(16px); border:1px solid rgba(197,255,41,0.32); border-radius:20px; padding:8px; box-shadow:0 20px 48px rgba(0,0,0,0.8); z-index:860; display:flex; flex-direction:column; gap:4px;">
         <div style="font-size:10px; font-weight:700; letter-spacing:0.6px; color:rgba(244,247,232,0.45); padding:6px 12px 2px;">
           DECIDIM MEMBER PORTAL
         </div>
         <button type="button" class="nav-tab active" id="m-nav-5" onclick="switchMemberTab(5)" style="flex-direction:row; justify-content:flex-start; gap:10px; padding:10px 12px; font-size:13px; border-radius:12px; width:100%;">
-          <span>🤖</span>
-          <span>AI Assistant</span>
+          <span>🧭</span>
+          <span>Resource Navigator</span>
         </button>
         <button type="button" class="nav-tab" id="m-nav-1" onclick="switchMemberTab(1)" style="flex-direction:row; justify-content:flex-start; gap:10px; padding:10px 12px; font-size:13px; border-radius:12px; width:100%;">
           <span>🛍️</span>
@@ -728,7 +728,7 @@
       </div>
 
       <div class="pwa-header hidden" id="member-pwa-header">
-        <!-- Search & Local AI Quick Bar -->
+        <!-- Search & Local Resource Navigator Quick Bar -->
         <div id="member-search-row" style="display:flex; gap:8px; margin-bottom:10px; align-items:center;">
           <input type="text"
                  id="member-catalog-search"
@@ -741,7 +741,7 @@
           <button class="olive-badge"
                   style="cursor:pointer;"
                   onclick="switchMemberTab(5)">
-            🤖 Ask Local AI
+            🧭 Resource Navigator
           </button>
         </div>
 
@@ -876,10 +876,10 @@
         </div>
       </div>
 
-      <!-- MEMBER TAB 5 (DEFAULT HOME): Google Gemini-Inspired Local AI Assistant & Context Box -->
+      <!-- MEMBER TAB 5 (DEFAULT HOME): Local Resource Navigator & Context Box -->
       <div class="pwa-body" id="member-tab-5" style="justify-content:space-between; padding:18px 18px 22px; background:radial-gradient(circle at 50% 42%, rgba(197,255,41,0.09) 0%, rgba(22,11,43,0.3) 58%, transparent 100%);">
         <div class="hidden">
-          LOCAL NODE AI ASSISTANT (decidim-ai) • ZERO EXTERNAL API • OFFLINE-CAPABLE LLM
+          LOCAL NODE RESOURCE NAVIGATOR • ZERO EXTERNAL API • OFFLINE-CAPABLE
         </div>
 
         <!-- CENTER HERO & CONVERSATION AREA -->
@@ -903,7 +903,7 @@
           <!-- Guided Government & Non-Profit Paperwork Auto-Filler (Toggled via "Task" mode pill or "+" button) -->
           <div id="member-paperwork-task-panel" class="dark-card hidden" style="width:100%; text-align:left; margin-top:12px; padding:14px;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-              <span class="cat-tag-chip" style="margin:0;">ENCRYPTED LOCAL PAPERWORK CO-PILOT</span>
+              <span class="cat-tag-chip" style="margin:0;">ENCRYPTED LOCAL RESOURCE NAVIGATOR</span>
               <span class="olive-badge" style="padding:3px 9px; font-size:10px;">ZERO MEANS-TEST</span>
             </div>
             <div style="font-size:13.5px; font-weight:700; margin-bottom:6px;">📋 Auto-Fill Non-Profit & Government Forms</div>
@@ -973,7 +973,7 @@
           </div>
         </div>
 
-        <!-- BOTTOM MODE TOGGLE ("Chat" | "Task") & AI CHATBOT CONTEXT BOX -->
+        <!-- BOTTOM MODE TOGGLE ("Chat" | "Task") & RESOURCE NAVIGATOR CONTEXT BOX -->
         <div style="display:flex; flex-direction:column; align-items:center; gap:12px; width:100%;">
           <div style="display:inline-flex; align-items:center; gap:8px;">
             <button type="button" id="gemini-mode-chat-btn" onclick="toggleMemberGeminiMode('chat')" style="background:rgba(197,255,41,0.12); color:var(--text-white); border:1px solid rgba(197,255,41,0.42); border-radius:999px; padding:7px 18px; font-size:13px; font-weight:600; cursor:pointer; transition:all 0.15s ease;">
@@ -984,9 +984,9 @@
             </button>
           </div>
 
-          <!-- AI CHATBOT CONTEXT BOX -->
+          <!-- RESOURCE NAVIGATOR CONTEXT BOX -->
           <div id="member-gemini-context-box" style="width:100%; background:#1C1032; border:1.5px solid rgba(197,255,41,0.28); border-radius:36px; padding:9px 11px 9px 15px; display:flex; align-items:center; gap:10px; box-shadow:0 12px 34px rgba(0,0,0,0.6);">
-            <button type="button" title="Open Paperwork Co-Pilot & Context" onclick="toggleMemberGeminiMode('task')" style="background:transparent; border:none; color:rgba(244,247,232,0.82); font-size:24px; font-weight:300; line-height:1; cursor:pointer; padding:0 4px;">
+            <button type="button" title="Open Resource Navigator Forms & Context" onclick="toggleMemberGeminiMode('task')" style="background:transparent; border:none; color:rgba(244,247,232,0.82); font-size:24px; font-weight:300; line-height:1; cursor:pointer; padding:0 4px;">
               +
             </button>
             <input type="text"
@@ -999,7 +999,7 @@
               🎙️
             </button>
             <button type="button"
-                    title="Send to Local Node AI"
+                    title="Send to Resource Navigator"
                     data-action="click->paperwork-copilot#sendMessage"
                     onclick="sendLocalAiMessage()"
                     style="width:38px; height:38px; border-radius:50%; background:var(--lime-bright); color:#120924; border:none; display:inline-flex; align-items:center; justify-content:center; font-size:17px; font-weight:900; cursor:pointer; flex-shrink:0; box-shadow:0 4px 14px rgba(197,255,41,0.3);">
@@ -2092,7 +2092,7 @@
       if (lower.includes('veteran') || lower.includes('va ') || lower.includes('calfresh') || lower.includes('social')) {
         replyHtml = `
           Matched in <strong>Social services & Veteran services</strong> at Fruitvale Resource Hub:
-          <br>• Pre-filled <strong>CalFresh/Medi-Cal/LIHEAP</strong> and <strong>VA Disability Claim / DD-214</strong> packets in the local Paperwork Co-Pilot below.
+          <br>• Pre-filled <strong>CalFresh/Medi-Cal/LIHEAP</strong> and <strong>VA Disability Claim / DD-214</strong> packets in the local Resource Navigator below.
           <br>• <button class="olive-badge" style="margin-top:6px; cursor:pointer;" onclick="addItemToBasket(this, 'Veteran & Social Services Care Packet', 'Veteran & Social Services')">+ Add Printed Packet & Veteran Care Tote</button>
         `;
       } else if (lower.includes('legal') || lower.includes('housing') || lower.includes('public sector') || lower.includes('eviction')) {
@@ -2123,7 +2123,7 @@
       aiBubble.style.cssText = 'background:var(--bg-outer); border:1px solid var(--lime-bright); border-radius:12px; padding:10px; font-size:12px; line-height:1.45;';
       aiBubble.innerHTML = `
         <div style="font-family:monospace; font-size:10px; color:var(--lime-bright); font-weight:700; margin-bottom:4px;">
-          🤖 #OAK-01 LOCAL SERVER AI • 19-CATEGORY MATCH
+          🧭 COMMON NEED RESOURCE NAVIGATOR • #OAK-01
         </div>
         ${replyHtml}
       `;
@@ -2154,7 +2154,7 @@
       if (mode === 'pdf') {
         showToast(`Generated encrypted PDF for "${formName}" in your local #OAK-01 vault!`);
       } else {
-        addItemToBasket(null, formName, 'Paperwork Co-Pilot • Fruitvale Hub');
+        addItemToBasket(null, formName, 'Resource Navigator • Fruitvale Hub');
       }
     }
 

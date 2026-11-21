@@ -74,7 +74,7 @@ export default class extends Controller {
       "background:var(--bg-outer); border:1px solid var(--lime-bright); border-radius:12px; padding:10px; font-size:12px; line-height:1.45;"
     aiBubble.innerHTML = `
       <div style="font-family:monospace; font-size:10px; color:var(--lime-bright); font-weight:700; margin-bottom:4px;">
-        🤖 ${this.nodeCodeValue} LOCAL SERVER AI • 19-CATEGORY MATCH
+        🧭 COMMON NEED RESOURCE NAVIGATOR • ${this.nodeCodeValue}
       </div>
       ${this.buildLocalReplyHtml(userText)}
     `

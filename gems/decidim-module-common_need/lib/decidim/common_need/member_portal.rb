@@ -7,7 +7,7 @@ module Decidim
     module MemberPortal
       TABS = {
         browse: { index: 1, label: "1. Browse", icon: "🛍️" },
-        ai_helper: { index: 5, label: "2. AI Helper", icon: "🤖" },
+        ai_helper: { index: 5, label: "Resource Navigator", icon: "🧭" },
         basket: { index: 2, label: "3. Basket", icon: "📦" },
         calendar: { index: 6, label: "4. Calendar", icon: "📅" },
         vote: { index: 4, label: "5. Vote", icon: "🗳️" }
