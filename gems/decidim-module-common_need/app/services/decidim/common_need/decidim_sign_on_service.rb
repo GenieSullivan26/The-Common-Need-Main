@@ -127,7 +127,7 @@ module Decidim
       def call
         return failure("Email or Decidim handle is required") if @email.blank? && @user.nil?
         return failure("Name is required to create an account") if @mode == "register" && @name.blank?
-        return failure("Street address or ZIP code is required to link your local instance") if @mode == "register" && @address.blank?
+        return failure("Street address or ZIP code is required to link your local instance") if %w(register update_profile).include?(@mode) && @address.blank?
         return failure("Invalid password or local node passkey") if @user.nil? && @password.present? && @password.length < 4
 
         resolved_type = resolve_user_type
@@ -137,6 +137,7 @@ module Decidim
         {
           authenticated: true,
           created_account: @mode == "register",
+          updated_profile: @mode == "update_profile",
           provider: "decidim_devise_sso",
           organization_node: instance_info[:node_code],
           instance_name: instance_info[:name],

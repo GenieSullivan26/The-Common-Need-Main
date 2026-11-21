@@ -19,28 +19,41 @@ RSpec.describe "The Common Need 5-Role PWA Suite System Specs", type: :system do
   describe "Decidim Sign-On Security Authentication & Role-Based PWA Dispatcher" do
     before { visit "/?role=member" }
 
-    it "renders the sleek Decidim Sign-On & Create Account gate (#decidim-sso-gate) with address-to-instance linking" do
+    it "renders the sleek Decidim Sign-On gate with address hidden on Sign-In, shown on Create Account, and editable in the in-app Profile modal (#pwa-profile-modal)" do
       expect(page).to have_css("#decidim-sso-gate")
+      expect(page).to have_css("#decidim-sso-address-group")
+      expect(page.body).to include('id="decidim-sso-address-group" class="hidden"')
+      expect(page).to have_css("#pwa-profile-modal")
+      expect(page).to have_css("#pwa-open-profile-btn")
       expect(page).to have_content("Sign In")
       expect(page).to have_content("Sign in with Decidim to open your local instance")
-      expect(page).to have_content("Address or ZIP Code")
-      expect(page).to have_content("Linked Instance: East Oakland Local Node (#OAK-01)")
+      expect(page).to have_content("Account & Local Instance")
+      expect(page).to have_content("Save Address & Update Instance →")
       expect(page).to have_content("Don't have an account?")
       expect(page).to have_content("Create an account")
       expect(page).to have_content("Secured by Decidim Single Sign-On")
     end
 
-    it "authenticates or creates Member, Volunteer, and Partner Decidim accounts, links them to their correct instance based on address, and directs each to the matching PWA" do
+    it "authenticates existing users using their saved profile address, requires address when creating an account, and allows updating address in profile once logged in" do
       member_auth = Decidim::CommonNeed::DecidimSignOnService.new(
         email: "rosa@oakland-node.org",
-        password: "solidarity-oak-01",
-        address: "1420 62nd Ave, Oakland, CA 94621"
+        password: "solidarity-oak-01"
       ).call
       expect(member_auth[:authenticated]).to eq(true)
       expect(member_auth[:user_type]).to eq("member")
       expect(member_auth[:organization_node]).to eq("#OAK-01")
       expect(member_auth[:instance_name]).to eq("East Oakland Local Node")
       expect(member_auth[:target_portal]).to eq("Decidim::CommonNeed::MemberPortal")
+
+      member_profile_update = Decidim::CommonNeed::DecidimSignOnService.new(
+        email: "rosa@oakland-node.org",
+        address: "1800 San Leandro Blvd, San Leandro, CA 94577",
+        mode: "update_profile"
+      ).call
+      expect(member_profile_update[:authenticated]).to eq(true)
+      expect(member_profile_update[:updated_profile]).to eq(true)
+      expect(member_profile_update[:organization_node]).to eq("#SLN-04")
+      expect(member_profile_update[:instance_name]).to eq("South County Solidarity Node")
 
       volunteer_auth = Decidim::CommonNeed::DecidimSignOnService.new(
         email: "marcus@berkeley-node.org",

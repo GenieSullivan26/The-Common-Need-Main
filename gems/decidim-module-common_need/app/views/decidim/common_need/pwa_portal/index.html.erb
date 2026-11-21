@@ -498,6 +498,186 @@
       color: var(--lime-bright);
     }
 
+    .category-bar, .sub-pill-bar {
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .category-bar::-webkit-scrollbar, .sub-pill-bar::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* SLEEK, ELEGANT REDESIGN FOR MEMBER PWA */
+    #role-view-member {
+      background: linear-gradient(180deg, #160B2B 0%, #120924 100%);
+    }
+
+    #role-view-member .pwa-header {
+      background: rgba(22, 11, 43, 0.96);
+      border-bottom: 1px solid rgba(197, 255, 41, 0.16);
+      padding: 12px 16px 10px;
+    }
+
+    #role-view-member #member-catalog-search {
+      border-radius: 999px !important;
+      background: rgba(255, 255, 255, 0.06) !important;
+      border: 1px solid rgba(255, 255, 255, 0.15) !important;
+      padding: 9px 14px !important;
+      font-size: 12.5px !important;
+      color: var(--text-white);
+    }
+
+    #role-view-member .cat-pill {
+      background: rgba(255, 255, 255, 0.05);
+      color: rgba(244, 247, 232, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 999px;
+      padding: 6px 13px;
+      font-size: 11.5px;
+      font-weight: 600;
+      transition: all 0.15s ease;
+    }
+
+    #role-view-member .cat-pill.active {
+      background: var(--lime-bright);
+      color: #120924;
+      border: 1px solid var(--lime-bright);
+      font-weight: 700;
+    }
+
+    #role-view-member .pwa-body {
+      padding: 14px 16px 18px;
+      gap: 14px;
+    }
+
+    #role-view-member .lime-dashed-banner {
+      background: rgba(197, 255, 41, 0.07);
+      border: 1px solid rgba(197, 255, 41, 0.22);
+      border-radius: 16px;
+      padding: 11px 14px;
+      color: var(--text-cream);
+      font-size: 12px;
+    }
+
+    #role-view-member .dark-card {
+      background: #1B0F33;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+    }
+
+    #role-view-member .pantry-title {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 15.5px;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+      color: var(--text-white);
+      margin: 4px 0 2px;
+    }
+
+    #role-view-member .member-hub-card > hr {
+      border: none;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      margin: 10px 0 6px !important;
+    }
+
+    #role-view-member .mono-sub {
+      background: transparent;
+      color: rgba(244, 247, 232, 0.68);
+      font-family: inherit;
+      font-size: 11.5px;
+      padding: 0;
+      margin-bottom: 4px;
+    }
+
+    #role-view-member .item-lime-card {
+      background: rgba(255, 255, 255, 0.035);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 11px 13px;
+      margin-top: 8px;
+      gap: 12px;
+    }
+
+    #role-view-member .member-hub-card .item-lime-card > div:first-child > div:last-child {
+      display: none;
+    }
+
+    #role-view-member .cat-tag-chip {
+      background: rgba(197, 255, 41, 0.12);
+      color: var(--lime-bright);
+      border: none;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      padding: 2px 7px;
+      margin-bottom: 4px;
+    }
+
+    #role-view-member .item-title {
+      font-size: 13.5px;
+      font-weight: 650;
+      color: var(--text-white);
+      margin-bottom: 2px;
+      line-height: 1.3;
+    }
+
+    #role-view-member .olive-badge {
+      background: rgba(197, 255, 41, 0.12);
+      color: var(--lime-bright);
+      border: 1px solid rgba(197, 255, 41, 0.35);
+      border-radius: 999px;
+      font-family: inherit;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 6px 12px;
+    }
+
+    #role-view-member .stepper-pill {
+      background: rgba(197, 255, 41, 0.12);
+      color: var(--lime-bright);
+      border: 1px solid rgba(197, 255, 41, 0.35);
+      border-radius: 999px;
+      padding: 5px 12px;
+      font-size: 12.5px;
+      gap: 10px;
+    }
+
+    #role-view-member .cta-olive-btn {
+      background: var(--lime-bright);
+      color: #120924;
+      border: none;
+      border-radius: 14px;
+      padding: 13px 16px;
+      font-size: 13.5px;
+      font-weight: 800;
+      box-shadow: 0 4px 16px rgba(197, 255, 41, 0.22);
+    }
+
+    #role-view-member .bottom-nav {
+      background: rgba(18, 9, 36, 0.98);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 8px 8px 14px;
+    }
+
+    #role-view-member .nav-tab {
+      color: rgba(244, 247, 232, 0.6);
+      font-size: 10.5px;
+      font-weight: 600;
+      padding: 7px 2px;
+      border-radius: 12px;
+    }
+
+    #role-view-member .nav-tab.active {
+      background: rgba(197, 255, 41, 0.12);
+      border: 1px solid rgba(197, 255, 41, 0.3);
+      color: var(--lime-bright);
+      font-weight: 700;
+    }
+
     .hidden { display: none !important; }
   </style>
 </head>
@@ -526,9 +706,43 @@
     </div>
 
     <!-- ACTIVE INSTANCE LINK BANNER (Shown when authenticated into a PWA) -->
-    <div id="pwa-active-instance-bar" class="hidden" style="background:#0D061A; border-bottom:1.5px solid rgba(197,255,41,0.35); padding:6px 14px; font-family:ui-monospace, SFMono-Regular, monospace; font-size:10.5px; color:var(--lime-bright); display:flex; justify-content:space-between; align-items:center;">
-      <span id="pwa-active-instance-text">📍 Instance: East Oakland Local Node (#OAK-01)</span>
-      <span id="pwa-active-instance-host" style="color:var(--text-cream); opacity:0.8;">oakland-01.common-need.org</span>
+    <div id="pwa-active-instance-bar" class="hidden" style="background:rgba(13,6,26,0.95); border-bottom:1px solid rgba(197,255,41,0.2); padding:7px 16px; font-size:11.5px; color:var(--lime-bright); display:flex; justify-content:space-between; align-items:center; gap:8px;">
+      <span id="pwa-active-instance-text" style="font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">📍 East Oakland Local Node (#OAK-01)</span>
+      <span id="pwa-active-instance-host" class="hidden">oakland-01.common-need.org</span>
+      <button type="button" id="pwa-open-profile-btn" onclick="openProfileModal()" style="background:rgba(197,255,41,0.12); color:var(--lime-bright); border:1px solid rgba(197,255,41,0.35); border-radius:999px; padding:3px 10px; font-size:11px; font-weight:700; cursor:pointer; white-space:nowrap; flex-shrink:0;">
+        👤 Profile
+      </button>
+    </div>
+
+    <!-- IN-APP PROFILE & INSTANCE ADDRESS MODAL (Editable once logged in) -->
+    <div id="pwa-profile-modal" class="hidden" style="position:absolute; inset:42px 0 0 0; background:rgba(18,9,36,0.96); backdrop-filter:blur(10px); z-index:900; padding:22px 20px; display:flex; flex-direction:column; justify-content:center;">
+      <div class="dark-card" style="background:#1B0F33; border:1.5px solid rgba(197,255,41,0.4); border-radius:22px; padding:20px 18px; box-shadow:0 16px 40px rgba(0,0,0,0.6);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+          <div>
+            <span class="olive-badge" id="pwa-profile-role-badge" style="font-size:10px; padding:3px 9px; border-radius:999px;">🛍️ MEMBER PROFILE</span>
+            <h2 class="pantry-title" style="font-family:inherit; font-size:19px; margin:6px 0 0;">Account & Local Instance</h2>
+          </div>
+          <button type="button" onclick="closeProfileModal()" style="background:rgba(255,255,255,0.08); color:var(--text-white); border:1px solid rgba(255,255,255,0.15); border-radius:999px; width:30px; height:30px; font-size:14px; font-weight:700; cursor:pointer;">✕</button>
+        </div>
+
+        <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:11px 13px; margin-bottom:14px; font-size:12.5px;">
+          <div style="font-weight:700; color:var(--text-white);" id="pwa-profile-name-display">Rosa Morales</div>
+          <div style="color:rgba(244,247,232,0.7); font-size:11.5px; margin-top:2px;" id="pwa-profile-email-display">rosa@oakland-node.org</div>
+        </div>
+
+        <label style="font-size:12px; font-weight:600; color:var(--text-cream); display:block; margin-bottom:5px;">
+          Address or ZIP Code
+        </label>
+        <input type="text" id="pwa-profile-address-input" class="dark-input" value="1420 62nd Ave, Oakland, CA 94621" placeholder="Enter street address or ZIP code" oninput="updateProfileInstancePreview(this.value)" style="margin:0 0 8px 0; padding:10px 12px; font-size:13px; border-radius:12px;">
+
+        <div id="pwa-profile-instance-preview" style="background:#0D061A; color:var(--lime-bright); border:1px solid rgba(197,255,41,0.3); font-family:ui-monospace, SFMono-Regular, monospace; font-size:10.5px; padding:7px 10px; border-radius:10px; margin-bottom:16px;">
+          📍 Linked Instance: East Oakland Local Node (#OAK-01)
+        </div>
+
+        <button type="button" id="pwa-profile-save-btn" class="cta-lime-btn" style="width:100%; font-size:13.5px; padding:12px; border-radius:14px; margin-top:0;" onclick="saveProfileAddressUpdate()">
+          Save Address & Update Instance →
+        </button>
+      </div>
     </div>
 
     <!-- =========================================================
@@ -568,10 +782,12 @@
         <label style="font-size:12px; font-weight:600; color:var(--text-cream); display:block; margin-bottom:4px;">Email</label>
         <input type="email" id="decidim-sso-email" class="dark-input" value="rosa@oakland-node.org" placeholder="you@example.org" style="padding:10px 12px; font-size:13px; border-radius:12px; margin-bottom:11px;">
 
-        <label style="font-size:12px; font-weight:600; color:var(--text-cream); display:block; margin-bottom:4px;">Address or ZIP Code</label>
-        <input type="text" id="decidim-sso-address" class="dark-input" value="1420 62nd Ave, Oakland, CA 94621" placeholder="Street address or ZIP code" oninput="updateDecidimInstancePreview(this.value)" style="padding:10px 12px; font-size:13px; border-radius:12px; margin-bottom:6px;">
-        <div id="decidim-sso-instance-pill" class="mono-sub" style="display:block; width:100%; margin-bottom:11px; font-size:10.5px; padding:5px 9px; border-radius:8px;">
-          📍 Linked Instance: East Oakland Local Node (#OAK-01)
+        <div id="decidim-sso-address-group" class="hidden">
+          <label style="font-size:12px; font-weight:600; color:var(--text-cream); display:block; margin-bottom:4px;">Address or ZIP Code</label>
+          <input type="text" id="decidim-sso-address" class="dark-input" value="1420 62nd Ave, Oakland, CA 94621" placeholder="Street address or ZIP code" oninput="updateDecidimInstancePreview(this.value)" style="padding:10px 12px; font-size:13px; border-radius:12px; margin-bottom:6px;">
+          <div id="decidim-sso-instance-pill" class="mono-sub" style="display:block; width:100%; margin-bottom:11px; font-size:10.5px; padding:5px 9px; border-radius:8px;">
+            📍 Linked Instance: East Oakland Local Node (#OAK-01)
+          </div>
         </div>
 
         <label style="font-size:12px; font-weight:600; color:var(--text-cream); display:block; margin-bottom:4px;">Password</label>
@@ -598,17 +814,17 @@
     <div id="role-view-member" data-controller="catalog-filter paperwork-copilot" style="display:flex; flex-direction:column; flex:1;">
       <div class="pwa-header" id="member-pwa-header">
         <!-- Search & Local AI Quick Bar -->
-        <div id="member-search-row" style="display:flex; gap:6px; margin-bottom:6px;">
+        <div id="member-search-row" style="display:flex; gap:8px; margin-bottom:10px; align-items:center;">
           <input type="text"
                  id="member-catalog-search"
                  class="dark-input"
-                 style="margin:0; padding:7px 10px; font-size:12px; flex:1;"
-                 placeholder="🔍 Search 19 categories (food, pets, legal, arts, co-ops)..."
+                 style="margin:0; flex:1;"
+                 placeholder="🔍 Search food, health, legal, housing..."
                  data-catalog-filter-target="searchInput"
                  data-action="input->catalog-filter#search"
                  oninput="searchMemberCatalog(this.value)">
           <button class="olive-badge"
-                  style="cursor:pointer; border-color:var(--lime-bright); background:var(--bg-outer); color:var(--lime-bright);"
+                  style="cursor:pointer;"
                   onclick="switchMemberTab(5)">
             🤖 Ask Local AI
           </button>
@@ -641,13 +857,11 @@
 
       <!-- MEMBER TAB 1: Expanded Goods & Community Services Catalog (All 19 Categories) -->
       <div class="pwa-body" id="member-tab-1">
-        <div class="lime-dashed-banner" style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
-          <div class="mono-sub" style="margin:0; flex:1;" id="active-cat-banner-text" data-catalog-filter-target="bannerText">
-            Showing all 19 Decidim community taxonomy categories • Swipe pills above to filter
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:0 2px;">
+          <div style="font-size:12px; color:rgba(244,247,232,0.75); font-weight:500;" id="active-cat-banner-text" data-catalog-filter-target="bannerText">
+            4 Neighborhood Hubs • 19 Community Categories
           </div>
-          <button class="olive-badge" style="cursor:pointer; border-color:var(--lime-bright);" onclick="switchMemberTab(5)">
-            🤖 Local AI →
-          </button>
+          <span style="font-size:10px; color:var(--lime-bright); font-weight:700; letter-spacing:0.4px; opacity:0.9;">UNCONDITIONAL SOLIDARITY</span>
         </div>
 
         <turbo-frame id="member-catalog-frame" data-catalog-filter-target="turboFrame">

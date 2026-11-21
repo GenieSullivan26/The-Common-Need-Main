@@ -527,6 +527,191 @@
       color: var(--lime-bright);
     }
 
+    .category-bar, .sub-pill-bar {
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .category-bar::-webkit-scrollbar, .sub-pill-bar::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* SLEEK, ELEGANT REDESIGN FOR MEMBER PWA */
+    #role-view-member {
+      background: linear-gradient(180deg, #160B2B 0%, #120924 100%);
+    }
+
+    #role-view-member .pwa-header {
+      background: rgba(22, 11, 43, 0.96);
+      border-bottom: 1px solid rgba(197, 255, 41, 0.16);
+      padding: 12px 16px 10px;
+    }
+
+    #role-view-member #member-catalog-search {
+      border-radius: 999px !important;
+      background: rgba(255, 255, 255, 0.06) !important;
+      border: 1px solid rgba(255, 255, 255, 0.15) !important;
+      padding: 9px 14px !important;
+      font-size: 12.5px !important;
+      color: var(--text-white);
+    }
+
+    #role-view-member #member-catalog-search::placeholder {
+      color: rgba(244, 247, 232, 0.55);
+    }
+
+    #role-view-member .cat-pill {
+      background: rgba(255, 255, 255, 0.05);
+      color: rgba(244, 247, 232, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 999px;
+      padding: 6px 13px;
+      font-size: 11.5px;
+      font-weight: 600;
+      transition: all 0.15s ease;
+    }
+
+    #role-view-member .cat-pill.active {
+      background: var(--lime-bright);
+      color: #120924;
+      border: 1px solid var(--lime-bright);
+      font-weight: 700;
+    }
+
+    #role-view-member .pwa-body {
+      padding: 14px 16px 18px;
+      gap: 14px;
+    }
+
+    #role-view-member .lime-dashed-banner {
+      background: rgba(197, 255, 41, 0.07);
+      border: 1px solid rgba(197, 255, 41, 0.22);
+      border-radius: 16px;
+      padding: 11px 14px;
+      color: var(--text-cream);
+      font-size: 12px;
+    }
+
+    #role-view-member .dark-card {
+      background: #1B0F33;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+    }
+
+    #role-view-member .pantry-title {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 15.5px;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+      color: var(--text-white);
+      margin: 4px 0 2px;
+    }
+
+    #role-view-member .member-hub-card > hr {
+      border: none;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      margin: 10px 0 6px !important;
+    }
+
+    #role-view-member .mono-sub {
+      background: transparent;
+      color: rgba(244, 247, 232, 0.68);
+      font-family: inherit;
+      font-size: 11.5px;
+      padding: 0;
+      margin-bottom: 4px;
+    }
+
+    #role-view-member .item-lime-card {
+      background: rgba(255, 255, 255, 0.035);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 11px 13px;
+      margin-top: 8px;
+      gap: 12px;
+      transition: border-color 0.15s ease, background 0.15s ease;
+    }
+
+    #role-view-member .member-hub-card .item-lime-card > div:first-child > div:last-child {
+      display: none;
+    }
+
+    #role-view-member .cat-tag-chip {
+      background: rgba(197, 255, 41, 0.12);
+      color: var(--lime-bright);
+      border: none;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      padding: 2px 7px;
+      margin-bottom: 4px;
+    }
+
+    #role-view-member .item-title {
+      font-size: 13.5px;
+      font-weight: 650;
+      color: var(--text-white);
+      margin-bottom: 2px;
+      line-height: 1.3;
+    }
+
+    #role-view-member .olive-badge {
+      background: rgba(197, 255, 41, 0.12);
+      color: var(--lime-bright);
+      border: 1px solid rgba(197, 255, 41, 0.35);
+      border-radius: 999px;
+      font-family: inherit;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 6px 12px;
+    }
+
+    #role-view-member .stepper-pill {
+      background: rgba(197, 255, 41, 0.12);
+      color: var(--lime-bright);
+      border: 1px solid rgba(197, 255, 41, 0.35);
+      border-radius: 999px;
+      padding: 5px 12px;
+      font-size: 12.5px;
+      gap: 10px;
+    }
+
+    #role-view-member .cta-olive-btn {
+      background: var(--lime-bright);
+      color: #120924;
+      border: none;
+      border-radius: 14px;
+      padding: 13px 16px;
+      font-size: 13.5px;
+      font-weight: 800;
+      box-shadow: 0 4px 16px rgba(197, 255, 41, 0.22);
+    }
+
+    #role-view-member .bottom-nav {
+      background: rgba(18, 9, 36, 0.98);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 8px 8px 14px;
+    }
+
+    #role-view-member .nav-tab {
+      color: rgba(244, 247, 232, 0.6);
+      font-size: 10.5px;
+      font-weight: 600;
+      padding: 7px 2px;
+      border-radius: 12px;
+    }
+
+    #role-view-member .nav-tab.active {
+      background: rgba(197, 255, 41, 0.12);
+      border: 1px solid rgba(197, 255, 41, 0.3);
+      color: var(--lime-bright);
+      font-weight: 700;
+    }
+
     .hidden { display: none !important; }
   </style>
 </head>
@@ -579,9 +764,43 @@
     </div>
 
     <!-- ACTIVE INSTANCE LINK BANNER (Shown when authenticated into a PWA) -->
-    <div id="pwa-active-instance-bar" class="hidden" style="background:#0D061A; border-bottom:1.5px solid rgba(197,255,41,0.35); padding:6px 14px; font-family:ui-monospace, SFMono-Regular, monospace; font-size:10.5px; color:var(--lime-bright); display:flex; justify-content:space-between; align-items:center;">
-      <span id="pwa-active-instance-text">📍 Instance: East Oakland Local Node (#OAK-01)</span>
-      <span id="pwa-active-instance-host" style="color:var(--text-cream); opacity:0.8;">oakland-01.common-need.org</span>
+    <div id="pwa-active-instance-bar" class="hidden" style="background:rgba(13,6,26,0.95); border-bottom:1px solid rgba(197,255,41,0.2); padding:7px 16px; font-size:11.5px; color:var(--lime-bright); display:flex; justify-content:space-between; align-items:center; gap:8px;">
+      <span id="pwa-active-instance-text" style="font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">📍 East Oakland Local Node (#OAK-01)</span>
+      <span id="pwa-active-instance-host" class="hidden">oakland-01.common-need.org</span>
+      <button type="button" id="pwa-open-profile-btn" onclick="openProfileModal()" style="background:rgba(197,255,41,0.12); color:var(--lime-bright); border:1px solid rgba(197,255,41,0.35); border-radius:999px; padding:3px 10px; font-size:11px; font-weight:700; cursor:pointer; white-space:nowrap; flex-shrink:0;">
+        👤 Profile
+      </button>
+    </div>
+
+    <!-- IN-APP PROFILE & INSTANCE ADDRESS MODAL (Editable once logged in) -->
+    <div id="pwa-profile-modal" class="hidden" style="position:absolute; inset:42px 0 0 0; background:rgba(18,9,36,0.96); backdrop-filter:blur(10px); z-index:900; padding:22px 20px; display:flex; flex-direction:column; justify-content:center;">
+      <div class="dark-card" style="background:#1B0F33; border:1.5px solid rgba(197,255,41,0.4); border-radius:22px; padding:20px 18px; box-shadow:0 16px 40px rgba(0,0,0,0.6);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+          <div>
+            <span class="olive-badge" id="pwa-profile-role-badge" style="font-size:10px; padding:3px 9px; border-radius:999px;">🛍️ MEMBER PROFILE</span>
+            <h2 class="pantry-title" style="font-family:inherit; font-size:19px; margin:6px 0 0;">Account & Local Instance</h2>
+          </div>
+          <button type="button" onclick="closeProfileModal()" style="background:rgba(255,255,255,0.08); color:var(--text-white); border:1px solid rgba(255,255,255,0.15); border-radius:999px; width:30px; height:30px; font-size:14px; font-weight:700; cursor:pointer;">✕</button>
+        </div>
+
+        <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:11px 13px; margin-bottom:14px; font-size:12.5px;">
+          <div style="font-weight:700; color:var(--text-white);" id="pwa-profile-name-display">Rosa Morales</div>
+          <div style="color:rgba(244,247,232,0.7); font-size:11.5px; margin-top:2px;" id="pwa-profile-email-display">rosa@oakland-node.org</div>
+        </div>
+
+        <label style="font-size:12px; font-weight:600; color:var(--text-cream); display:block; margin-bottom:5px;">
+          Address or ZIP Code
+        </label>
+        <input type="text" id="pwa-profile-address-input" class="dark-input" value="1420 62nd Ave, Oakland, CA 94621" placeholder="Enter street address or ZIP code" oninput="updateProfileInstancePreview(this.value)" style="margin:0 0 8px 0; padding:10px 12px; font-size:13px; border-radius:12px;">
+
+        <div id="pwa-profile-instance-preview" style="background:#0D061A; color:var(--lime-bright); border:1px solid rgba(197,255,41,0.3); font-family:ui-monospace, SFMono-Regular, monospace; font-size:10.5px; padding:7px 10px; border-radius:10px; margin-bottom:16px;">
+          📍 Linked Instance: East Oakland Local Node (#OAK-01)
+        </div>
+
+        <button type="button" id="pwa-profile-save-btn" class="cta-lime-btn" style="width:100%; font-size:13.5px; padding:12px; border-radius:14px; margin-top:0;" onclick="saveProfileAddressUpdate()">
+          Save Address & Update Instance →
+        </button>
+      </div>
     </div>
 
     <!-- =========================================================
@@ -621,10 +840,12 @@
         <label style="font-size:12px; font-weight:600; color:var(--text-cream); display:block; margin-bottom:4px;">Email</label>
         <input type="email" id="decidim-sso-email" class="dark-input" value="rosa@oakland-node.org" placeholder="you@example.org" style="padding:10px 12px; font-size:13px; border-radius:12px; margin-bottom:11px;">
 
-        <label style="font-size:12px; font-weight:600; color:var(--text-cream); display:block; margin-bottom:4px;">Address or ZIP Code</label>
-        <input type="text" id="decidim-sso-address" class="dark-input" value="1420 62nd Ave, Oakland, CA 94621" placeholder="Street address or ZIP code" oninput="updateDecidimInstancePreview(this.value)" style="padding:10px 12px; font-size:13px; border-radius:12px; margin-bottom:6px;">
-        <div id="decidim-sso-instance-pill" class="mono-sub" style="display:block; width:100%; margin-bottom:11px; font-size:10.5px; padding:5px 9px; border-radius:8px;">
-          📍 Linked Instance: East Oakland Local Node (#OAK-01)
+        <div id="decidim-sso-address-group" class="hidden">
+          <label style="font-size:12px; font-weight:600; color:var(--text-cream); display:block; margin-bottom:4px;">Address or ZIP Code</label>
+          <input type="text" id="decidim-sso-address" class="dark-input" value="1420 62nd Ave, Oakland, CA 94621" placeholder="Street address or ZIP code" oninput="updateDecidimInstancePreview(this.value)" style="padding:10px 12px; font-size:13px; border-radius:12px; margin-bottom:6px;">
+          <div id="decidim-sso-instance-pill" class="mono-sub" style="display:block; width:100%; margin-bottom:11px; font-size:10.5px; padding:5px 9px; border-radius:8px;">
+            📍 Linked Instance: East Oakland Local Node (#OAK-01)
+          </div>
         </div>
 
         <label style="font-size:12px; font-weight:600; color:var(--text-cream); display:block; margin-bottom:4px;">Password</label>
@@ -651,9 +872,9 @@
     <div id="role-view-member" style="display:flex; flex-direction:column; flex:1;">
       <div class="pwa-header" id="member-pwa-header">
         <!-- Search & Local AI Quick Bar -->
-        <div id="member-search-row" style="display:flex; gap:6px; margin-bottom:6px;">
-          <input type="text" id="member-catalog-search" class="dark-input" style="margin:0; padding:7px 10px; font-size:12px; flex:1;" placeholder="🔍 Search 19 categories (food, pets, legal, arts, co-ops)..." oninput="searchMemberCatalog(this.value)">
-          <button class="olive-badge" style="cursor:pointer; border-color:var(--lime-bright); background:var(--bg-outer); color:var(--lime-bright);" onclick="switchMemberTab(5)">
+        <div id="member-search-row" style="display:flex; gap:8px; margin-bottom:10px; align-items:center;">
+          <input type="text" id="member-catalog-search" class="dark-input" style="margin:0; flex:1;" placeholder="🔍 Search food, health, legal, housing..." oninput="searchMemberCatalog(this.value)">
+          <button class="olive-badge" style="cursor:pointer;" onclick="switchMemberTab(5)">
             🤖 Ask Local AI
           </button>
         </div>
@@ -685,13 +906,11 @@
 
       <!-- MEMBER TAB 1: Expanded Goods & Community Services Catalog (All 19 Categories) -->
       <div class="pwa-body" id="member-tab-1">
-        <div class="lime-dashed-banner" style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
-          <div class="mono-sub" style="margin:0; flex:1;" id="active-cat-banner-text">
-            Showing all 19 Decidim community taxonomy categories • Swipe pills above to filter
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:0 2px;">
+          <div style="font-size:12px; color:rgba(244,247,232,0.75); font-weight:500;" id="active-cat-banner-text">
+            4 Neighborhood Hubs • 19 Community Categories
           </div>
-          <button class="olive-badge" style="cursor:pointer; border-color:var(--lime-bright);" onclick="switchMemberTab(5)">
-            🤖 Local AI →
-          </button>
+          <span style="font-size:10px; color:var(--lime-bright); font-weight:700; letter-spacing:0.4px; opacity:0.9;">UNCONDITIONAL SOLIDARITY</span>
         </div>
 
         <!-- =======================================================
@@ -1518,11 +1737,11 @@
 
       <!-- MEMBER BOTTOM NAV (5 TABS including Centralized Local Partner Calendar) -->
       <div class="bottom-nav five-cols">
-        <button class="nav-tab active" id="m-nav-1" onclick="switchMemberTab(1)"><span>🛍️</span><span>1. Browse</span></button>
-        <button class="nav-tab" id="m-nav-5" onclick="switchMemberTab(5)"><span>🤖</span><span>2. AI Helper</span></button>
-        <button class="nav-tab" id="m-nav-2" onclick="switchMemberTab(2)"><span>📦</span><span id="nav-basket-label">3. Basket(2)</span></button>
-        <button class="nav-tab" id="m-nav-6" onclick="switchMemberTab(6)"><span>📅</span><span>4. Calendar</span></button>
-        <button class="nav-tab" id="m-nav-4" onclick="switchMemberTab(4)"><span>🗳️</span><span>5. Vote</span></button>
+        <button class="nav-tab active" id="m-nav-1" onclick="switchMemberTab(1)"><span>🛍️</span><span>Browse</span></button>
+        <button class="nav-tab" id="m-nav-5" onclick="switchMemberTab(5)"><span>🤖</span><span>AI Helper</span></button>
+        <button class="nav-tab" id="m-nav-2" onclick="switchMemberTab(2)"><span>📦</span><span id="nav-basket-label">Basket (2)</span></button>
+        <button class="nav-tab" id="m-nav-6" onclick="switchMemberTab(6)"><span>📅</span><span>Calendar</span></button>
+        <button class="nav-tab" id="m-nav-4" onclick="switchMemberTab(4)"><span>🗳️</span><span>Vote</span></button>
       </div>
     </div>
 
@@ -2099,12 +2318,20 @@
     function switchRole(role) {
       const ssoGate = document.getElementById('decidim-sso-gate');
       if (ssoGate) ssoGate.classList.add('hidden');
+      const profileModal = document.getElementById('pwa-profile-modal');
+      if (profileModal) profileModal.classList.add('hidden');
       ['member', 'volunteer', 'nonprofit', 'localnode', 'network'].forEach(r => {
         const viewEl = document.getElementById('role-view-' + r);
         const btnEl = document.getElementById('role-btn-' + r);
         if (viewEl) viewEl.classList.toggle('hidden', r !== role);
         if (btnEl) btnEl.classList.toggle('active', r === role);
       });
+      if (['member', 'volunteer', 'nonprofit'].includes(role) && typeof syncActiveSessionForRole === 'function') {
+        syncActiveSessionForRole(role);
+      } else {
+        const instBarEl = document.getElementById('pwa-active-instance-bar');
+        if (instBarEl) instBarEl.classList.add('hidden');
+      }
       if (role === 'volunteer' && !leafletMap) {
         setTimeout(initLeafletMap, 200);
       }
@@ -2614,7 +2841,7 @@
     }
 
     function updateBasketLabels() {
-      document.getElementById('nav-basket-label').textContent = `3. Basket(${basketCount})`;
+      document.getElementById('nav-basket-label').textContent = `Basket (${basketCount})`;
       document.getElementById('basket-item-count').textContent = basketCount;
       const loadEl = document.getElementById('ledger-summary-load');
       if (loadEl) {
@@ -2831,6 +3058,34 @@
       pillEl.textContent = `📍 Linked Instance: ${inst.name} (${inst.code})`;
     }
 
+    function getSavedDecidimProfiles() {
+      try {
+        return JSON.parse(localStorage.getItem('common_need_saved_profiles') || '{}') || {};
+      } catch (e) {
+        return {};
+      }
+    }
+
+    function saveDecidimProfileRecord(session) {
+      if (!session || !session.email) return;
+      try {
+        const all = getSavedDecidimProfiles();
+        all[session.email.trim().toLowerCase()] = {
+          userType: session.userType,
+          name: session.name,
+          email: session.email,
+          address: session.address,
+          instanceCode: session.instanceCode,
+          instanceName: session.instanceName,
+          instanceHost: session.instanceHost
+        };
+        localStorage.setItem('common_need_saved_profiles', JSON.stringify(all));
+      } catch (e) {}
+      if (DECIDIM_SSO_PROFILES[session.userType]) {
+        DECIDIM_SSO_PROFILES[session.userType].address = session.address;
+      }
+    }
+
     function selectDecidimSsoType(userType, preserveInputs) {
       if (!DECIDIM_SSO_PROFILES[userType]) userType = 'member';
       selectedDecidimSsoType = userType;
@@ -2856,13 +3111,8 @@
       }
       const profile = DECIDIM_SSO_PROFILES[userType];
       const emailEl = document.getElementById('decidim-sso-email');
-      const addrEl = document.getElementById('decidim-sso-address');
       if (!preserveInputs && decidimAuthMode === 'signin') {
         if (emailEl) emailEl.value = profile.email;
-        if (addrEl) {
-          addrEl.value = profile.address;
-          updateDecidimInstancePreview(profile.address);
-        }
       }
     }
 
@@ -2874,6 +3124,7 @@
       const subheadingEl = document.getElementById('decidim-sso-subheading');
       const roleLabelEl = document.getElementById('decidim-sso-role-label');
       const nameGroupEl = document.getElementById('decidim-sso-name-group');
+      const addrGroupEl = document.getElementById('decidim-sso-address-group');
       const submitBtnEl = document.getElementById('decidim-sso-submit-btn');
       const switchPromptEl = document.getElementById('decidim-sso-switch-prompt');
       const emailEl = document.getElementById('decidim-sso-email');
@@ -2884,6 +3135,7 @@
       if (subheadingEl) subheadingEl.textContent = isRegister ? 'Create a Decidim account linked to your local instance' : 'Sign in with Decidim to open your local instance';
       if (roleLabelEl) roleLabelEl.textContent = isRegister ? 'Create account as' : 'Sign in as';
       if (nameGroupEl) nameGroupEl.classList.toggle('hidden', !isRegister);
+      if (addrGroupEl) addrGroupEl.classList.toggle('hidden', !isRegister);
       if (submitBtnEl) submitBtnEl.textContent = isRegister ? 'Create Account →' : 'Sign In →';
 
       if (isRegister) {
@@ -2902,10 +3154,6 @@
       } else {
         const profile = DECIDIM_SSO_PROFILES[selectedDecidimSsoType] || DECIDIM_SSO_PROFILES.member;
         if (emailEl && !emailEl.value) emailEl.value = profile.email;
-        if (addrEl && !addrEl.value) {
-          addrEl.value = profile.address;
-          updateDecidimInstancePreview(profile.address);
-        }
         if (passEl && !passEl.value) passEl.value = 'solidarity-oak-01';
         if (switchPromptEl) {
           switchPromptEl.innerHTML = `
@@ -2920,6 +3168,8 @@
     function resolveDecidimUserTypeFromEmail(email, fallbackType) {
       const normalized = (email || '').trim().toLowerCase();
       if (!normalized) return fallbackType || 'member';
+      const saved = getSavedDecidimProfiles()[normalized];
+      if (saved && saved.userType) return saved.userType;
       if (normalized === 'rosa@oakland-node.org') return 'member';
       if (normalized === 'marcus@oakland-node.org') return 'volunteer';
       if (normalized === 'elena@eastoaklandpantry.org') return 'nonprofit';
@@ -2970,6 +3220,151 @@
       }
     }
 
+    function syncActiveSessionForRole(role) {
+      if (!DECIDIM_SSO_PROFILES[role]) return;
+      let activeSession = null;
+      try {
+        activeSession = JSON.parse(sessionStorage.getItem('common_need_decidim_sso') || 'null');
+      } catch (e) {}
+      if (!activeSession || activeSession.userType !== role) {
+        const profile = DECIDIM_SSO_PROFILES[role];
+        const saved = getSavedDecidimProfiles()[profile.email.toLowerCase()];
+        const addr = (saved && saved.address) ? saved.address : profile.address;
+        const inst = resolveDecidimInstanceFromAddress(addr);
+        activeSession = {
+          authenticated: true,
+          userType: profile.userType,
+          name: (saved && saved.name) ? saved.name : profile.name,
+          email: profile.email,
+          address: addr,
+          instanceCode: inst.code,
+          instanceName: inst.name,
+          instanceHost: inst.host
+        };
+      }
+      const instBarEl = document.getElementById('pwa-active-instance-bar');
+      const instTextEl = document.getElementById('pwa-active-instance-text');
+      const instHostEl = document.getElementById('pwa-active-instance-host');
+      if (instBarEl) {
+        instBarEl.classList.remove('hidden');
+        if (instTextEl) instTextEl.textContent = `📍 ${activeSession.instanceName} (${activeSession.instanceCode})`;
+        if (instHostEl) instHostEl.textContent = activeSession.instanceHost;
+      }
+    }
+
+    function openProfileModal() {
+      let session = null;
+      try {
+        session = JSON.parse(sessionStorage.getItem('common_need_decidim_sso') || 'null');
+      } catch (e) {}
+
+      if (!session || !session.authenticated) {
+        const activeRole = ['member', 'volunteer', 'nonprofit'].find(r => {
+          const el = document.getElementById('role-view-' + r);
+          return el && !el.classList.contains('hidden');
+        }) || 'member';
+        const profile = DECIDIM_SSO_PROFILES[activeRole];
+        const inst = resolveDecidimInstanceFromAddress(profile.address);
+        session = {
+          authenticated: true,
+          userType: profile.userType,
+          name: profile.name,
+          email: profile.email,
+          address: profile.address,
+          instanceCode: inst.code,
+          instanceName: inst.name,
+          instanceHost: inst.host
+        };
+      }
+
+      const roleBadges = {
+        member: '🛍️ MEMBER PROFILE',
+        volunteer: '🚚 VOLUNTEER PROFILE',
+        nonprofit: '🏢 PARTNER PROFILE'
+      };
+      const badgeEl = document.getElementById('pwa-profile-role-badge');
+      const nameEl = document.getElementById('pwa-profile-name-display');
+      const emailEl = document.getElementById('pwa-profile-email-display');
+      const addrInputEl = document.getElementById('pwa-profile-address-input');
+      const modalEl = document.getElementById('pwa-profile-modal');
+
+      if (badgeEl) badgeEl.textContent = roleBadges[session.userType] || '🛍️ MEMBER PROFILE';
+      if (nameEl) nameEl.textContent = session.name;
+      if (emailEl) emailEl.textContent = session.email;
+      if (addrInputEl) {
+        addrInputEl.value = session.address || '';
+        updateProfileInstancePreview(addrInputEl.value);
+      }
+      if (modalEl) modalEl.classList.remove('hidden');
+    }
+
+    function closeProfileModal() {
+      const modalEl = document.getElementById('pwa-profile-modal');
+      if (modalEl) modalEl.classList.add('hidden');
+    }
+
+    function updateProfileInstancePreview(rawAddress) {
+      const previewEl = document.getElementById('pwa-profile-instance-preview');
+      if (!previewEl) return;
+      const trimmed = (rawAddress || '').trim();
+      if (!trimmed) {
+        previewEl.textContent = '📍 Enter your street address or ZIP code to link your local instance';
+        return;
+      }
+      const inst = resolveDecidimInstanceFromAddress(trimmed);
+      previewEl.textContent = `📍 Linked Instance: ${inst.name} (${inst.code}) • ${inst.host}`;
+    }
+
+    function saveProfileAddressUpdate() {
+      const addrInputEl = document.getElementById('pwa-profile-address-input');
+      const newAddress = addrInputEl ? addrInputEl.value.trim() : '';
+      if (!newAddress) {
+        showToast('⚠️ Please enter a street address or ZIP code in your profile.');
+        return;
+      }
+
+      let session = null;
+      try {
+        session = JSON.parse(sessionStorage.getItem('common_need_decidim_sso') || 'null');
+      } catch (e) {}
+
+      const activeRole = (session && session.userType) || ['member', 'volunteer', 'nonprofit'].find(r => {
+        const el = document.getElementById('role-view-' + r);
+        return el && !el.classList.contains('hidden');
+      }) || 'member';
+      const profile = DECIDIM_SSO_PROFILES[activeRole] || DECIDIM_SSO_PROFILES.member;
+      const inst = resolveDecidimInstanceFromAddress(newAddress);
+
+      const updatedSession = {
+        authenticated: true,
+        userType: activeRole,
+        name: (session && session.name) ? session.name : profile.name,
+        email: (session && session.email) ? session.email : profile.email,
+        address: newAddress,
+        instanceCode: inst.code,
+        instanceName: inst.name,
+        instanceHost: inst.host,
+        signedInAt: new Date().toISOString()
+      };
+
+      try {
+        sessionStorage.setItem('common_need_decidim_sso', JSON.stringify(updatedSession));
+      } catch (e) {}
+      saveDecidimProfileRecord(updatedSession);
+
+      if (window.__LOCKED_PWA_ROLE__) {
+        try {
+          const nextUrl = new URL(window.location.href);
+          nextUrl.searchParams.set('instance', inst.code.replace('#', ''));
+          window.history.replaceState({}, '', nextUrl.toString());
+        } catch (e) {}
+      }
+
+      renderStatusBarAuthPill(updatedSession);
+      closeProfileModal();
+      showToast(`✓ Profile address updated — Linked to ${inst.name} (${inst.code})`);
+    }
+
     function openDecidimSignOn(defaultType) {
       const targetType = DECIDIM_SSO_PROFILES[defaultType] ? defaultType : (DECIDIM_SSO_PROFILES[window.__LOCKED_PWA_ROLE__] ? window.__LOCKED_PWA_ROLE__ : selectedDecidimSsoType);
       toggleDecidimAuthMode('signin');
@@ -2978,6 +3373,8 @@
         const viewEl = document.getElementById('role-view-' + r);
         if (viewEl) viewEl.classList.add('hidden');
       });
+      const profileModal = document.getElementById('pwa-profile-modal');
+      if (profileModal) profileModal.classList.add('hidden');
       const ssoGate = document.getElementById('decidim-sso-gate');
       if (ssoGate) ssoGate.classList.remove('hidden');
       renderStatusBarAuthPill(null);
@@ -2985,12 +3382,15 @@
 
     function completeDecidimSignOn(resolvedType, customEmail, customName, customAddress, isNewAccount) {
       const profile = DECIDIM_SSO_PROFILES[resolvedType] || DECIDIM_SSO_PROFILES.member;
-      const finalAddress = customAddress || profile.address;
+      const normalizedEmail = (customEmail || profile.email).trim().toLowerCase();
+      const savedProfile = getSavedDecidimProfiles()[normalizedEmail];
+      const finalAddress = customAddress || (savedProfile && savedProfile.address) || profile.address;
+      const finalName = customName || (savedProfile && savedProfile.name) || profile.name;
       const inst = resolveDecidimInstanceFromAddress(finalAddress);
       const session = {
         authenticated: true,
         userType: profile.userType,
-        name: customName || profile.name,
+        name: finalName,
         email: customEmail || profile.email,
         address: finalAddress,
         instanceCode: inst.code,
@@ -3001,8 +3401,8 @@
       try {
         sessionStorage.setItem('common_need_decidim_sso', JSON.stringify(session));
       } catch (e) {}
+      saveDecidimProfileRecord(session);
 
-      // If in standalone PWA mode, update URL query param to match the authenticated user type's PWA and linked instance
       if (window.__LOCKED_PWA_ROLE__) {
         window.__LOCKED_PWA_ROLE__ = profile.userType;
         const switcher = document.getElementById('top-role-switcher');
@@ -3040,7 +3440,7 @@
         showToast('⚠️ Please enter your email address.');
         return;
       }
-      if (!address) {
+      if (isRegister && !address) {
         showToast('⚠️ Please enter your street address or ZIP code to link your local instance.');
         return;
       }
@@ -3051,7 +3451,7 @@
       const resolvedType = isRegister
         ? selectedDecidimSsoType
         : resolveDecidimUserTypeFromEmail(email, selectedDecidimSsoType);
-      completeDecidimSignOn(resolvedType, email, name, address, isRegister);
+      completeDecidimSignOn(resolvedType, email, isRegister ? name : '', isRegister ? address : '', isRegister);
     }
 
     function quickDecidimDemoSignIn(userType) {
@@ -3067,13 +3467,17 @@
         if (saved && saved.userType) lastType = saved.userType;
         sessionStorage.removeItem('common_need_decidim_sso');
       } catch (e) {}
+      closeProfileModal();
       openDecidimSignOn(lastType);
-      showToast('Signed out of Decidim Local Node #OAK-01 session.');
+      showToast('Signed out of Decidim Local Node session.');
     }
 
     function applyLockedPwaRole() {
       const lockedRole = window.__LOCKED_PWA_ROLE__;
-      if (!lockedRole) return;
+      if (!lockedRole) {
+        syncActiveSessionForRole('member');
+        return;
+      }
 
       const switcher = document.getElementById("top-role-switcher");
       if (switcher) switcher.classList.add("hidden");
