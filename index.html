@@ -41,58 +41,62 @@
     .role-switcher-box {
       width: 100%;
       max-width: 430px;
-      background-color: var(--lime-primary);
-      border: 3px solid var(--lime-bright);
-      border-radius: 20px;
-      padding: 8px;
+      background: rgba(27, 15, 51, 0.92);
+      border: 1px solid rgba(197, 255, 41, 0.25);
+      border-radius: 999px;
+      padding: 6px;
       margin-bottom: 14px;
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 6px;
+      gap: 4px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
     }
 
     .role-btn {
-      background-color: var(--bg-outer);
-      color: var(--text-white);
-      border: 1.5px solid rgba(255, 255, 255, 0.35);
-      border-radius: 10px;
-      padding: 6px 10px;
+      background: transparent;
+      color: rgba(244, 247, 232, 0.78);
+      border: 1px solid transparent;
+      border-radius: 999px;
+      padding: 6px 11px;
       font-size: 11.5px;
-      font-weight: 700;
+      font-weight: 600;
       cursor: pointer;
       display: flex;
       align-items: center;
       gap: 4px;
-      transition: transform 0.12s ease, box-shadow 0.12s ease;
+      transition: all 0.15s ease;
     }
 
     .role-btn.active {
+      background: var(--lime-bright);
+      color: #120924;
       border-color: var(--lime-bright);
-      box-shadow: 0 0 0 2px var(--bg-outer), 0 4px 10px rgba(0,0,0,0.5);
-      transform: translateY(-1px);
+      font-weight: 700;
+      box-shadow: 0 2px 10px rgba(197, 255, 41, 0.25);
     }
 
     /* PHONE FRAME */
     .phone-frame {
       width: 100%;
       max-width: 430px;
-      background-color: var(--bg-phone);
-      border: 5px solid var(--lime-bright);
-      border-radius: 42px;
+      background: linear-gradient(180deg, #160B2B 0%, #120924 100%);
+      border: 2px solid rgba(197, 255, 41, 0.32);
+      border-radius: 40px;
       overflow: hidden;
       display: flex;
       flex-direction: column;
       min-height: 780px;
       position: relative;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.05);
     }
 
     .status-bar {
-      background-color: var(--bg-outer);
-      color: var(--lime-bright);
-      font-family: ui-monospace, SFMono-Regular, monospace;
-      font-size: 12px;
+      background: rgba(13, 6, 26, 0.96);
+      color: rgba(244, 247, 232, 0.85);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 11.5px;
+      font-weight: 600;
       padding: 12px 22px 10px;
       display: flex;
       justify-content: space-between;
@@ -100,17 +104,17 @@
     }
 
     .notch-pill {
-      width: 84px;
-      height: 16px;
-      background-color: var(--olive-badge);
-      border: 1px solid var(--olive-border);
-      border-radius: 10px;
+      width: 76px;
+      height: 14px;
+      background-color: #07030F;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 999px;
     }
 
     .pwa-header {
-      background-color: var(--lime-primary);
-      padding: 12px 16px;
-      border-bottom: 2px solid var(--lime-bright);
+      background: rgba(22, 11, 43, 0.96);
+      padding: 14px 16px 12px;
+      border-bottom: 1px solid rgba(197, 255, 41, 0.16);
     }
 
     .header-top-row {
@@ -122,176 +126,192 @@
     }
 
     .app-tag-pill {
-      background-color: var(--bg-outer);
+      background: rgba(197, 255, 41, 0.1);
       color: var(--lime-bright);
-      font-family: ui-monospace, SFMono-Regular, monospace;
-      font-size: 11px;
+      font-family: inherit;
+      font-size: 10px;
       font-weight: 700;
-      padding: 4px 8px;
-      border-radius: 6px;
+      letter-spacing: 0.4px;
+      padding: 3px 9px;
+      border-radius: 999px;
       display: inline-block;
     }
 
     .olive-badge {
-      background-color: var(--olive-badge);
-      color: var(--text-white);
-      border: 1px solid var(--olive-border);
-      font-family: ui-monospace, SFMono-Regular, monospace;
+      background: rgba(197, 255, 41, 0.12);
+      color: var(--lime-bright);
+      border: 1px solid rgba(197, 255, 41, 0.35);
+      font-family: inherit;
       font-size: 11px;
       font-weight: 700;
-      padding: 4px 10px;
-      border-radius: 6px;
+      padding: 6px 12px;
+      border-radius: 999px;
       white-space: nowrap;
     }
 
     .header-subtitle {
       color: var(--text-white);
-      font-size: 14px;
-      font-weight: 800;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -0.2px;
       margin-bottom: 8px;
     }
 
-    .category-bar {
+    .category-bar, .sub-pill-bar {
       display: flex;
       gap: 6px;
       overflow-x: auto;
       padding: 4px 0 6px;
-      scrollbar-width: thin;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .category-bar::-webkit-scrollbar, .sub-pill-bar::-webkit-scrollbar {
+      display: none;
     }
 
     .cat-pill {
-      background-color: var(--bg-outer);
-      color: var(--text-white);
-      border: 1px solid rgba(255,255,255,0.4);
-      border-radius: 8px;
-      padding: 5px 10px;
+      background: rgba(255, 255, 255, 0.05);
+      color: rgba(244, 247, 232, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 999px;
+      padding: 6px 13px;
       font-size: 11.5px;
-      font-weight: 700;
+      font-weight: 600;
       cursor: pointer;
       white-space: nowrap;
       flex-shrink: 0;
+      transition: all 0.15s ease;
     }
 
     .cat-pill.active {
-      border: 2px solid var(--lime-bright);
-      background-color: #261542;
-      color: var(--lime-bright);
+      background: var(--lime-bright);
+      color: #120924;
+      border: 1px solid var(--lime-bright);
+      font-weight: 700;
     }
 
     .kpi-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 8px;
-      margin-top: 6px;
+      margin-top: 8px;
     }
 
     .kpi-box {
-      background-color: var(--bg-outer);
-      border: 1px solid rgba(255,255,255,0.3);
-      border-radius: 8px;
-      padding: 8px 10px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: 14px;
+      padding: 10px 12px;
     }
 
     .kpi-label {
-      color: var(--lime-bright);
-      font-family: ui-monospace, SFMono-Regular, monospace;
+      color: rgba(244, 247, 232, 0.65);
+      font-family: inherit;
       font-size: 10px;
-      font-weight: 700;
+      font-weight: 600;
+      letter-spacing: 0.3px;
     }
 
     .kpi-val {
-      color: var(--text-white);
-      font-family: ui-monospace, SFMono-Regular, monospace;
+      color: var(--lime-bright);
+      font-family: inherit;
       font-size: 15px;
       font-weight: 800;
-      margin-top: 2px;
+      margin-top: 3px;
     }
 
     .pwa-body {
       flex: 1;
-      padding: 12px;
+      padding: 14px 16px 18px;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 14px;
     }
 
     .dark-card {
-      background-color: var(--bg-card-dark);
-      border: 2.5px solid var(--lime-bright);
-      border-radius: 18px;
-      padding: 14px;
+      background: #1B0F33;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
     }
 
     .lime-dashed-banner {
-      background-color: var(--lime-card);
-      border: 2px dashed var(--olive-border);
-      border-radius: 14px;
-      padding: 10px 12px;
-      color: var(--text-white);
+      background: rgba(197, 255, 41, 0.07);
+      border: 1px solid rgba(197, 255, 41, 0.22);
+      border-radius: 16px;
+      padding: 11px 14px;
+      color: var(--text-cream);
       font-size: 12px;
-      line-height: 1.4;
+      line-height: 1.45;
     }
 
     .pantry-title {
-      font-family: Georgia, serif;
-      font-size: 16px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 15.5px;
       font-weight: 700;
+      letter-spacing: -0.2px;
       color: var(--text-white);
-      margin: 6px 0 4px;
+      margin: 4px 0 2px;
     }
 
     .mono-sub {
-      background-color: #0D061A;
-      color: var(--lime-bright);
-      font-family: ui-monospace, SFMono-Regular, monospace;
-      font-size: 11px;
-      padding: 4px 8px;
+      background: transparent;
+      color: rgba(244, 247, 232, 0.68);
+      font-family: inherit;
+      font-size: 11.5px;
+      padding: 0;
       border-radius: 6px;
       display: inline-block;
-      margin-bottom: 8px;
+      margin-bottom: 4px;
+      border: none !important;
     }
 
     .item-lime-card {
-      background-color: var(--lime-card);
-      border: 1.5px solid var(--lime-bright);
-      border-radius: 12px;
-      padding: 10px 12px;
+      background: rgba(255, 255, 255, 0.035);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 11px 13px;
       margin-top: 8px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 8px;
+      gap: 12px;
+      transition: border-color 0.15s ease, background 0.15s ease;
     }
 
     .item-title {
       font-size: 13.5px;
-      font-weight: 700;
+      font-weight: 650;
       color: var(--text-white);
-      margin-bottom: 4px;
+      margin-bottom: 2px;
+      line-height: 1.3;
     }
 
     .cat-tag-chip {
-      background-color: var(--bg-outer);
+      background: rgba(197, 255, 41, 0.12);
       color: var(--lime-bright);
-      border: 1px solid var(--olive-border);
-      font-family: ui-monospace, SFMono-Regular, monospace;
-      font-size: 10px;
+      border: none;
+      font-family: inherit;
+      font-size: 9.5px;
       font-weight: 700;
-      padding: 2px 6px;
-      border-radius: 4px;
+      letter-spacing: 0.4px;
+      padding: 2px 7px;
+      border-radius: 6px;
       display: inline-block;
       margin-bottom: 4px;
     }
 
     .stepper-pill {
-      background-color: var(--bg-outer);
-      color: var(--text-white);
-      border: 1px solid rgba(255,255,255,0.4);
-      border-radius: 8px;
-      padding: 5px 10px;
+      background: rgba(197, 255, 41, 0.12);
+      color: var(--lime-bright);
+      border: 1px solid rgba(197, 255, 41, 0.35);
+      border-radius: 999px;
+      padding: 5px 12px;
       font-weight: 800;
-      font-size: 13px;
+      font-size: 12.5px;
       display: flex;
       align-items: center;
       gap: 10px;
@@ -311,42 +331,48 @@
     .check-row input[type="checkbox"] {
       width: 18px;
       height: 18px;
-      accent-color: var(--olive-badge);
+      accent-color: var(--lime-bright);
     }
 
-    .cta-olive-btn {
+    .cta-olive-btn, .cta-lime-btn {
       width: 100%;
-      background-color: var(--olive-badge);
-      color: var(--text-white);
-      border: 2.5px solid var(--lime-bright);
+      background: var(--lime-bright) !important;
+      color: #120924 !important;
+      border: none !important;
       border-radius: 14px;
-      padding: 14px;
-      font-size: 13px;
+      padding: 13px 16px;
+      font-size: 13.5px;
       font-weight: 800;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.2px;
       cursor: pointer;
       text-align: center;
+      box-shadow: 0 4px 16px rgba(197, 255, 41, 0.22);
     }
 
     .dark-input {
       width: 100%;
-      background-color: var(--bg-outer);
+      background: rgba(255, 255, 255, 0.05);
       color: var(--text-white);
-      border: 1.5px solid var(--olive-border);
-      border-radius: 8px;
-      padding: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      padding: 10px 12px;
       font-size: 13px;
       margin-top: 8px;
+      outline: none;
+    }
+
+    .dark-input::placeholder {
+      color: rgba(244, 247, 232, 0.5);
     }
 
     /* BOTTOM NAVS */
     .bottom-nav {
-      background-color: var(--lime-primary);
-      border-top: 2px solid var(--lime-bright);
-      padding: 8px 6px 14px;
+      background: rgba(18, 9, 36, 0.98);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 8px 8px 14px;
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 4px;
+      gap: 6px;
     }
 
     .bottom-nav.two-cols {
@@ -367,24 +393,26 @@
 
     .nav-tab {
       background: transparent;
-      color: var(--text-white);
-      border: none;
-      border-radius: 10px;
-      padding: 6px 2px;
-      font-size: 10px;
-      font-weight: 700;
+      color: rgba(244, 247, 232, 0.6);
+      border: 1px solid transparent;
+      border-radius: 12px;
+      padding: 7px 2px;
+      font-size: 10.5px;
+      font-weight: 600;
       cursor: pointer;
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 3px;
       text-align: center;
+      transition: all 0.15s ease;
     }
 
     .nav-tab.active {
-      background-color: var(--bg-outer);
-      border: 1px solid var(--olive-border);
+      background: rgba(197, 255, 41, 0.12);
+      border: 1px solid rgba(197, 255, 41, 0.3);
       color: var(--lime-bright);
+      font-weight: 700;
     }
 
     /* IN-APP TOAST BANNER */
@@ -393,14 +421,13 @@
       bottom: 24px;
       left: 50%;
       transform: translateX(-50%);
-      background-color: var(--bg-outer);
+      background: rgba(18, 9, 36, 0.96);
       color: var(--lime-bright);
-      border: 2px solid var(--lime-bright);
+      border: 1px solid rgba(197, 255, 41, 0.45);
       border-radius: 14px;
-      padding: 10px 16px;
-      font-family: ui-monospace, SFMono-Regular, monospace;
-      font-size: 12px;
-      font-weight: 700;
+      padding: 11px 16px;
+      font-size: 12.5px;
+      font-weight: 600;
       box-shadow: 0 12px 30px rgba(0,0,0,0.85);
       z-index: 9999;
       max-width: 390px;
@@ -413,7 +440,7 @@
       width: 100%;
       height: 8px;
       background-color: var(--bg-outer);
-      border: 1px solid rgba(255,255,255,0.3);
+      border: 1px solid rgba(255,255,255,0.2);
       border-radius: 6px;
       overflow: hidden;
       margin: 6px 0;
@@ -425,33 +452,26 @@
       transition: width 0.3s ease;
     }
 
-    .sub-pill-bar {
-      display: flex;
-      gap: 6px;
-      overflow-x: auto;
-      padding-bottom: 4px;
-    }
-
     /* CALENDAR VIEW SWITCHER & MONTH GRID */
     .cal-mode-switcher {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 6px;
-      background-color: var(--bg-outer);
+      background: rgba(255, 255, 255, 0.04);
       padding: 5px;
       border-radius: 12px;
-      border: 1.5px solid var(--olive-border);
+      border: 1px solid rgba(255, 255, 255, 0.12);
       margin-bottom: 8px;
     }
 
     .cal-mode-btn {
       background: transparent;
-      color: var(--text-white);
+      color: rgba(244, 247, 232, 0.8);
       border: 1px solid transparent;
       border-radius: 8px;
       padding: 7px 4px;
       font-size: 11.5px;
-      font-weight: 800;
+      font-weight: 700;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -460,9 +480,10 @@
     }
 
     .cal-mode-btn.active {
-      background-color: var(--lime-primary);
-      color: var(--bg-outer);
+      background: var(--lime-bright);
+      color: #120924;
       border-color: var(--lime-bright);
+      font-weight: 800;
     }
 
     .cal-month-grid {
@@ -474,7 +495,6 @@
     }
 
     .cal-weekday-hdr {
-      font-family: ui-monospace, SFMono-Regular, monospace;
       font-size: 10px;
       color: var(--lime-bright);
       font-weight: 700;
@@ -482,14 +502,14 @@
     }
 
     .cal-day-cell {
-      background-color: var(--bg-outer);
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 8px;
       min-height: 44px;
       padding: 4px 2px;
       font-size: 11px;
       font-weight: 700;
-      color: rgba(255, 255, 255, 0.7);
+      color: rgba(255, 255, 255, 0.65);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -497,54 +517,32 @@
     }
 
     .cal-day-cell.has-events {
-      border: 1.5px solid var(--lime-bright);
+      border: 1px solid rgba(197, 255, 41, 0.5);
       color: var(--text-white);
       cursor: pointer;
-      background-color: #23123F;
+      background: rgba(197, 255, 41, 0.08);
     }
 
     .cal-day-cell.selected-day {
-      background-color: var(--lime-primary);
-      color: var(--bg-outer);
-      border: 2px solid var(--text-white);
-      font-weight: 900;
+      background: var(--lime-bright);
+      color: #120924;
+      border: 1px solid var(--text-white);
+      font-weight: 800;
     }
 
     .cal-event-dot-pill {
-      background-color: var(--olive-badge);
+      background: rgba(197, 255, 41, 0.16);
       color: var(--lime-bright);
-      border: 1px solid var(--olive-border);
       border-radius: 6px;
-      font-family: ui-monospace, SFMono-Regular, monospace;
       font-size: 8.5px;
-      font-weight: 800;
+      font-weight: 700;
       padding: 1px 4px;
       line-height: 1.1;
     }
 
     .cal-day-cell.selected-day .cal-event-dot-pill {
-      background-color: var(--bg-outer);
+      background-color: #120924;
       color: var(--lime-bright);
-    }
-
-    .category-bar, .sub-pill-bar {
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-    }
-
-    .category-bar::-webkit-scrollbar, .sub-pill-bar::-webkit-scrollbar {
-      display: none;
-    }
-
-    /* SLEEK, ELEGANT REDESIGN FOR MEMBER PWA */
-    #role-view-member {
-      background: linear-gradient(180deg, #160B2B 0%, #120924 100%);
-    }
-
-    #role-view-member .pwa-header {
-      background: rgba(22, 11, 43, 0.96);
-      border-bottom: 1px solid rgba(197, 255, 41, 0.16);
-      padding: 12px 16px 10px;
     }
 
     #role-view-member #member-catalog-search {
@@ -556,160 +554,14 @@
       color: var(--text-white);
     }
 
-    #role-view-member #member-catalog-search::placeholder {
-      color: rgba(244, 247, 232, 0.55);
-    }
-
-    #role-view-member .cat-pill {
-      background: rgba(255, 255, 255, 0.05);
-      color: rgba(244, 247, 232, 0.85);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 999px;
-      padding: 6px 13px;
-      font-size: 11.5px;
-      font-weight: 600;
-      transition: all 0.15s ease;
-    }
-
-    #role-view-member .cat-pill.active {
-      background: var(--lime-bright);
-      color: #120924;
-      border: 1px solid var(--lime-bright);
-      font-weight: 700;
-    }
-
-    #role-view-member .pwa-body {
-      padding: 14px 16px 18px;
-      gap: 14px;
-    }
-
-    #role-view-member .lime-dashed-banner {
-      background: rgba(197, 255, 41, 0.07);
-      border: 1px solid rgba(197, 255, 41, 0.22);
-      border-radius: 16px;
-      padding: 11px 14px;
-      color: var(--text-cream);
-      font-size: 12px;
-    }
-
-    #role-view-member .dark-card {
-      background: #1B0F33;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 20px;
-      padding: 16px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
-    }
-
-    #role-view-member .pantry-title {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      font-size: 15.5px;
-      font-weight: 700;
-      letter-spacing: -0.2px;
-      color: var(--text-white);
-      margin: 4px 0 2px;
-    }
-
-    #role-view-member .member-hub-card > hr {
+    .member-hub-card > hr {
       border: none;
       border-top: 1px solid rgba(255, 255, 255, 0.08);
       margin: 10px 0 6px !important;
     }
 
-    #role-view-member .mono-sub {
-      background: transparent;
-      color: rgba(244, 247, 232, 0.68);
-      font-family: inherit;
-      font-size: 11.5px;
-      padding: 0;
-      margin-bottom: 4px;
-    }
-
-    #role-view-member .item-lime-card {
-      background: rgba(255, 255, 255, 0.035);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 14px;
-      padding: 11px 13px;
-      margin-top: 8px;
-      gap: 12px;
-      transition: border-color 0.15s ease, background 0.15s ease;
-    }
-
-    #role-view-member .member-hub-card .item-lime-card > div:first-child > div:last-child {
+    .member-hub-card .item-lime-card > div:first-child > div:last-child {
       display: none;
-    }
-
-    #role-view-member .cat-tag-chip {
-      background: rgba(197, 255, 41, 0.12);
-      color: var(--lime-bright);
-      border: none;
-      border-radius: 6px;
-      font-family: inherit;
-      font-size: 9.5px;
-      font-weight: 700;
-      letter-spacing: 0.4px;
-      padding: 2px 7px;
-      margin-bottom: 4px;
-    }
-
-    #role-view-member .item-title {
-      font-size: 13.5px;
-      font-weight: 650;
-      color: var(--text-white);
-      margin-bottom: 2px;
-      line-height: 1.3;
-    }
-
-    #role-view-member .olive-badge {
-      background: rgba(197, 255, 41, 0.12);
-      color: var(--lime-bright);
-      border: 1px solid rgba(197, 255, 41, 0.35);
-      border-radius: 999px;
-      font-family: inherit;
-      font-size: 11px;
-      font-weight: 700;
-      padding: 6px 12px;
-    }
-
-    #role-view-member .stepper-pill {
-      background: rgba(197, 255, 41, 0.12);
-      color: var(--lime-bright);
-      border: 1px solid rgba(197, 255, 41, 0.35);
-      border-radius: 999px;
-      padding: 5px 12px;
-      font-size: 12.5px;
-      gap: 10px;
-    }
-
-    #role-view-member .cta-olive-btn {
-      background: var(--lime-bright);
-      color: #120924;
-      border: none;
-      border-radius: 14px;
-      padding: 13px 16px;
-      font-size: 13.5px;
-      font-weight: 800;
-      box-shadow: 0 4px 16px rgba(197, 255, 41, 0.22);
-    }
-
-    #role-view-member .bottom-nav {
-      background: rgba(18, 9, 36, 0.98);
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 8px 8px 14px;
-    }
-
-    #role-view-member .nav-tab {
-      color: rgba(244, 247, 232, 0.6);
-      font-size: 10.5px;
-      font-weight: 600;
-      padding: 7px 2px;
-      border-radius: 12px;
-    }
-
-    #role-view-member .nav-tab.active {
-      background: rgba(197, 255, 41, 0.12);
-      border: 1px solid rgba(197, 255, 41, 0.3);
-      color: var(--lime-bright);
-      font-weight: 700;
     }
 
     .hidden { display: none !important; }
@@ -1750,47 +1602,39 @@
          ========================================================= -->
     <div id="role-view-volunteer" class="hidden" style="display:flex; flex-direction:column; flex:1;">
       <div class="pwa-header">
-        <div class="header-top-row">
+        <div class="header-top-row" style="align-items:center;">
           <span class="app-tag-pill">THE COMMON NEED • VOLUNTEER PWA</span>
           <span class="olive-badge">BATCH #OAK-409</span>
         </div>
-        <div class="header-subtitle">Deep East Oakland → Fruitvale Loop</div>
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-          <span class="app-tag-pill">42 mins • 4.6 mi</span>
-          <span class="olive-badge">📶 Offline Ready</span>
-          <span class="olive-badge" id="vol-stops-counter">1/4 Stops Done</span>
+        <div class="header-subtitle" style="margin:6px 0 8px;">Deep East Oakland → Fruitvale Loop</div>
+        <div style="display:flex; gap:6px; align-items:center; flex-wrap:wrap;">
+          <span class="app-tag-pill" style="background:rgba(255,255,255,0.06); color:var(--text-cream);">42 mins • 4.6 mi</span>
+          <span class="olive-badge" style="padding:3px 9px; font-size:10px;">📶 Offline Ready</span>
+          <span class="olive-badge" id="vol-stops-counter" style="padding:3px 9px; font-size:10px;">1/4 Stops Done</span>
         </div>
       </div>
 
       <!-- VOLUNTEER TAB 1 -->
       <div class="pwa-body" id="volunteer-tab-1">
-        <div class="lime-dashed-banner" style="display:flex; justify-content:space-between; align-items:center;">
-          <div>
-            <div style="font-weight:800;">Local Node Route: East Oakland</div>
-            <div>→ 2 Homes (Pedestrian/Bicycle/Car)</div>
+        <div class="dark-card" style="padding:14px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <span class="cat-tag-chip" style="margin:0;">LOCAL NODE OSRM NAVIGATOR</span>
+            <span style="font-size:11px; color:var(--lime-bright); font-weight:600;">✓ Offline Route Synced</span>
           </div>
-          <span class="olive-badge">4.6 mi Total</span>
-        </div>
+          <div id="leaflet-map" style="width:100%; height:180px; border-radius:14px; border:1px solid rgba(255,255,255,0.14);"></div>
 
-        <div class="dark-card" style="padding:10px;">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-            <span class="mono-sub" style="margin:0;">LOCAL NODE OSRM NAVIGATOR (OFFLINE CACHED)</span>
-            <span style="font-size:11px; color:var(--lime-bright)">✓ Synced</span>
-          </div>
-          <div id="leaflet-map" style="width:100%; height:180px; border-radius:12px; border:2px solid var(--lime-bright);"></div>
-
-          <div class="item-lime-card" style="flex-direction:column; align-items:stretch; margin-top:8px; padding:10px;">
-            <div style="display:flex; justify-content:space-between; font-size:11px; font-weight:800;">
+          <div class="item-lime-card" style="flex-direction:column; align-items:stretch; margin-top:10px; padding:12px;">
+            <div style="display:flex; justify-content:space-between; font-size:11px; font-weight:700; color:var(--lime-bright);">
               <span id="nav-step-counter">[ ↱ ] LEG 1 OF 3 • STEP 2/4</span>
               <span id="nav-step-dist">0.6 mi (2 min)</span>
             </div>
-            <div style="font-size:12.5px; font-weight:700; margin-top:4px;" id="nav-instruction-text">
+            <div style="font-size:13px; font-weight:650; margin-top:5px; line-height:1.35;" id="nav-instruction-text">
               Take Exit 19C toward West St / San Pablo Ave and merge onto 36th St toward Stop #2.
             </div>
-            <div style="display:flex; gap:6px; margin-top:8px;">
+            <div style="display:flex; gap:6px; margin-top:10px;">
               <button class="olive-badge" style="cursor:pointer; flex:1; text-align:center;" onclick="stepVolunteerNav(-1)">◀ Prev</button>
-              <button class="olive-badge" style="cursor:pointer; flex:1; text-align:center; border-color:var(--lime-bright);" onclick="stepVolunteerNav(1)">Next Maneuver ▶</button>
-              <button class="olive-badge" style="cursor:pointer; background:var(--bg-outer);" onclick="speakCurrentNavStep()">🔊 Voice</button>
+              <button class="olive-badge" style="cursor:pointer; flex:1; text-align:center;" onclick="stepVolunteerNav(1)">Next ▶</button>
+              <button class="olive-badge" style="cursor:pointer;" onclick="speakCurrentNavStep()">🔊 Voice</button>
             </div>
           </div>
         </div>
@@ -1798,56 +1642,54 @@
         <!-- STOP 1 CARD -->
         <div class="dark-card">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-            <span class="mono-sub" style="margin:0;">STOP 1 • PICKUP</span>
-            <span class="mono-sub" style="margin:0; border:1px solid var(--lime-bright);">✓ Confirmed 2:12 PM</span>
+            <span class="cat-tag-chip" style="margin:0;">STOP 1 • PICKUP</span>
+            <span style="font-size:11px; color:var(--lime-bright); font-weight:600;">✓ Confirmed 2:12 PM</span>
           </div>
-          <div style="font-size:14px; font-weight:800; margin-bottom:4px;">East Oakland Collective Pantry</div>
-          <div class="mono-sub">7800 MacArthur Blvd • 4 Crates Loaded</div>
+          <div class="item-title" style="font-size:14.5px;">East Oakland Collective Pantry</div>
+          <div class="mono-sub" style="margin:0;">7800 MacArthur Blvd • 4 Crates Loaded</div>
         </div>
 
         <!-- STOP 2 CARD -->
         <div class="dark-card">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-            <span class="mono-sub" style="margin:0;">STOP 2 • PICKUP</span>
-            <button class="olive-badge" style="cursor:pointer; border-color:var(--lime-bright);" onclick="confirmVolunteerStop(2)">✓ Confirm Pickup</button>
+            <span class="cat-tag-chip" style="margin:0;">STOP 2 • PICKUP</span>
+            <button class="olive-badge" style="cursor:pointer;" onclick="confirmVolunteerStop(2)">✓ Confirm Pickup</button>
           </div>
-          <div style="font-size:14px; font-weight:800; margin-bottom:4px;">West County Mutual Aid Care Hub</div>
-          <div class="mono-sub">3115 San Pablo Ave (By 2:30 PM)</div>
-          <div class="item-lime-card" style="flex-direction:column; align-items:flex-start; font-size:12px;">
-            <div>📦 2 sealed medical/hygiene parcels (N95 Masks & Care Kits)</div>
-            <div style="font-size:11px; margin-top:4px;">📝 Confirming pickup recalculates and narrows Stop #3's arrival window.</div>
-          </div>
+          <div class="item-title" style="font-size:14.5px;">West County Mutual Aid Care Hub</div>
+          <div class="mono-sub" style="margin:0;">3115 San Pablo Ave • 2 Sealed Medical/Hygiene Parcels</div>
         </div>
 
         <!-- STOP 3 CARD -->
         <div class="dark-card">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-            <span class="mono-sub" style="margin:0;">STOP 3 • DROPOFF</span>
+            <span class="cat-tag-chip" style="margin:0;">STOP 3 • DROPOFF</span>
             <button class="olive-badge" style="cursor:pointer;" onclick="this.textContent='✓ Delivered'; showToast('Stop #3 household delivery confirmed!')">✓ Confirm Delivery</button>
           </div>
-          <div style="font-size:14px; font-weight:800; margin-bottom:4px;">Member Household • 1400 Block of 62nd Ave</div>
-          <div class="mono-sub">Handoff: Walk up 4 porch steps & wait 60s at door</div>
+          <div class="item-title" style="font-size:14.5px;">Member Household • 1400 Block of 62nd Ave</div>
+          <div class="mono-sub" style="margin:0;">Handoff: Walk up 4 porch steps & wait 60s at door</div>
         </div>
       </div>
 
       <!-- VOLUNTEER TAB 2 -->
       <div class="pwa-body hidden" id="volunteer-tab-2">
-        <div class="lime-dashed-banner">
-          <strong>Community Bulk Distribution Shifts</strong> (decidim-meetings) • Coordinate neighborhood routes on foot, bicycle, or personal vehicle.
+        <div style="font-size:12.5px; color:rgba(244,247,232,0.8); font-weight:600; padding:0 2px;">
+          Community Bulk Distribution Shifts
         </div>
         <div class="dark-card">
-          <div style="font-size:14px; font-weight:800; margin-bottom:4px;">Thu 2:00 PM • East Oakland Loop</div>
-          <div class="mono-sub">Pickup at 7800 MacArthur Blvd • 4 Households (4.6 mi)</div>
-          <div class="item-lime-card" style="margin:8px 0;">
-            <span style="font-size:12px;">Local Node Server: Oakland-East (#OAK-01)</span>
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <div class="item-title" style="font-size:14.5px;">Thu 2:00 PM • East Oakland Loop</div>
+              <div class="mono-sub" style="margin:0;">7800 MacArthur Blvd • 4 Households (4.6 mi)</div>
+            </div>
             <span class="olive-badge">Signed Up ✓</span>
           </div>
         </div>
         <div class="dark-card">
-          <div style="font-size:14px; font-weight:800; margin-bottom:4px;">Sat 10:00 AM • Fruitvale & San Antonio Loop</div>
-          <div class="mono-sub">Pickup at 3301 E 12th St • 5 Households (2.1 mi)</div>
-          <div class="item-lime-card" style="margin:8px 0;">
-            <span style="font-size:12px;">Walking / Bicycle / Personal Vehicle</span>
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <div class="item-title" style="font-size:14.5px;">Sat 10:00 AM • Fruitvale & San Antonio Loop</div>
+              <div class="mono-sub" style="margin:0;">3301 E 12th St • 5 Households (2.1 mi)</div>
+            </div>
             <button class="olive-badge" style="cursor:pointer;" onclick="this.textContent='Signed Up ✓'; showToast('Signed up for Saturday 10:00 AM Fruitvale Volunteer Shift!')">+ Sign Up for Shift</button>
           </div>
         </div>
@@ -1855,8 +1697,8 @@
 
       <!-- VOLUNTEER BOTTOM NAV -->
       <div class="bottom-nav two-cols">
-        <button class="nav-tab active" id="v-nav-1" onclick="switchVolunteerTab(1)"><span>🗺️</span><span>1. Route</span></button>
-        <button class="nav-tab" id="v-nav-2" onclick="switchVolunteerTab(2)"><span>📅</span><span>2. Shifts</span></button>
+        <button class="nav-tab active" id="v-nav-1" onclick="switchVolunteerTab(1)"><span>🗺️</span><span>Route</span></button>
+        <button class="nav-tab" id="v-nav-2" onclick="switchVolunteerTab(2)"><span>📅</span><span>Shifts</span></button>
       </div>
     </div>
 
@@ -1865,20 +1707,18 @@
          ========================================================= -->
     <div id="role-view-nonprofit" class="hidden" style="display:flex; flex-direction:column; flex:1;">
       <div class="pwa-header">
-        <div class="header-top-row">
-          <div>
-            <span class="app-tag-pill">THE COMMON NEED • NON-PROFIT PROVIDER PORTAL</span>
-            <div class="header-subtitle" style="margin-top:6px;">East Oakland Collective Pantry Hub</div>
-          </div>
+        <div class="header-top-row" style="align-items:center;">
+          <span class="app-tag-pill">THE COMMON NEED • NON-PROFIT PROVIDER PORTAL</span>
           <span class="olive-badge">LOCAL NODE 501(c)(3)</span>
         </div>
+        <div class="header-subtitle" style="margin:4px 0 8px;">East Oakland Collective Pantry Hub</div>
         <div class="kpi-grid">
           <div class="kpi-box">
-            <div class="kpi-label">SURPLUS NOURISHMENT:</div>
+            <div class="kpi-label">SURPLUS NOURISHMENT</div>
             <div class="kpi-val">1,840 lbs / mo</div>
           </div>
           <div class="kpi-box">
-            <div class="kpi-label">STAFF HOURS RECLAIMED:</div>
+            <div class="kpi-label">STAFF HOURS RECLAIMED</div>
             <div class="kpi-val">18.5 hrs / wk</div>
           </div>
         </div>
@@ -1886,31 +1726,28 @@
 
       <!-- PARTNER TAB 1 -->
       <div class="pwa-body" id="nonprofit-tab-1">
-        <div class="lime-dashed-banner">
-          <strong>Shared Volunteer Fleet:</strong> Pre-pack member choice crates below for incoming volunteer couriers. Data hosted locally on East Oakland node.
-        </div>
         <div class="dark-card">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-            <span class="mono-sub" style="margin:0; border:1px solid var(--olive-border);">BATCH-OAK-409</span>
-            <span class="mono-sub" style="margin:0;">Arriving in 4 mins</span>
+            <span class="cat-tag-chip" style="margin:0;">BATCH-OAK-409</span>
+            <span style="font-size:11px; color:var(--lime-bright); font-weight:600;">Arriving in 4 mins</span>
           </div>
-          <div style="font-size:14px; font-weight:800;">Marcus T. (Volunteer Courier Route)</div>
-          <div style="font-size:12px; margin:4px 0 8px;">Serving 4 neighborhood households in this loop</div>
-          <div class="item-lime-card" style="margin-bottom:10px;">
+          <div class="item-title" style="font-size:14.5px;">Marcus T. • Volunteer Courier Route</div>
+          <div class="mono-sub">Serving 4 neighborhood households in this loop</div>
+          <div class="item-lime-card" style="margin-bottom:12px;">
             <div style="font-size:12px;"><strong>Pull from Shelf:</strong> 4x Produce Bundles, 2x Staple Grain Boxes</div>
           </div>
-          <button class="cta-olive-btn" style="background-color:var(--bg-outer); padding:10px; margin-top:4px;" onclick="this.textContent='✓ Crates Verified & Staged'; showToast('Batch #OAK-409 crates marked as staged at loading ramp!')">
+          <button class="cta-olive-btn" style="padding:11px;" onclick="this.textContent='✓ Crates Verified & Staged'; showToast('Batch #OAK-409 crates marked as staged at loading ramp!')">
             ✓ Crates Verified & Staged at Loading Ramp
           </button>
         </div>
 
         <div class="dark-card">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-            <span class="mono-sub" style="margin:0; border:1px solid var(--olive-border);">BATCH-OAK-412</span>
+            <span class="cat-tag-chip" style="margin:0;">BATCH-OAK-412</span>
             <span class="mono-sub" style="margin:0;">Pickup at 3:15 PM</span>
           </div>
-          <div style="font-size:14px; font-weight:800;">Elena R. (Volunteer Courier Route)</div>
-          <div style="font-size:12px; margin:4px 0 8px;">Serving 7 neighborhood households in this loop</div>
+          <div class="item-title" style="font-size:14.5px;">Elena R. • Volunteer Courier Route</div>
+          <div class="mono-sub">Serving 7 neighborhood households in this loop</div>
           <div class="item-lime-card">
             <div style="font-size:12px;"><strong>Pull from Shelf:</strong> 6x Produce Bundles, 5x Sourdough Loaves, 3x Grain Boxes</div>
           </div>
@@ -1920,7 +1757,7 @@
       <!-- PARTNER TAB 2 -->
       <div class="pwa-body hidden" id="nonprofit-tab-2">
         <div class="dark-card">
-          <div style="font-family:monospace; font-size:12px; font-weight:700;">+ POST SURPLUS GOODS TO LOCAL NODE</div>
+          <div style="font-size:13px; font-weight:700; color:var(--lime-bright);">+ POST SURPLUS GOODS TO LOCAL NODE</div>
           <input type="text" id="surplus-name-input" class="dark-input" placeholder="Item name (e.g., Fresh Bok Choy & Ginger)">
           <div style="display:flex; gap:8px; margin-top:8px;">
             <input type="number" id="surplus-qty-input" class="dark-input" value="20" style="width:90px; margin:0;">
@@ -1930,7 +1767,7 @@
 
         <!-- Partner Calendar Event Publisher (Syncs to Member PWA Calendar Tab 4) -->
         <div class="dark-card">
-          <div style="font-family:monospace; font-size:12px; font-weight:700;">📅 POST EVENT TO MEMBER LOCAL AREA CALENDAR</div>
+          <div style="font-size:13px; font-weight:700; color:var(--lime-bright);">📅 POST EVENT TO MEMBER LOCAL AREA CALENDAR</div>
           <input type="text" id="partner-event-title" class="dark-input" placeholder="Event title (e.g., Pop-Up Winter Coat & Hot Soup Share)">
           <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-top:8px;">
             <select id="partner-event-day" class="dark-input" style="margin:0; font-size:11.5px;">
@@ -1949,17 +1786,17 @@
         <div id="live-inventory-list" style="display:flex; flex-direction:column; gap:10px;">
           <div class="dark-card" style="display:flex; justify-content:space-between; align-items:center;">
             <div>
-              <div style="font-size:13.5px; font-weight:700;">Organic Collard Greens & Kale Bundle</div>
-              <div class="mono-sub" style="margin:6px 0 0;">Vegan / GF • Local Node #1</div>
+              <div class="item-title">Organic Collard Greens & Kale Bundle</div>
+              <div class="mono-sub" style="margin:2px 0 0;">Vegan / GF • Local Node #1</div>
             </div>
-            <span class="olive-badge">24<br>left</span>
+            <span class="olive-badge">24 left</span>
           </div>
           <div class="dark-card" style="display:flex; justify-content:space-between; align-items:center;">
             <div>
-              <div style="font-size:13.5px; font-weight:700;">25lb Staple Grain Box (Rice, Pinto Beans)</div>
-              <div class="mono-sub" style="margin:6px 0 0;">Halal / Kosher • Local Node #1</div>
+              <div class="item-title">25lb Staple Grain Box (Rice, Pinto Beans)</div>
+              <div class="mono-sub" style="margin:2px 0 0;">Halal / Kosher • Local Node #1</div>
             </div>
-            <span class="olive-badge">15<br>left</span>
+            <span class="olive-badge">15 left</span>
           </div>
         </div>
       </div>
@@ -1967,22 +1804,23 @@
       <!-- PARTNER TAB 3 -->
       <div class="pwa-body hidden" id="nonprofit-tab-3">
         <div class="dark-card">
-          <span class="mono-sub" style="border:1px solid var(--olive-border);">DECIDIM-ACCOUNTABILITY • LOCAL NODE</span>
-          <div class="pantry-title" style="font-size:15px; margin-top:4px;">Local Node Accountability Ledger</div>
-          <div class="item-lime-card" style="font-size:12px; line-height:1.45; margin:8px 0; flex-direction:column; align-items:flex-start;">
-            <p>Data stored securely on East Oakland local node server, federating transparent impact metrics to the central network.</p>
-            <hr style="border-color:rgba(255,255,255,0.2); width:100%; margin:8px 0;">
-            <div>✓ Member Audit Score: <strong>★ 4.9 / 5.0</strong></div>
-            <div>✓ Data Sovereignty: <strong>Local Postgres Instance</strong></div>
+          <span class="cat-tag-chip">DECIDIM-ACCOUNTABILITY • LOCAL NODE</span>
+          <div class="pantry-title" style="font-size:15.5px; margin-top:4px;">Local Node Accountability Ledger</div>
+          <div class="item-lime-card" style="font-size:12.5px; line-height:1.45; margin:8px 0 0; flex-direction:column; align-items:flex-start;">
+            <p style="color:rgba(244,247,232,0.8);">Data stored securely on East Oakland local node server, federating transparent impact metrics to the central network.</p>
+            <div style="width:100%; border-top:1px solid rgba(255,255,255,0.08); padding-top:8px; margin-top:4px; display:flex; flex-direction:column; gap:4px;">
+              <div>✓ Member Audit Score: <strong style="color:var(--lime-bright);">★ 4.9 / 5.0</strong></div>
+              <div>✓ Data Sovereignty: <strong>Local Postgres Instance</strong></div>
+            </div>
           </div>
         </div>
       </div>
 
       <!-- PARTNER BOTTOM NAV -->
       <div class="bottom-nav three-cols">
-        <button class="nav-tab active" id="np-nav-1" onclick="switchNonProfitTab(1)"><span>🚚</span><span>1. Handoff</span></button>
-        <button class="nav-tab" id="np-nav-2" onclick="switchNonProfitTab(2)"><span>📦</span><span>2. Stock</span></button>
-        <button class="nav-tab" id="np-nav-3" onclick="switchNonProfitTab(3)"><span>📊</span><span>3. Audit</span></button>
+        <button class="nav-tab active" id="np-nav-1" onclick="switchNonProfitTab(1)"><span>🚚</span><span>Handoff</span></button>
+        <button class="nav-tab" id="np-nav-2" onclick="switchNonProfitTab(2)"><span>📦</span><span>Inventory</span></button>
+        <button class="nav-tab" id="np-nav-3" onclick="switchNonProfitTab(3)"><span>📊</span><span>Audit</span></button>
       </div>
     </div>
 
@@ -1991,42 +1829,36 @@
          ========================================================= -->
     <div id="role-view-localnode" class="hidden" style="display:flex; flex-direction:column; flex:1;">
       <div class="pwa-header">
-        <div class="header-top-row">
-          <div>
-            <span class="app-tag-pill">EAST OAKLAND LOCAL NODE • SOVEREIGN DASHBOARD</span>
-            <div class="header-subtitle" style="margin-top:6px;">Community Analytics, Partner Moderation & Local Votes</div>
-          </div>
+        <div class="header-top-row" style="align-items:center;">
+          <span class="app-tag-pill">EAST OAKLAND LOCAL NODE • SOVEREIGN DASHBOARD</span>
           <span class="olive-badge">NODE #OAK-01 ACTIVE</span>
         </div>
+        <div class="header-subtitle" style="margin:4px 0 8px;">Community Analytics & Local Governance</div>
         <div class="kpi-grid">
           <div class="kpi-box">
-            <div class="kpi-label">SURPLUS NOURISHMENT:</div>
-            <div class="kpi-val" style="color:var(--lime-bright)">1,840 lbs / mo</div>
+            <div class="kpi-label">SURPLUS NOURISHMENT</div>
+            <div class="kpi-val">1,840 lbs / mo</div>
           </div>
           <div class="kpi-box">
-            <div class="kpi-label">SHIFT FILL RATE:</div>
-            <div class="kpi-val" style="color:var(--lime-bright)">94% (Zero Gap)</div>
+            <div class="kpi-label">SHIFT FILL RATE</div>
+            <div class="kpi-val">94% (Zero Gap)</div>
           </div>
         </div>
       </div>
 
       <!-- LOCAL NODE TAB 1: Community Analytics -->
       <div class="pwa-body" id="ln-tab-1">
-        <div class="lime-dashed-banner">
-          <strong>Local Node Telemetry:</strong> Track relevant community metrics (nourishment rescued, household delivery completion, active volunteer shifts, and co-op partner compliance) stored securely on this local PostgreSQL/PostGIS server.
-        </div>
-
         <div class="dark-card">
-          <div style="font-size:14px; font-weight:800; margin-bottom:6px;">📈 Community-Relevant Analytics</div>
-          <div style="display:flex; flex-direction:column; gap:8px; font-size:12px; font-family:monospace;">
-            <div style="background:var(--bg-outer); padding:8px; border-radius:6px; display:flex; justify-content:space-between;">
-              <span>Active Neighborhood Hubs:</span> <strong style="color:var(--lime-bright)">4 Community Hubs</strong>
+          <div class="pantry-title" style="margin-bottom:10px;">📈 Community-Relevant Analytics</div>
+          <div style="display:flex; flex-direction:column; gap:8px; font-size:12.5px;">
+            <div class="item-lime-card" style="margin:0;">
+              <span>Active Neighborhood Hubs</span> <strong style="color:var(--lime-bright)">4 Community Hubs</strong>
             </div>
-            <div style="background:var(--bg-outer); padding:8px; border-radius:6px; display:flex; justify-content:space-between;">
-              <span>Households Served (Monthly):</span> <strong style="color:var(--lime-bright)">312 Families</strong>
+            <div class="item-lime-card" style="margin:0;">
+              <span>Households Served (Monthly)</span> <strong style="color:var(--lime-bright)">312 Families</strong>
             </div>
-            <div style="background:var(--bg-outer); padding:8px; border-radius:6px; display:flex; justify-content:space-between;">
-              <span>Volunteer Shift Fill Rate:</span> <strong style="color:var(--lime-bright)">94.2%</strong>
+            <div class="item-lime-card" style="margin:0;">
+              <span>Volunteer Shift Fill Rate</span> <strong style="color:var(--lime-bright)">94.2%</strong>
             </div>
           </div>
         </div>
@@ -2035,25 +1867,25 @@
       <!-- LOCAL NODE TAB 2: Partner Onboarding & Moderation -->
       <div class="pwa-body hidden" id="ln-tab-2">
         <div class="dark-card">
-          <div style="font-size:14px; font-weight:800; margin-bottom:4px;">🏢 Partner Organization Moderation</div>
-          <div style="font-size:12px; color:var(--text-cream); margin-bottom:8px;">
-            Review incoming 501(c)(3) partner applications or manage active community pantries:
+          <div class="pantry-title" style="margin-bottom:4px;">🏢 Partner Organization Moderation</div>
+          <div class="mono-sub" style="margin-bottom:8px;">
+            Review incoming 501(c)(3) partner applications
           </div>
-          <div class="item-lime-card" style="flex-direction:column; align-items:flex-start; padding:10px;">
-            <div style="font-size:13px; font-weight:700;">Fruitvale Senior Lunch Project (Pending 501c3)</div>
-            <div class="mono-sub" style="margin:4px 0;">Submitted Oct 28 • EIN: 94-7728190</div>
-            <div style="display:flex; gap:6px; width:100%; margin-top:4px;">
-              <button class="olive-badge" style="flex:1; cursor:pointer; padding:6px;" onclick="this.textContent='✓ Approved on Node'; showToast('Partner organization verified & activated on East Oakland Local Node!')">✓ Approve Partner</button>
-              <button class="olive-badge" style="flex:1; background:#4A1525; border-color:#8B263E; cursor:pointer; padding:6px;" onclick="showToast('Partner application placed on hold for Member Assembly review.')">Hold</button>
+          <div class="item-lime-card" style="flex-direction:column; align-items:flex-start;">
+            <div class="item-title">Fruitvale Senior Lunch Project (Pending 501c3)</div>
+            <div class="mono-sub" style="margin:2px 0 6px;">Submitted Oct 28 • EIN: 94-7728190</div>
+            <div style="display:flex; gap:8px; width:100%;">
+              <button class="olive-badge" style="flex:1; cursor:pointer; text-align:center;" onclick="this.textContent='✓ Approved on Node'; showToast('Partner organization verified & activated on East Oakland Local Node!')">✓ Approve Partner</button>
+              <button class="olive-badge" style="flex:1; background:rgba(255,255,255,0.06); color:var(--text-cream); border-color:rgba(255,255,255,0.15); cursor:pointer; text-align:center;" onclick="showToast('Partner application placed on hold for Member Assembly review.')">Hold</button>
             </div>
           </div>
         </div>
 
         <div class="dark-card">
-          <div style="font-size:14px; font-weight:800; margin-bottom:4px;">⚙️ Onboard New Local Partner Hub</div>
+          <div class="pantry-title" style="margin-bottom:4px;">⚙️ Onboard New Local Partner Hub</div>
           <input type="text" class="dark-input" placeholder="Organization Name (e.g., San Antonio Mutual Aid)">
           <input type="text" class="dark-input" placeholder="EIN (XX-XXXXXXX) & Address">
-          <button class="cta-olive-btn" style="padding:10px; margin-top:8px;" onclick="showToast('Verification invite sent via Decidim::Verifications::NonProfitHandler!')">
+          <button class="cta-olive-btn" style="padding:11px; margin-top:10px;" onclick="showToast('Verification invite sent via Decidim::Verifications::NonProfitHandler!')">
             + Send Onboarding Invite →
           </button>
         </div>
@@ -2062,27 +1894,24 @@
       <!-- LOCAL NODE TAB 3: Member Requests & Moderation -->
       <div class="pwa-body hidden" id="ln-tab-3">
         <div class="dark-card">
-          <div style="font-size:14px; font-weight:800; margin-bottom:4px;">🛡️ Member Request & Content Moderation</div>
-          <div style="font-size:12px; color:var(--text-cream); margin-bottom:8px;">
-            Review flagged delivery feedback or member care requests in accordance with community standards:
+          <div class="pantry-title" style="margin-bottom:4px;">🛡️ Member Request & Content Moderation</div>
+          <div class="mono-sub" style="margin-bottom:8px;">
+            Review flagged delivery feedback or member care requests
           </div>
-          <div class="item-lime-card" style="flex-direction:column; align-items:flex-start; padding:10px;">
-            <div style="font-size:12.5px; font-weight:700;">Flagged Review on West County Pharmacy</div>
-            <div class="mono-sub" style="margin:4px 0;">Reported as incorrect address tag by courier</div>
-            <button class="olive-badge" style="cursor:pointer; padding:6px; margin-top:4px;" onclick="this.textContent='✓ Resolved'; showToast('Flagged item resolved & logged in public Decidim Admin Activity Log.')">Resolve / Dismiss Flag</button>
+          <div class="item-lime-card" style="flex-direction:column; align-items:flex-start;">
+            <div class="item-title">Flagged Review on West County Pharmacy</div>
+            <div class="mono-sub" style="margin:2px 0 6px;">Reported as incorrect address tag by courier</div>
+            <button class="olive-badge" style="cursor:pointer;" onclick="this.textContent='✓ Resolved'; showToast('Flagged item resolved & logged in public Decidim Admin Activity Log.')">Resolve / Dismiss Flag</button>
           </div>
         </div>
       </div>
 
       <!-- LOCAL NODE TAB 4: Decidim Local Voting -->
       <div class="pwa-body hidden" id="ln-tab-4">
-        <div class="lime-dashed-banner">
-          <strong>Local Decidim Voting:</strong> Members in this server area vote to change local node parameters, routing radii, and partner funding allocations.
-        </div>
         <div class="dark-card">
-          <span class="mono-sub" style="border:1px solid var(--olive-border);">LOCAL BALLOT #OAK-09</span>
-          <div class="pantry-title" style="font-size:15px; margin-top:4px;">Expand East Oakland Delivery Radius to 90th Ave</div>
-          <div class="item-lime-card" style="font-size:12px; line-height:1.45; margin:8px 0;">
+          <span class="cat-tag-chip">LOCAL BALLOT #OAK-09</span>
+          <div class="pantry-title" style="margin-top:4px;">Expand East Oakland Delivery Radius to 90th Ave</div>
+          <div class="item-lime-card" style="font-size:12.5px; line-height:1.45; margin:8px 0;">
             Proposal to extend volunteer courier batch routes eastward to cover senior housing complexes along International Blvd.
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -2094,10 +1923,10 @@
 
       <!-- LOCAL NODE BOTTOM NAV -->
       <div class="bottom-nav four-cols">
-        <button class="nav-tab active" id="ln-nav-1" onclick="switchLocalNodeTab(1)"><span>📊</span><span>1. Analytics</span></button>
-        <button class="nav-tab" id="ln-nav-2" onclick="switchLocalNodeTab(2)"><span>🏢</span><span>2. Partners</span></button>
-        <button class="nav-tab" id="ln-nav-3" onclick="switchLocalNodeTab(3)"><span>🛡️</span><span>3. Requests</span></button>
-        <button class="nav-tab" id="ln-nav-4" onclick="switchLocalNodeTab(4)"><span>🗳️</span><span>4. Votes</span></button>
+        <button class="nav-tab active" id="ln-nav-1" onclick="switchLocalNodeTab(1)"><span>📊</span><span>Analytics</span></button>
+        <button class="nav-tab" id="ln-nav-2" onclick="switchLocalNodeTab(2)"><span>🏢</span><span>Partners</span></button>
+        <button class="nav-tab" id="ln-nav-3" onclick="switchLocalNodeTab(3)"><span>🛡️</span><span>Requests</span></button>
+        <button class="nav-tab" id="ln-nav-4" onclick="switchLocalNodeTab(4)"><span>🗳️</span><span>Votes</span></button>
       </div>
     </div>
 
@@ -2106,39 +1935,33 @@
          ========================================================= -->
     <div id="role-view-network" class="hidden" style="display:flex; flex-direction:column; flex:1;">
       <div class="pwa-header">
-        <div class="header-top-row">
-          <div>
-            <span class="app-tag-pill">THE COMMON NEED • FEDERATION CENTRAL HUB</span>
-            <div class="header-subtitle" style="margin-top:6px;">Server Provisioning, Area Support & Network Votes</div>
-          </div>
+        <div class="header-top-row" style="align-items:center;">
+          <span class="app-tag-pill">THE COMMON NEED • FEDERATION CENTRAL HUB</span>
           <span class="olive-badge" id="central-node-count-badge">14 NODES PEERED</span>
         </div>
+        <div class="header-subtitle" style="margin:4px 0 8px;">Server Provisioning, Area Support & Network Votes</div>
         <div class="kpi-grid">
           <div class="kpi-box">
-            <div class="kpi-label">OPEN AREA REQUESTS:</div>
-            <div class="kpi-val" id="central-open-requests-val" style="color:var(--lime-bright)">3 Active Tickets</div>
+            <div class="kpi-label">OPEN AREA REQUESTS</div>
+            <div class="kpi-val" id="central-open-requests-val">3 Active Tickets</div>
           </div>
           <div class="kpi-box">
-            <div class="kpi-label">NETWORK BALLOTS:</div>
-            <div class="kpi-val" style="color:var(--lime-bright)">3 Live • 94% Quorum</div>
+            <div class="kpi-label">NETWORK BALLOTS</div>
+            <div class="kpi-val">3 Live • 94% Quorum</div>
           </div>
         </div>
       </div>
 
       <!-- CENTRAL HUB TAB 1 -->
       <div class="pwa-body" id="net-tab-1">
-        <div class="lime-dashed-banner">
-          <strong>Federated Server Incubator:</strong> Launch new autonomous local Decidim + PostGIS + OSRM servers or provision multitenant instances for emerging communities with zero DevOps friction.
-        </div>
-
         <div class="dark-card">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-            <span class="mono-sub" style="margin:0; border:1px solid var(--olive-border);">DECIDIM FEDERATION PROVISIONER</span>
-            <span class="olive-badge">v0.32 STACK</span>
+            <span class="cat-tag-chip" style="margin:0;">DECIDIM FEDERATION PROVISIONER</span>
+            <span class="olive-badge" style="padding:3px 9px; font-size:10px;">v0.32 STACK</span>
           </div>
-          <div style="font-size:14px; font-weight:800; margin-bottom:4px;">🚀 Launch & Peer a New Federated Server</div>
-          <div style="font-size:11.5px; color:var(--text-cream); margin-bottom:8px;">
-            Configure a turn-key Docker/PostgreSQL/PostGIS + OSRM routing bundle or a managed Decidim Multitenant (`Decidim::Organization`) host:
+          <div class="pantry-title">🚀 Launch & Peer a New Federated Server</div>
+          <div class="mono-sub" style="margin-bottom:6px;">
+            Provision an autonomous local Decidim + PostGIS + OSRM node
           </div>
 
           <input type="text" id="new-node-name" class="dark-input" placeholder="Local Area Name (e.g., Richmond & San Pablo Collective)">
@@ -2163,17 +1986,17 @@
 
         <div class="dark-card">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-            <span style="font-size:13.5px; font-weight:800;">🌐 Active & Incubating Federated Servers</span>
+            <span class="pantry-title" style="margin:0;">🌐 Peered Federated Servers</span>
             <button class="olive-badge" style="cursor:pointer;" onclick="showToast('Pushed decidim-module-courier v0.32.4 & OSRM tile delta to all 14 peered nodes!')">
-              ↻ Sync All Nodes
+              ↻ Sync All
             </button>
           </div>
 
           <div id="federated-nodes-list" style="display:flex; flex-direction:column; gap:8px;">
             <div class="item-lime-card" style="flex-direction:column; align-items:stretch; margin:0;">
               <div style="display:flex; justify-content:space-between; align-items:center;">
-                <span style="font-size:13px; font-weight:800;">#OAK-01 • East Oakland Node</span>
-                <span class="olive-badge">● HEALTHY (18ms)</span>
+                <span style="font-size:13px; font-weight:700;">#OAK-01 • East Oakland Node</span>
+                <span class="olive-badge" style="padding:3px 9px; font-size:10px;">● HEALTHY (18ms)</span>
               </div>
               <div class="mono-sub" style="margin:4px 0 0;">Sovereign Postgres + Local OSRM • 4 Hubs • 312 Households</div>
             </div>
@@ -2183,21 +2006,17 @@
 
       <!-- CENTRAL HUB TAB 2 -->
       <div class="pwa-body hidden" id="net-tab-2">
-        <div class="lime-dashed-banner">
-          <strong>Local Area Support Desk:</strong> Triage and fulfill incoming requests from federated local servers.
-        </div>
-
         <div id="area-requests-container" style="display:flex; flex-direction:column; gap:10px;">
           <div class="dark-card area-req-card" data-req-type="surplus">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
-              <span class="mono-sub" style="margin:0; border:1px solid var(--lime-bright);">REQ #401 • INTER-NODE SURPLUS</span>
-              <span class="olive-badge" style="background:#6E1A2E;">HIGH PRIORITY</span>
+              <span class="cat-tag-chip" style="margin:0;">REQ #401 • INTER-NODE SURPLUS</span>
+              <span class="olive-badge">HIGH PRIORITY</span>
             </div>
-            <div class="pantry-title" style="font-size:14.5px;">Richmond / West County Node (#RCH-03)</div>
-            <div style="font-size:12px; color:var(--text-cream); line-height:1.4; margin:4px 0 8px;">
-              <strong>Need:</strong> Requesting <strong>400 N95 Masks & 20 Staple Grain Boxes</strong> routed from neighboring East Oakland (#OAK-01) and Berkeley (#BER-04) surplus reserves.
+            <div class="pantry-title">Richmond / West County Node (#RCH-03)</div>
+            <div style="font-size:12.5px; color:rgba(244,247,232,0.8); line-height:1.45; margin:6px 0 12px;">
+              Requesting <strong>400 N95 Masks & 20 Staple Grain Boxes</strong> routed from neighboring East Oakland (#OAK-01) and Berkeley (#BER-04) surplus reserves.
             </div>
-            <button class="cta-olive-btn" style="padding:10px;" onclick="resolveAreaRequest(this, 'Dispatched inter-node solidarity transfer from #OAK-01 & #BER-04 to Richmond #RCH-03!')">
+            <button class="cta-olive-btn" style="padding:11px;" onclick="resolveAreaRequest(this, 'Dispatched inter-node solidarity transfer from #OAK-01 & #BER-04 to Richmond #RCH-03!')">
               ✓ Approve & Dispatch Inter-Node Transfer →
             </button>
           </div>
@@ -2206,23 +2025,19 @@
 
       <!-- CENTRAL HUB TAB 3 -->
       <div class="pwa-body hidden" id="net-tab-3">
-        <div class="lime-dashed-banner">
-          <strong>Federated Decidim Governance (`1 Member = 1 Vote`):</strong> Proposals affecting the entire Common Need network are syndicated across all 14 federated servers.
-        </div>
-
         <div id="net-gov-proposals" style="display:flex; flex-direction:column; gap:12px;">
           <div class="dark-card">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
-              <span class="mono-sub" style="margin:0; border:1px solid var(--olive-border);">DECIDIM-PROPOSALS • #NET-88</span>
+              <span class="cat-tag-chip" style="margin:0;">DECIDIM-PROPOSALS • #NET-88</span>
               <span class="olive-badge">14/14 NODES VOTING</span>
             </div>
-            <div class="pantry-title" style="font-size:15px;">Inter-Node Solidarity & Emergency Grain Reserve Protocol</div>
-            <div class="item-lime-card" style="font-size:12px; line-height:1.45; margin:8px 0; flex-direction:column; align-items:flex-start;">
-              <div>
+            <div class="pantry-title">Inter-Node Solidarity & Emergency Grain Reserve Protocol</div>
+            <div class="item-lime-card" style="font-size:12.5px; line-height:1.45; margin:8px 0 10px; flex-direction:column; align-items:flex-start;">
+              <div style="color:rgba(244,247,232,0.82);">
                 Mandate that federated nodes with >20% monthly staple surplus automatically pledge 5% to a regional rapid-response pool.
               </div>
-              <div style="width:100%; margin-top:8px; padding-top:6px; border-top:1px solid rgba(255,255,255,0.25); font-family:monospace; font-size:11px;">
-                <div>Cross-Node Tally: <strong id="net-88-tally">3,842 Support (94%) • 245 Oppose</strong></div>
+              <div style="width:100%; margin-top:8px; padding-top:6px; border-top:1px solid rgba(255,255,255,0.08); font-size:11.5px; color:var(--lime-bright);">
+                Cross-Node Tally: <strong id="net-88-tally">3,842 Support (94%) • 245 Oppose</strong>
               </div>
             </div>
             <div style="display:flex; gap:6px; align-items:center;">
@@ -2236,28 +2051,25 @@
 
       <!-- CENTRAL HUB TAB 4 -->
       <div class="pwa-body hidden" id="net-tab-4">
-        <div class="lime-dashed-banner">
-          <strong>Zero-Knowledge Federated Telemetry:</strong> Local nodes retain 100% of household addresses on their own servers, publishing only aggregate nourishment, households served, and volunteer shift fill rates.
-        </div>
-
         <div class="dark-card">
-          <div style="font-size:14px; font-weight:800; margin-bottom:8px;">🌐 Network-Wide Aggregate Telemetry</div>
-          <div class="kpi-grid" style="margin-bottom:8px;">
+          <div class="pantry-title" style="margin-bottom:4px;">🌐 Zero-Knowledge Network Telemetry</div>
+          <div class="mono-sub" style="margin-bottom:10px;">100% of household PII remains isolated on local nodes</div>
+          <div class="kpi-grid">
             <div class="kpi-box">
               <div class="kpi-label">HOUSEHOLDS SERVED:</div>
-              <div class="kpi-val" style="color:var(--lime-bright)">4,280 Homes</div>
+              <div class="kpi-val">4,280 Homes</div>
             </div>
             <div class="kpi-box">
               <div class="kpi-label">SHIFT FILL RATE:</div>
-              <div class="kpi-val" style="color:var(--lime-bright)" id="net-avg-fill-rate">95.4% Filled</div>
+              <div class="kpi-val" id="net-avg-fill-rate">95.4% Filled</div>
             </div>
             <div class="kpi-box">
               <div class="kpi-label">SURPLUS RESCUED:</div>
-              <div class="kpi-val" style="color:var(--lime-bright)">24,680 lbs</div>
+              <div class="kpi-val">24,680 lbs</div>
             </div>
             <div class="kpi-box">
               <div class="kpi-label">HOUSEHOLD PII ON HUB:</div>
-              <div class="kpi-val" style="color:var(--lime-bright)">0 Bytes</div>
+              <div class="kpi-val">0 Bytes</div>
             </div>
           </div>
         </div>
@@ -2265,10 +2077,10 @@
 
       <!-- NETWORK CENTRAL BOTTOM NAV -->
       <div class="bottom-nav four-cols">
-        <button class="nav-tab active" id="net-nav-1" onclick="switchNetworkTab(1)"><span>🚀</span><span>1. Deploy Nodes</span></button>
-        <button class="nav-tab" id="net-nav-2" onclick="switchNetworkTab(2)"><span>🆘</span><span>2. Area Requests</span></button>
-        <button class="nav-tab" id="net-nav-3" onclick="switchNetworkTab(3)"><span>🗳️</span><span>3. Network Votes</span></button>
-        <button class="nav-tab" id="net-nav-4" onclick="switchNetworkTab(4)"><span>📊</span><span>4. Telemetry</span></button>
+        <button class="nav-tab active" id="net-nav-1" onclick="switchNetworkTab(1)"><span>🚀</span><span>Nodes</span></button>
+        <button class="nav-tab" id="net-nav-2" onclick="switchNetworkTab(2)"><span>🆘</span><span>Requests</span></button>
+        <button class="nav-tab" id="net-nav-3" onclick="switchNetworkTab(3)"><span>🗳️</span><span>Votes</span></button>
+        <button class="nav-tab" id="net-nav-4" onclick="switchNetworkTab(4)"><span>📊</span><span>Telemetry</span></button>
       </div>
     </div>
   </div>

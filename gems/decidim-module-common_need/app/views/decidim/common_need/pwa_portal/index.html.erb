@@ -43,57 +43,61 @@
     .role-switcher-box {
       width: 100%;
       max-width: 430px;
-      background-color: var(--lime-primary);
-      border: 3px solid var(--lime-bright);
-      border-radius: 20px;
-      padding: 8px;
+      background: rgba(27, 15, 51, 0.92);
+      border: 1px solid rgba(197, 255, 41, 0.25);
+      border-radius: 999px;
+      padding: 6px;
       margin-bottom: 14px;
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 6px;
+      gap: 4px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
     }
 
     .role-btn {
-      background-color: var(--bg-outer);
-      color: var(--text-white);
-      border: 1.5px solid rgba(255, 255, 255, 0.35);
-      border-radius: 10px;
-      padding: 6px 10px;
+      background: transparent;
+      color: rgba(244, 247, 232, 0.78);
+      border: 1px solid transparent;
+      border-radius: 999px;
+      padding: 6px 11px;
       font-size: 11.5px;
-      font-weight: 700;
+      font-weight: 600;
       cursor: pointer;
       display: flex;
       align-items: center;
       gap: 4px;
-      transition: transform 0.12s ease, box-shadow 0.12s ease;
+      transition: all 0.15s ease;
     }
 
     .role-btn.active {
+      background: var(--lime-bright);
+      color: #120924;
       border-color: var(--lime-bright);
-      box-shadow: 0 0 0 2px var(--bg-outer), 0 4px 10px rgba(0,0,0,0.5);
-      transform: translateY(-1px);
+      font-weight: 700;
+      box-shadow: 0 2px 10px rgba(197, 255, 41, 0.25);
     }
 
     .phone-frame {
       width: 100%;
       max-width: 430px;
-      background-color: var(--bg-phone);
-      border: 5px solid var(--lime-bright);
-      border-radius: 42px;
+      background: linear-gradient(180deg, #160B2B 0%, #120924 100%);
+      border: 2px solid rgba(197, 255, 41, 0.32);
+      border-radius: 40px;
       overflow: hidden;
       display: flex;
       flex-direction: column;
       min-height: 780px;
       position: relative;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.05);
     }
 
     .status-bar {
-      background-color: var(--bg-outer);
-      color: var(--lime-bright);
-      font-family: ui-monospace, SFMono-Regular, monospace;
-      font-size: 12px;
+      background: rgba(13, 6, 26, 0.96);
+      color: rgba(244, 247, 232, 0.85);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 11.5px;
+      font-weight: 600;
       padding: 12px 22px 10px;
       display: flex;
       justify-content: space-between;
@@ -101,17 +105,17 @@
     }
 
     .notch-pill {
-      width: 84px;
-      height: 16px;
-      background-color: var(--olive-badge);
-      border: 1px solid var(--olive-border);
-      border-radius: 10px;
+      width: 76px;
+      height: 14px;
+      background-color: #07030F;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 999px;
     }
 
     .pwa-header {
-      background-color: var(--lime-primary);
-      padding: 12px 16px;
-      border-bottom: 2px solid var(--lime-bright);
+      background: rgba(22, 11, 43, 0.96);
+      padding: 14px 16px 12px;
+      border-bottom: 1px solid rgba(197, 255, 41, 0.16);
     }
 
     .header-top-row {
@@ -123,176 +127,191 @@
     }
 
     .app-tag-pill {
-      background-color: var(--bg-outer);
+      background: rgba(197, 255, 41, 0.1);
       color: var(--lime-bright);
-      font-family: ui-monospace, SFMono-Regular, monospace;
-      font-size: 11px;
+      font-family: inherit;
+      font-size: 10px;
       font-weight: 700;
-      padding: 4px 8px;
-      border-radius: 6px;
+      letter-spacing: 0.4px;
+      padding: 3px 9px;
+      border-radius: 999px;
       display: inline-block;
     }
 
     .olive-badge {
-      background-color: var(--olive-badge);
-      color: var(--text-white);
-      border: 1px solid var(--olive-border);
-      font-family: ui-monospace, SFMono-Regular, monospace;
+      background: rgba(197, 255, 41, 0.12);
+      color: var(--lime-bright);
+      border: 1px solid rgba(197, 255, 41, 0.35);
+      font-family: inherit;
       font-size: 11px;
       font-weight: 700;
-      padding: 4px 10px;
-      border-radius: 6px;
+      padding: 6px 12px;
+      border-radius: 999px;
       white-space: nowrap;
     }
 
     .header-subtitle {
       color: var(--text-white);
-      font-size: 14px;
-      font-weight: 800;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -0.2px;
       margin-bottom: 8px;
     }
 
-    .category-bar {
+    .category-bar, .sub-pill-bar {
       display: flex;
       gap: 6px;
       overflow-x: auto;
       padding: 4px 0 6px;
-      scrollbar-width: thin;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .category-bar::-webkit-scrollbar, .sub-pill-bar::-webkit-scrollbar {
+      display: none;
     }
 
     .cat-pill {
-      background-color: var(--bg-outer);
-      color: var(--text-white);
-      border: 1px solid rgba(255,255,255,0.4);
-      border-radius: 8px;
-      padding: 5px 10px;
+      background: rgba(255, 255, 255, 0.05);
+      color: rgba(244, 247, 232, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 999px;
+      padding: 6px 13px;
       font-size: 11.5px;
-      font-weight: 700;
+      font-weight: 600;
       cursor: pointer;
       white-space: nowrap;
       flex-shrink: 0;
+      transition: all 0.15s ease;
     }
 
     .cat-pill.active {
-      border: 2px solid var(--lime-bright);
-      background-color: #261542;
-      color: var(--lime-bright);
+      background: var(--lime-bright);
+      color: #120924;
+      border: 1px solid var(--lime-bright);
+      font-weight: 700;
     }
 
     .kpi-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 8px;
-      margin-top: 6px;
+      margin-top: 8px;
     }
 
     .kpi-box {
-      background-color: var(--bg-outer);
-      border: 1px solid rgba(255,255,255,0.3);
-      border-radius: 8px;
-      padding: 8px 10px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: 14px;
+      padding: 10px 12px;
     }
 
     .kpi-label {
-      color: var(--lime-bright);
-      font-family: ui-monospace, SFMono-Regular, monospace;
+      color: rgba(244, 247, 232, 0.65);
+      font-family: inherit;
       font-size: 10px;
-      font-weight: 700;
+      font-weight: 600;
+      letter-spacing: 0.3px;
     }
 
     .kpi-val {
-      color: var(--text-white);
-      font-family: ui-monospace, SFMono-Regular, monospace;
+      color: var(--lime-bright);
+      font-family: inherit;
       font-size: 15px;
       font-weight: 800;
-      margin-top: 2px;
+      margin-top: 3px;
     }
 
     .pwa-body {
       flex: 1;
-      padding: 12px;
+      padding: 14px 16px 18px;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 14px;
     }
 
     .dark-card {
-      background-color: var(--bg-card-dark);
-      border: 2.5px solid var(--lime-bright);
-      border-radius: 18px;
-      padding: 14px;
+      background: #1B0F33;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
     }
 
     .lime-dashed-banner {
-      background-color: var(--lime-card);
-      border: 2px dashed var(--olive-border);
-      border-radius: 14px;
-      padding: 10px 12px;
-      color: var(--text-white);
+      background: rgba(197, 255, 41, 0.07);
+      border: 1px solid rgba(197, 255, 41, 0.22);
+      border-radius: 16px;
+      padding: 11px 14px;
+      color: var(--text-cream);
       font-size: 12px;
-      line-height: 1.4;
+      line-height: 1.45;
     }
 
     .pantry-title {
-      font-family: Georgia, serif;
-      font-size: 16px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 15.5px;
       font-weight: 700;
+      letter-spacing: -0.2px;
       color: var(--text-white);
-      margin: 6px 0 4px;
+      margin: 4px 0 2px;
     }
 
     .mono-sub {
-      background-color: #0D061A;
-      color: var(--lime-bright);
-      font-family: ui-monospace, SFMono-Regular, monospace;
-      font-size: 11px;
-      padding: 4px 8px;
+      background: transparent;
+      color: rgba(244, 247, 232, 0.68);
+      font-family: inherit;
+      font-size: 11.5px;
+      padding: 0;
       border-radius: 6px;
       display: inline-block;
-      margin-bottom: 8px;
+      margin-bottom: 4px;
+      border: none !important;
     }
 
     .item-lime-card {
-      background-color: var(--lime-card);
-      border: 1.5px solid var(--lime-bright);
-      border-radius: 12px;
-      padding: 10px 12px;
+      background: rgba(255, 255, 255, 0.035);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 11px 13px;
       margin-top: 8px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 8px;
+      gap: 12px;
     }
 
     .item-title {
       font-size: 13.5px;
-      font-weight: 700;
+      font-weight: 650;
       color: var(--text-white);
-      margin-bottom: 4px;
+      margin-bottom: 2px;
+      line-height: 1.3;
     }
 
     .cat-tag-chip {
-      background-color: var(--bg-outer);
+      background: rgba(197, 255, 41, 0.12);
       color: var(--lime-bright);
-      border: 1px solid var(--olive-border);
-      font-family: ui-monospace, SFMono-Regular, monospace;
-      font-size: 10px;
+      border: none;
+      font-family: inherit;
+      font-size: 9.5px;
       font-weight: 700;
-      padding: 2px 6px;
-      border-radius: 4px;
+      letter-spacing: 0.4px;
+      padding: 2px 7px;
+      border-radius: 6px;
       display: inline-block;
       margin-bottom: 4px;
     }
 
     .stepper-pill {
-      background-color: var(--bg-outer);
-      color: var(--text-white);
-      border: 1px solid rgba(255,255,255,0.4);
-      border-radius: 8px;
-      padding: 5px 10px;
+      background: rgba(197, 255, 41, 0.12);
+      color: var(--lime-bright);
+      border: 1px solid rgba(197, 255, 41, 0.35);
+      border-radius: 999px;
+      padding: 5px 12px;
       font-weight: 800;
-      font-size: 13px;
+      font-size: 12.5px;
       display: flex;
       align-items: center;
       gap: 10px;
@@ -312,41 +331,43 @@
     .check-row input[type="checkbox"] {
       width: 18px;
       height: 18px;
-      accent-color: var(--olive-badge);
+      accent-color: var(--lime-bright);
     }
 
-    .cta-olive-btn {
+    .cta-olive-btn, .cta-lime-btn {
       width: 100%;
-      background-color: var(--olive-badge);
-      color: var(--text-white);
-      border: 2.5px solid var(--lime-bright);
+      background: var(--lime-bright) !important;
+      color: #120924 !important;
+      border: none !important;
       border-radius: 14px;
-      padding: 14px;
-      font-size: 13px;
+      padding: 13px 16px;
+      font-size: 13.5px;
       font-weight: 800;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.2px;
       cursor: pointer;
       text-align: center;
+      box-shadow: 0 4px 16px rgba(197, 255, 41, 0.22);
     }
 
     .dark-input {
       width: 100%;
-      background-color: var(--bg-outer);
+      background: rgba(255, 255, 255, 0.05);
       color: var(--text-white);
-      border: 1.5px solid var(--olive-border);
-      border-radius: 8px;
-      padding: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      padding: 10px 12px;
       font-size: 13px;
       margin-top: 8px;
+      outline: none;
     }
 
     .bottom-nav {
-      background-color: var(--lime-primary);
-      border-top: 2px solid var(--lime-bright);
-      padding: 8px 6px 14px;
+      background: rgba(18, 9, 36, 0.98);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 8px 8px 14px;
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 4px;
+      gap: 6px;
     }
 
     .bottom-nav.two-cols { grid-template-columns: repeat(2, 1fr); }
@@ -356,12 +377,12 @@
 
     .nav-tab {
       background: transparent;
-      color: var(--text-white);
-      border: none;
-      border-radius: 10px;
-      padding: 6px 2px;
-      font-size: 10px;
-      font-weight: 700;
+      color: rgba(244, 247, 232, 0.6);
+      border: 1px solid transparent;
+      border-radius: 12px;
+      padding: 7px 2px;
+      font-size: 10.5px;
+      font-weight: 600;
       cursor: pointer;
       display: flex;
       flex-direction: column;
@@ -371,9 +392,10 @@
     }
 
     .nav-tab.active {
-      background-color: var(--bg-outer);
-      border: 1px solid var(--olive-border);
+      background: rgba(197, 255, 41, 0.12);
+      border: 1px solid rgba(197, 255, 41, 0.3);
       color: var(--lime-bright);
+      font-weight: 700;
     }
 
     .pwa-toast {
@@ -381,14 +403,13 @@
       bottom: 24px;
       left: 50%;
       transform: translateX(-50%);
-      background-color: var(--bg-outer);
+      background: rgba(18, 9, 36, 0.96);
       color: var(--lime-bright);
-      border: 2px solid var(--lime-bright);
+      border: 1px solid rgba(197, 255, 41, 0.45);
       border-radius: 14px;
-      padding: 10px 16px;
-      font-family: ui-monospace, SFMono-Regular, monospace;
-      font-size: 12px;
-      font-weight: 700;
+      padding: 11px 16px;
+      font-size: 12.5px;
+      font-weight: 600;
       box-shadow: 0 12px 30px rgba(0,0,0,0.85);
       z-index: 9999;
       max-width: 390px;
@@ -397,32 +418,25 @@
       transition: opacity 0.2s ease;
     }
 
-    .sub-pill-bar {
-      display: flex;
-      gap: 6px;
-      overflow-x: auto;
-      padding-bottom: 4px;
-    }
-
     .cal-mode-switcher {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 6px;
-      background-color: var(--bg-outer);
+      background: rgba(255, 255, 255, 0.04);
       padding: 5px;
       border-radius: 12px;
-      border: 1.5px solid var(--olive-border);
+      border: 1px solid rgba(255, 255, 255, 0.12);
       margin-bottom: 8px;
     }
 
     .cal-mode-btn {
       background: transparent;
-      color: var(--text-white);
+      color: rgba(244, 247, 232, 0.8);
       border: 1px solid transparent;
       border-radius: 8px;
       padding: 7px 4px;
       font-size: 11.5px;
-      font-weight: 800;
+      font-weight: 700;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -431,9 +445,10 @@
     }
 
     .cal-mode-btn.active {
-      background-color: var(--lime-primary);
-      color: var(--bg-outer);
+      background: var(--lime-bright);
+      color: #120924;
       border-color: var(--lime-bright);
+      font-weight: 800;
     }
 
     .cal-month-grid {
@@ -445,7 +460,6 @@
     }
 
     .cal-weekday-hdr {
-      font-family: ui-monospace, SFMono-Regular, monospace;
       font-size: 10px;
       color: var(--lime-bright);
       font-weight: 700;
@@ -453,14 +467,14 @@
     }
 
     .cal-day-cell {
-      background-color: var(--bg-outer);
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 8px;
       min-height: 44px;
       padding: 4px 2px;
       font-size: 11px;
       font-weight: 700;
-      color: rgba(255, 255, 255, 0.7);
+      color: rgba(255, 255, 255, 0.65);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -468,54 +482,32 @@
     }
 
     .cal-day-cell.has-events {
-      border: 1.5px solid var(--lime-bright);
+      border: 1px solid rgba(197, 255, 41, 0.5);
       color: var(--text-white);
       cursor: pointer;
-      background-color: #23123F;
+      background: rgba(197, 255, 41, 0.08);
     }
 
     .cal-day-cell.selected-day {
-      background-color: var(--lime-primary);
-      color: var(--bg-outer);
-      border: 2px solid var(--text-white);
-      font-weight: 900;
+      background: var(--lime-bright);
+      color: #120924;
+      border: 1px solid var(--text-white);
+      font-weight: 800;
     }
 
     .cal-event-dot-pill {
-      background-color: var(--olive-badge);
+      background: rgba(197, 255, 41, 0.16);
       color: var(--lime-bright);
-      border: 1px solid var(--olive-border);
       border-radius: 6px;
-      font-family: ui-monospace, SFMono-Regular, monospace;
       font-size: 8.5px;
-      font-weight: 800;
+      font-weight: 700;
       padding: 1px 4px;
       line-height: 1.1;
     }
 
     .cal-day-cell.selected-day .cal-event-dot-pill {
-      background-color: var(--bg-outer);
+      background-color: #120924;
       color: var(--lime-bright);
-    }
-
-    .category-bar, .sub-pill-bar {
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-    }
-
-    .category-bar::-webkit-scrollbar, .sub-pill-bar::-webkit-scrollbar {
-      display: none;
-    }
-
-    /* SLEEK, ELEGANT REDESIGN FOR MEMBER PWA */
-    #role-view-member {
-      background: linear-gradient(180deg, #160B2B 0%, #120924 100%);
-    }
-
-    #role-view-member .pwa-header {
-      background: rgba(22, 11, 43, 0.96);
-      border-bottom: 1px solid rgba(197, 255, 41, 0.16);
-      padding: 12px 16px 10px;
     }
 
     #role-view-member #member-catalog-search {
@@ -527,155 +519,14 @@
       color: var(--text-white);
     }
 
-    #role-view-member .cat-pill {
-      background: rgba(255, 255, 255, 0.05);
-      color: rgba(244, 247, 232, 0.85);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 999px;
-      padding: 6px 13px;
-      font-size: 11.5px;
-      font-weight: 600;
-      transition: all 0.15s ease;
-    }
-
-    #role-view-member .cat-pill.active {
-      background: var(--lime-bright);
-      color: #120924;
-      border: 1px solid var(--lime-bright);
-      font-weight: 700;
-    }
-
-    #role-view-member .pwa-body {
-      padding: 14px 16px 18px;
-      gap: 14px;
-    }
-
-    #role-view-member .lime-dashed-banner {
-      background: rgba(197, 255, 41, 0.07);
-      border: 1px solid rgba(197, 255, 41, 0.22);
-      border-radius: 16px;
-      padding: 11px 14px;
-      color: var(--text-cream);
-      font-size: 12px;
-    }
-
-    #role-view-member .dark-card {
-      background: #1B0F33;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 20px;
-      padding: 16px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
-    }
-
-    #role-view-member .pantry-title {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      font-size: 15.5px;
-      font-weight: 700;
-      letter-spacing: -0.2px;
-      color: var(--text-white);
-      margin: 4px 0 2px;
-    }
-
-    #role-view-member .member-hub-card > hr {
+    .member-hub-card > hr {
       border: none;
       border-top: 1px solid rgba(255, 255, 255, 0.08);
       margin: 10px 0 6px !important;
     }
 
-    #role-view-member .mono-sub {
-      background: transparent;
-      color: rgba(244, 247, 232, 0.68);
-      font-family: inherit;
-      font-size: 11.5px;
-      padding: 0;
-      margin-bottom: 4px;
-    }
-
-    #role-view-member .item-lime-card {
-      background: rgba(255, 255, 255, 0.035);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 14px;
-      padding: 11px 13px;
-      margin-top: 8px;
-      gap: 12px;
-    }
-
-    #role-view-member .member-hub-card .item-lime-card > div:first-child > div:last-child {
+    .member-hub-card .item-lime-card > div:first-child > div:last-child {
       display: none;
-    }
-
-    #role-view-member .cat-tag-chip {
-      background: rgba(197, 255, 41, 0.12);
-      color: var(--lime-bright);
-      border: none;
-      border-radius: 6px;
-      font-family: inherit;
-      font-size: 9.5px;
-      font-weight: 700;
-      letter-spacing: 0.4px;
-      padding: 2px 7px;
-      margin-bottom: 4px;
-    }
-
-    #role-view-member .item-title {
-      font-size: 13.5px;
-      font-weight: 650;
-      color: var(--text-white);
-      margin-bottom: 2px;
-      line-height: 1.3;
-    }
-
-    #role-view-member .olive-badge {
-      background: rgba(197, 255, 41, 0.12);
-      color: var(--lime-bright);
-      border: 1px solid rgba(197, 255, 41, 0.35);
-      border-radius: 999px;
-      font-family: inherit;
-      font-size: 11px;
-      font-weight: 700;
-      padding: 6px 12px;
-    }
-
-    #role-view-member .stepper-pill {
-      background: rgba(197, 255, 41, 0.12);
-      color: var(--lime-bright);
-      border: 1px solid rgba(197, 255, 41, 0.35);
-      border-radius: 999px;
-      padding: 5px 12px;
-      font-size: 12.5px;
-      gap: 10px;
-    }
-
-    #role-view-member .cta-olive-btn {
-      background: var(--lime-bright);
-      color: #120924;
-      border: none;
-      border-radius: 14px;
-      padding: 13px 16px;
-      font-size: 13.5px;
-      font-weight: 800;
-      box-shadow: 0 4px 16px rgba(197, 255, 41, 0.22);
-    }
-
-    #role-view-member .bottom-nav {
-      background: rgba(18, 9, 36, 0.98);
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 8px 8px 14px;
-    }
-
-    #role-view-member .nav-tab {
-      color: rgba(244, 247, 232, 0.6);
-      font-size: 10.5px;
-      font-weight: 600;
-      padding: 7px 2px;
-      border-radius: 12px;
-    }
-
-    #role-view-member .nav-tab.active {
-      background: rgba(197, 255, 41, 0.12);
-      border: 1px solid rgba(197, 255, 41, 0.3);
-      color: var(--lime-bright);
-      font-weight: 700;
     }
 
     .hidden { display: none !important; }
