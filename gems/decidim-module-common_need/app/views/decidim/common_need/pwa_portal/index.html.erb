@@ -229,6 +229,13 @@
       display: flex;
       flex-direction: column;
       gap: 14px;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .pwa-body::-webkit-scrollbar,
+    #local-ai-chat-log::-webkit-scrollbar {
+      display: none;
     }
 
     .dark-card {
@@ -699,7 +706,7 @@
           DECIDIM MEMBER PORTAL
         </div>
         <button type="button" class="nav-tab active" id="m-nav-5" onclick="switchMemberTab(5)" style="flex-direction:row; justify-content:flex-start; gap:10px; padding:10px 12px; font-size:13px; border-radius:12px; width:100%;">
-          <span style="color:var(--lime-bright); font-size:15px;">✦</span>
+          <span>🤖</span>
           <span>AI Assistant</span>
         </button>
         <button type="button" class="nav-tab" id="m-nav-1" onclick="switchMemberTab(1)" style="flex-direction:row; justify-content:flex-start; gap:10px; padding:10px 12px; font-size:13px; border-radius:12px; width:100%;">
@@ -875,21 +882,10 @@
           LOCAL NODE AI ASSISTANT (decidim-ai) • ZERO EXTERNAL API • OFFLINE-CAPABLE LLM
         </div>
 
-        <!-- CENTER GEMINI HERO & CONVERSATION AREA -->
-        <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:12px 6px; overflow-y:auto;">
+        <!-- CENTER HERO & CONVERSATION AREA -->
+        <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:12px 6px; overflow-y:auto; scrollbar-width:none; -ms-overflow-style:none;">
           <div id="member-gemini-hero" style="display:flex; flex-direction:column; align-items:center; justify-content:center; transition:all 0.2s ease;">
-            <svg width="46" height="46" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" style="filter:drop-shadow(0 0 18px rgba(197,255,41,0.38));">
-              <defs>
-                <linearGradient id="commonNeedSparkle" x1="6" y1="6" x2="42" y2="42" gradientUnits="userSpaceOnUse">
-                  <stop offset="0%" stop-color="#C5FF29" />
-                  <stop offset="55%" stop-color="#95C623" />
-                  <stop offset="100%" stop-color="#6B5B1E" />
-                </linearGradient>
-              </defs>
-              <path d="M24 3C24 14.598 33.402 24 45 24C33.402 24 24 33.402 24 45C24 33.402 14.598 24 3 24C14.598 24 24 14.598 24 3Z" fill="url(#commonNeedSparkle)"/>
-            </svg>
-
-            <h1 id="member-gemini-greeting" style="font-size:28px; font-weight:500; color:var(--text-white); letter-spacing:-0.5px; line-height:1.25; margin:18px 0 8px;">
+            <h1 id="member-gemini-greeting" style="font-size:28px; font-weight:500; color:var(--text-white); letter-spacing:-0.5px; line-height:1.25; margin:8px 0;">
               What can I help with,<br><span id="member-gemini-first-name" style="color:var(--lime-bright); font-weight:600;">Rosa</span>?
             </h1>
 
@@ -901,7 +897,7 @@
             </div>
           </div>
 
-          <div id="local-ai-chat-log" data-paperwork-copilot-target="chatLog" class="hidden" style="width:100%; max-height:310px; overflow-y:auto; display:flex; flex-direction:column; gap:10px; padding:8px 2px; text-align:left; margin-top:10px;">
+          <div id="local-ai-chat-log" data-paperwork-copilot-target="chatLog" class="hidden" style="width:100%; max-height:310px; overflow-y:auto; scrollbar-width:none; -ms-overflow-style:none; display:flex; flex-direction:column; gap:10px; padding:8px 2px; text-align:left; margin-top:10px;">
           </div>
 
           <!-- Guided Government & Non-Profit Paperwork Auto-Filler (Toggled via "Task" mode pill or "+" button) -->
@@ -977,7 +973,7 @@
           </div>
         </div>
 
-        <!-- BOTTOM GEMINI-STYLE MODE TOGGLE ("Chat" | "Task") & AI CHATBOT CONTEXT BOX -->
+        <!-- BOTTOM MODE TOGGLE ("Chat" | "Task") & AI CHATBOT CONTEXT BOX -->
         <div style="display:flex; flex-direction:column; align-items:center; gap:12px; width:100%;">
           <div style="display:inline-flex; align-items:center; gap:8px;">
             <button type="button" id="gemini-mode-chat-btn" onclick="toggleMemberGeminiMode('chat')" style="background:rgba(197,255,41,0.12); color:var(--text-white); border:1px solid rgba(197,255,41,0.42); border-radius:999px; padding:7px 18px; font-size:13px; font-weight:600; cursor:pointer; transition:all 0.15s ease;">
@@ -988,7 +984,7 @@
             </button>
           </div>
 
-          <!-- GEMINI AI CHATBOT CONTEXT BOX -->
+          <!-- AI CHATBOT CONTEXT BOX -->
           <div id="member-gemini-context-box" style="width:100%; background:#1C1032; border:1.5px solid rgba(197,255,41,0.28); border-radius:36px; padding:9px 11px 9px 15px; display:flex; align-items:center; gap:10px; box-shadow:0 12px 34px rgba(0,0,0,0.6);">
             <button type="button" title="Open Paperwork Co-Pilot & Context" onclick="toggleMemberGeminiMode('task')" style="background:transparent; border:none; color:rgba(244,247,232,0.82); font-size:24px; font-weight:300; line-height:1; cursor:pointer; padding:0 4px;">
               +
@@ -1006,8 +1002,8 @@
                     title="Send to Local Node AI"
                     data-action="click->paperwork-copilot#sendMessage"
                     onclick="sendLocalAiMessage()"
-                    style="width:38px; height:38px; border-radius:50%; background:var(--lime-bright); color:#120924; border:none; display:inline-flex; align-items:center; justify-content:center; font-size:15px; font-weight:900; cursor:pointer; flex-shrink:0; box-shadow:0 4px 14px rgba(197,255,41,0.3);">
-              ✦
+                    style="width:38px; height:38px; border-radius:50%; background:var(--lime-bright); color:#120924; border:none; display:inline-flex; align-items:center; justify-content:center; font-size:17px; font-weight:900; cursor:pointer; flex-shrink:0; box-shadow:0 4px 14px rgba(197,255,41,0.3);">
+              ↑
             </button>
           </div>
         </div>
