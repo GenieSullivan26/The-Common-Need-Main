@@ -90,8 +90,19 @@ RSpec.describe "The Common Need 5-Role PWA Suite System Specs", type: :system do
   describe "Role 1: Member PWA Portal (Decidim::CommonNeed::MemberPortal)" do
     before { visit "/?role=member" }
 
-    it "hides the top 5-Role Switcher bar and renders Member header with NO MEANS-TESTING & UNCONDITIONAL SOLIDARITY" do
+    it "hides the top 5-Role Switcher bar and renders the Google Gemini-inspired Member header with top-left dropdown menu, top-right profile/sign-out button, and AI chatbot context box" do
       expect(page).not_to have_css("#top-role-switcher")
+      expect(page).to have_css("#member-gemini-topbar")
+      expect(page).to have_css("#member-top-menu-btn")
+      expect(page).to have_css("#member-nav-dropdown")
+      expect(page).to have_css("#member-top-profile-btn")
+      expect(page).to have_css("#pwa-profile-signout-btn")
+      expect(page).to have_css("#member-gemini-context-box")
+      expect(page).to have_content("What can I help with,")
+      expect(page).to have_content("Browse")
+      expect(page).to have_content("Basket (2)")
+      expect(page).to have_content("Calendar")
+      expect(page).to have_content("Vote")
       expect(page).to have_content("NO MEANS-TESTING")
       expect(page).to have_content("UNCONDITIONAL SOLIDARITY")
     end

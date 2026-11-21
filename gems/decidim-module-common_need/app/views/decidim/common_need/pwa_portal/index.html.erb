@@ -593,6 +593,10 @@
         <button type="button" id="pwa-profile-save-btn" class="cta-lime-btn" style="width:100%; font-size:13.5px; padding:12px; border-radius:14px; margin-top:0;" onclick="saveProfileAddressUpdate()">
           Save Address & Update Instance →
         </button>
+
+        <button type="button" id="pwa-profile-signout-btn" onclick="signOutDecidim()" style="width:100%; margin-top:10px; background:rgba(255,255,255,0.06); color:var(--text-cream); border:1px solid rgba(255,255,255,0.16); border-radius:14px; padding:11px; font-size:13px; font-weight:700; cursor:pointer;">
+          Sign Out
+        </button>
       </div>
     </div>
 
@@ -660,10 +664,63 @@
     </div>
 
     <!-- =========================================================
-         1. MEMBER PWA (Decidim::CommonNeed::MemberPortal)
+         1. MEMBER PWA (Decidim::CommonNeed::MemberPortal • Gemini-Inspired UI)
          ========================================================= -->
-    <div id="role-view-member" data-controller="catalog-filter paperwork-copilot" style="display:flex; flex-direction:column; flex:1;">
-      <div class="pwa-header" id="member-pwa-header">
+    <div id="role-view-member" data-controller="catalog-filter paperwork-copilot" style="display:flex; flex-direction:column; flex:1; position:relative;">
+      <!-- GEMINI-STYLE TOP BAR (Top-Left Dropdown Menu + Top-Right Profile & Sign Out) -->
+      <div id="member-gemini-topbar" style="display:flex; justify-content:space-between; align-items:center; padding:12px 18px 8px; position:relative; z-index:820;">
+        <button type="button" id="member-top-menu-btn" onclick="toggleMemberNavDropdown()" style="background:transparent; border:none; color:var(--text-white); display:inline-flex; align-items:center; gap:12px; cursor:pointer; padding:6px 4px; font-family:inherit;">
+          <span style="display:inline-flex; flex-direction:column; gap:5px; width:18px;">
+            <span style="display:block; height:2px; width:18px; background:rgba(244,247,232,0.85); border-radius:2px;"></span>
+            <span style="display:block; height:2px; width:13px; background:rgba(244,247,232,0.85); border-radius:2px;"></span>
+          </span>
+          <span style="font-size:17px; font-weight:600; letter-spacing:-0.2px; display:inline-flex; align-items:center; gap:6px;">
+            <span>Common Need</span>
+            <span id="member-top-page-indicator" style="color:rgba(244,247,232,0.52); font-weight:400;">AI</span>
+            <span style="font-size:12px; color:rgba(244,247,232,0.52);">⌄</span>
+          </span>
+        </button>
+
+        <div style="display:inline-flex; align-items:center; gap:10px;">
+          <button type="button" title="New AI Chat" onclick="resetMemberGeminiChat()" style="width:34px; height:34px; border-radius:50%; background:transparent; border:1.5px dashed rgba(244,247,232,0.35); color:var(--text-cream); display:inline-flex; align-items:center; justify-content:center; font-size:14px; cursor:pointer;">
+            ✎
+          </button>
+          <button type="button" id="member-top-profile-btn" onclick="openProfileModal()" style="background:linear-gradient(135deg, #C5FF29 0%, #6B5B1E 100%); padding:2px; border:none; border-radius:999px; cursor:pointer; display:inline-flex; align-items:center; gap:6px; box-shadow:0 4px 12px rgba(197,255,41,0.2);">
+            <span id="member-top-avatar-initial" style="width:30px; height:30px; border-radius:50%; background:#160B2B; color:var(--lime-bright); font-size:13px; font-weight:800; display:inline-flex; align-items:center; justify-content:center;">
+              R
+            </span>
+          </button>
+        </div>
+      </div>
+
+      <!-- TOP-LEFT DROPDOWN MENU (Links to AI Home, Browse, Basket, Calendar, and Vote) -->
+      <div id="member-nav-dropdown" class="hidden" style="position:absolute; top:56px; left:16px; width:240px; background:rgba(24,13,46,0.98); backdrop-filter:blur(16px); border:1px solid rgba(197,255,41,0.32); border-radius:20px; padding:8px; box-shadow:0 20px 48px rgba(0,0,0,0.8); z-index:860; display:flex; flex-direction:column; gap:4px;">
+        <div style="font-size:10px; font-weight:700; letter-spacing:0.6px; color:rgba(244,247,232,0.45); padding:6px 12px 2px;">
+          DECIDIM MEMBER PORTAL
+        </div>
+        <button type="button" class="nav-tab active" id="m-nav-5" onclick="switchMemberTab(5)" style="flex-direction:row; justify-content:flex-start; gap:10px; padding:10px 12px; font-size:13px; border-radius:12px; width:100%;">
+          <span style="color:var(--lime-bright); font-size:15px;">✦</span>
+          <span>AI Assistant</span>
+        </button>
+        <button type="button" class="nav-tab" id="m-nav-1" onclick="switchMemberTab(1)" style="flex-direction:row; justify-content:flex-start; gap:10px; padding:10px 12px; font-size:13px; border-radius:12px; width:100%;">
+          <span>🛍️</span>
+          <span>Browse</span>
+        </button>
+        <button type="button" class="nav-tab" id="m-nav-2" onclick="switchMemberTab(2)" style="flex-direction:row; justify-content:flex-start; gap:10px; padding:10px 12px; font-size:13px; border-radius:12px; width:100%;">
+          <span>📦</span>
+          <span id="nav-basket-label">Basket (2)</span>
+        </button>
+        <button type="button" class="nav-tab" id="m-nav-6" onclick="switchMemberTab(6)" style="flex-direction:row; justify-content:flex-start; gap:10px; padding:10px 12px; font-size:13px; border-radius:12px; width:100%;">
+          <span>📅</span>
+          <span>Calendar</span>
+        </button>
+        <button type="button" class="nav-tab" id="m-nav-4" onclick="switchMemberTab(4)" style="flex-direction:row; justify-content:flex-start; gap:10px; padding:10px 12px; font-size:13px; border-radius:12px; width:100%;">
+          <span>🗳️</span>
+          <span>Vote</span>
+        </button>
+      </div>
+
+      <div class="pwa-header hidden" id="member-pwa-header">
         <!-- Search & Local AI Quick Bar -->
         <div id="member-search-row" style="display:flex; gap:8px; margin-bottom:10px; align-items:center;">
           <input type="text"
@@ -812,132 +869,145 @@
         </div>
       </div>
 
-      <!-- MEMBER TAB 5: Secure Local-Server AI Chatbot & Paperwork Co-Pilot -->
-      <div class="pwa-body hidden" id="member-tab-5">
-        <div class="lime-dashed-banner" style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
-          <div>
-            <div style="font-weight:800;">🔒 LOCAL NODE AI ASSISTANT (decidim-ai)</div>
-            <div style="font-size:11px;">Hosted 100% on East Oakland Server <%= current_local_node_code %> • Zero Cloud Tracking</div>
-          </div>
-          <span class="olive-badge">OFFLINE-CAPABLE LLM</span>
+      <!-- MEMBER TAB 5 (DEFAULT HOME): Google Gemini-Inspired Local AI Assistant & Context Box -->
+      <div class="pwa-body" id="member-tab-5" style="justify-content:space-between; padding:18px 18px 22px; background:radial-gradient(circle at 50% 42%, rgba(197,255,41,0.09) 0%, rgba(22,11,43,0.3) 58%, transparent 100%);">
+        <div class="hidden">
+          LOCAL NODE AI ASSISTANT (decidim-ai) • ZERO EXTERNAL API • OFFLINE-CAPABLE LLM
         </div>
 
-        <!-- Quick Prompt Chips -->
-        <div class="sub-pill-bar">
-          <button class="cat-pill" data-action="click->paperwork-copilot#sendQuickPrompt" data-prompt="Find food, garden seeds, pet kibble & co-op bread" onclick="sendLocalAiPrompt('Find food, garden seeds, pet kibble & co-op bread')">🍎 Food, Garden & Pets</button>
-          <button class="cat-pill" data-action="click->paperwork-copilot#sendQuickPrompt" data-prompt="Help me fill out Social Services CalFresh, Medi-Cal & Veteran VA paperwork" onclick="sendLocalAiPrompt('Help me fill out Social Services CalFresh, Medi-Cal & Veteran VA paperwork')">📋 Social & Veteran Forms</button>
-          <button class="cat-pill" data-action="click->paperwork-copilot#sendQuickPrompt" data-prompt="I need Legal Aid eviction defense, Housing rent relief & Public Sector ID" onclick="sendLocalAiPrompt('I need Legal Aid eviction defense, Housing rent relief & Public Sector ID')">⚖️ Legal, Housing & Civic</button>
-          <button class="cat-pill" data-action="click->paperwork-copilot#sendQuickPrompt" data-prompt="Find Mental Health counseling, Medical walker & Youth/Arts kits" onclick="sendLocalAiPrompt('Find Mental Health counseling, Medical walker & Youth/Arts kits')">🧠 Health, Youth & Arts</button>
-        </div>
+        <!-- CENTER GEMINI HERO & CONVERSATION AREA -->
+        <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:12px 6px; overflow-y:auto;">
+          <div id="member-gemini-hero" style="display:flex; flex-direction:column; align-items:center; justify-content:center; transition:all 0.2s ease;">
+            <svg width="46" height="46" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" style="filter:drop-shadow(0 0 18px rgba(197,255,41,0.38));">
+              <defs>
+                <linearGradient id="commonNeedSparkle" x1="6" y1="6" x2="42" y2="42" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#C5FF29" />
+                  <stop offset="55%" stop-color="#95C623" />
+                  <stop offset="100%" stop-color="#6B5B1E" />
+                </linearGradient>
+              </defs>
+              <path d="M24 3C24 14.598 33.402 24 45 24C33.402 24 24 33.402 24 45C24 33.402 14.598 24 3 24C14.598 24 24 14.598 24 3Z" fill="url(#commonNeedSparkle)"/>
+            </svg>
 
-        <!-- Interactive Local AI Chat Thread -->
-        <div class="dark-card" style="display:flex; flex-direction:column; gap:8px;">
-          <div style="display:flex; justify-content:space-between; align-items:center;">
-            <span class="mono-sub" style="margin:0; border:1px solid var(--lime-bright);">LOCAL SERVER CHAT • ENCRYPTED SESSION</span>
-            <span style="font-size:10.5px; color:var(--lime-bright); font-family:monospace;">● Llama-3-Local (<%= current_local_node_code %>)</span>
-          </div>
+            <h1 id="member-gemini-greeting" style="font-size:28px; font-weight:500; color:var(--text-white); letter-spacing:-0.5px; line-height:1.25; margin:18px 0 8px;">
+              What can I help with,<br><span id="member-gemini-first-name" style="color:var(--lime-bright); font-weight:600;">Rosa</span>?
+            </h1>
 
-          <div id="local-ai-chat-log" data-paperwork-copilot-target="chatLog" style="max-height:210px; overflow-y:auto; display:flex; flex-direction:column; gap:8px; padding:4px 0;">
-            <div style="background:var(--bg-outer); border:1px solid var(--lime-bright); border-radius:12px; padding:10px; font-size:12px; line-height:1.45;">
-              <div style="font-family:monospace; font-size:10px; color:var(--lime-bright); font-weight:700; margin-bottom:4px;">
-                🤖 <%= current_local_node_code %> LOCAL SERVER AI • ZERO EXTERNAL API
-              </div>
-              Welcome! I run directly on the East Oakland community server so your personal information never leaves our neighborhood node. I can:
-              <br>1. <strong>Search across all 19 community categories</strong> (Arts, Education, Garden, Pets, Health, Mental health, Medical, Legal aid, Employment, Food, Housing, Public safety, Recreation, Youth services, Social services, Public sector, Co-ops, Veteran services, Mutual Aid).
-              <br>2. <strong>Auto-fill government & non-profit paperwork</strong> (CalFresh, Medi-Cal, VA Claims, Legal Aid, Municipal ID) and have a volunteer courier bring printed forms to your door.
+            <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:7px; margin-top:14px; max-width:340px;">
+              <button type="button" class="cat-pill" data-action="click->paperwork-copilot#sendQuickPrompt" data-prompt="Find food, garden seeds, pet kibble & co-op bread" onclick="sendLocalAiPrompt('Find food, garden seeds, pet kibble & co-op bread')" style="font-size:11.5px; padding:6px 12px;">🍎 Food & Produce</button>
+              <button type="button" class="cat-pill" data-action="click->paperwork-copilot#sendQuickPrompt" data-prompt="Help me fill out Social Services CalFresh, Medi-Cal & Veteran VA paperwork" onclick="sendLocalAiPrompt('Help me fill out Social Services CalFresh, Medi-Cal & Veteran VA paperwork')" style="font-size:11.5px; padding:6px 12px;">📋 CalFresh & VA</button>
+              <button type="button" class="cat-pill" data-action="click->paperwork-copilot#sendQuickPrompt" data-prompt="I need Legal Aid eviction defense, Housing rent relief & Public Sector ID" onclick="sendLocalAiPrompt('I need Legal Aid eviction defense, Housing rent relief & Public Sector ID')" style="font-size:11.5px; padding:6px 12px;">⚖️ Legal & Housing</button>
+              <button type="button" class="cat-pill" data-action="click->paperwork-copilot#sendQuickPrompt" data-prompt="Find Mental Health counseling, Medical walker & Youth/Arts kits" onclick="sendLocalAiPrompt('Find Mental Health counseling, Medical walker & Youth/Arts kits')" style="font-size:11.5px; padding:6px 12px;">🩺 Health & Care</button>
             </div>
           </div>
 
-          <div style="display:flex; gap:6px; margin-top:4px;">
+          <div id="local-ai-chat-log" data-paperwork-copilot-target="chatLog" class="hidden" style="width:100%; max-height:310px; overflow-y:auto; display:flex; flex-direction:column; gap:10px; padding:8px 2px; text-align:left; margin-top:10px;">
+          </div>
+
+          <!-- Guided Government & Non-Profit Paperwork Auto-Filler (Toggled via "Task" mode pill or "+" button) -->
+          <div id="member-paperwork-task-panel" class="dark-card hidden" style="width:100%; text-align:left; margin-top:12px; padding:14px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+              <span class="cat-tag-chip" style="margin:0;">ENCRYPTED LOCAL PAPERWORK CO-PILOT</span>
+              <span class="olive-badge" style="padding:3px 9px; font-size:10px;">ZERO MEANS-TEST</span>
+            </div>
+            <div style="font-size:13.5px; font-weight:700; margin-bottom:6px;">📋 Auto-Fill Non-Profit & Government Forms</div>
+
+            <select id="ai-form-template"
+                    data-paperwork-copilot-target="templateSelect"
+                    data-action="change->paperwork-copilot#updatePreview"
+                    class="dark-input"
+                    style="margin-top:4px;"
+                    onchange="updatePaperworkPreview()">
+              <% @paperwork_templates.each do |tpl| %>
+                <option value="<%= tpl %>"><%= tpl %></option>
+              <% end %>
+            </select>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-top:6px;">
+              <input type="text"
+                     id="ai-form-household"
+                     data-paperwork-copilot-target="householdInput"
+                     data-action="input->paperwork-copilot#updatePreview"
+                     class="dark-input"
+                     style="margin:0;"
+                     value="Household Size: 3"
+                     oninput="updatePaperworkPreview()">
+              <input type="text"
+                     id="ai-form-lang"
+                     data-paperwork-copilot-target="languageInput"
+                     data-action="input->paperwork-copilot#updatePreview"
+                     class="dark-input"
+                     style="margin:0;"
+                     value="Language: English / Español"
+                     oninput="updatePaperworkPreview()">
+            </div>
+
+            <input type="text"
+                   id="ai-form-situation"
+                   data-paperwork-copilot-target="situationInput"
+                   data-action="input->paperwork-copilot#updatePreview"
+                   class="dark-input"
+                   value="Need expedited processing + porch delivery of printed signature page"
+                   oninput="updatePaperworkPreview()">
+
+            <div class="item-lime-card" style="flex-direction:column; align-items:flex-start; font-size:11px; gap:4px; margin-top:8px;">
+              <div id="ai-form-preview-text" data-paperwork-copilot-target="previewText" style="line-height:1.4;">
+                • Form: Social Services: CalFresh / SNAP, Medi-Cal & LIHEAP Packet<br>
+                • Jurisdiction: Alameda County / Local Node <%= current_local_node_code %><br>
+                • Qualifying 3-Day Expedited Review Checked ✓
+              </div>
+            </div>
+
+            <div style="display:flex; gap:6px; margin-top:10px;">
+              <button class="cta-olive-btn"
+                      style="padding:10px; flex:1; font-size:11.5px;"
+                      data-action="click->paperwork-copilot#completePaperwork"
+                      data-delivery-mode="pdf"
+                      onclick="completeAiPaperwork('pdf')">
+                📄 Save Encrypted PDF
+              </button>
+              <button class="olive-badge"
+                      style="padding:10px; flex:1; font-size:11.5px; cursor:pointer; text-align:center;"
+                      data-action="click->paperwork-copilot#completePaperwork"
+                      data-delivery-mode="courier"
+                      onclick="completeAiPaperwork('courier')">
+                🚚 Add Packet to Basket
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- BOTTOM GEMINI-STYLE MODE TOGGLE ("Chat" | "Task") & AI CHATBOT CONTEXT BOX -->
+        <div style="display:flex; flex-direction:column; align-items:center; gap:12px; width:100%;">
+          <div style="display:inline-flex; align-items:center; gap:8px;">
+            <button type="button" id="gemini-mode-chat-btn" onclick="toggleMemberGeminiMode('chat')" style="background:rgba(197,255,41,0.12); color:var(--text-white); border:1px solid rgba(197,255,41,0.42); border-radius:999px; padding:7px 18px; font-size:13px; font-weight:600; cursor:pointer; transition:all 0.15s ease;">
+              Chat
+            </button>
+            <button type="button" id="gemini-mode-task-btn" onclick="toggleMemberGeminiMode('task')" style="background:transparent; color:rgba(244,247,232,0.75); border:1px solid transparent; border-radius:999px; padding:7px 18px; font-size:13px; font-weight:600; cursor:pointer; transition:all 0.15s ease;">
+              Task
+            </button>
+          </div>
+
+          <!-- GEMINI AI CHATBOT CONTEXT BOX -->
+          <div id="member-gemini-context-box" style="width:100%; background:#1C1032; border:1.5px solid rgba(197,255,41,0.28); border-radius:36px; padding:9px 11px 9px 15px; display:flex; align-items:center; gap:10px; box-shadow:0 12px 34px rgba(0,0,0,0.6);">
+            <button type="button" title="Open Paperwork Co-Pilot & Context" onclick="toggleMemberGeminiMode('task')" style="background:transparent; border:none; color:rgba(244,247,232,0.82); font-size:24px; font-weight:300; line-height:1; cursor:pointer; padding:0 4px;">
+              +
+            </button>
             <input type="text"
                    id="local-ai-user-input"
                    data-paperwork-copilot-target="userInput"
-                   class="dark-input"
-                   style="margin:0; flex:1;"
-                   placeholder="Ask for any category or paperwork help..."
-                   onkeydown="if(event.key==='Enter') sendLocalAiMessage()">
-            <button class="olive-badge"
-                    style="cursor:pointer; padding:0 14px; border-color:var(--lime-bright);"
-                    data-action="click->paperwork-copilot#sendMessage"
-                    onclick="sendLocalAiMessage()">Send →</button>
-          </div>
-        </div>
-
-        <!-- Guided Government & Non-Profit Paperwork Auto-Filler -->
-        <div class="dark-card">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-            <span class="mono-sub" style="margin:0; border:1px solid var(--olive-border);">ENCRYPTED LOCAL PAPERWORK CO-PILOT</span>
-            <span class="olive-badge">ZERO MEANS-TEST</span>
-          </div>
-          <div style="font-size:14px; font-weight:800; margin-bottom:4px;">📋 Auto-Fill Non-Profit & Government Forms</div>
-          <div style="font-size:11.5px; color:var(--text-cream); margin-bottom:8px;">
-            Your answers are processed in local RAM on Node <%= current_local_node_code %> (`ActiveStorage` local vault) and purged after generating your PDF or courier print request:
-          </div>
-
-          <select id="ai-form-template"
-                  data-paperwork-copilot-target="templateSelect"
-                  data-action="change->paperwork-copilot#updatePreview"
-                  class="dark-input"
-                  style="margin-top:4px;"
-                  onchange="updatePaperworkPreview()">
-            <% @paperwork_templates.each do |tpl| %>
-              <option value="<%= tpl %>"><%= tpl %></option>
-            <% end %>
-          </select>
-
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-top:6px;">
-            <input type="text"
-                   id="ai-form-household"
-                   data-paperwork-copilot-target="householdInput"
-                   data-action="input->paperwork-copilot#updatePreview"
-                   class="dark-input"
-                   style="margin:0;"
-                   value="Household Size: 3"
-                   oninput="updatePaperworkPreview()">
-            <input type="text"
-                   id="ai-form-lang"
-                   data-paperwork-copilot-target="languageInput"
-                   data-action="input->paperwork-copilot#updatePreview"
-                   class="dark-input"
-                   style="margin:0;"
-                   value="Language: English / Español"
-                   oninput="updatePaperworkPreview()">
-          </div>
-
-          <input type="text"
-                 id="ai-form-situation"
-                 data-paperwork-copilot-target="situationInput"
-                 data-action="input->paperwork-copilot#updatePreview"
-                 class="dark-input"
-                 value="Need expedited processing + porch delivery of printed signature page"
-                 oninput="updatePaperworkPreview()">
-
-          <div class="item-lime-card" style="flex-direction:column; align-items:flex-start; font-family:monospace; font-size:11px; gap:4px; margin-top:10px;">
-            <div style="font-weight:800; color:var(--bg-outer); background:var(--lime-bright); padding:2px 6px; border-radius:4px;">
-              LOCAL AI PRE-FILLED FORM SUMMARY:
-            </div>
-            <div id="ai-form-preview-text" data-paperwork-copilot-target="previewText">
-              • Form: Social Services: CalFresh / SNAP, Medi-Cal & LIHEAP Packet<br>
-              • Jurisdiction: Alameda County / Local Node <%= current_local_node_code %><br>
-              • Household: 1400 Block of 62nd Ave (Household Size: 3)<br>
-              • Fee Waiver & Expedited Flag: Qualifying 3-Day Expedited Review Checked ✓
-            </div>
-          </div>
-
-          <div style="display:flex; gap:6px; margin-top:10px;">
-            <button class="cta-olive-btn"
-                    style="padding:10px; flex:1; font-size:11.5px;"
-                    data-action="click->paperwork-copilot#completePaperwork"
-                    data-delivery-mode="pdf"
-                    onclick="completeAiPaperwork('pdf')">
-              📄 Save Encrypted PDF
+                   placeholder="Ask The Common Need"
+                   onkeydown="if(event.key==='Enter') sendLocalAiMessage()"
+                   style="background:transparent; border:none; color:var(--text-white); font-size:15px; flex:1; outline:none; margin:0; padding:6px 0;">
+            <button type="button" title="Voice Input" onclick="triggerMemberVoicePrompt()" style="background:transparent; border:none; color:rgba(244,247,232,0.78); font-size:16px; cursor:pointer; padding:4px;">
+              🎙️
             </button>
-            <button class="cta-olive-btn"
-                    style="padding:10px; flex:1; font-size:11.5px; background:var(--bg-outer);"
-                    data-action="click->paperwork-copilot#completePaperwork"
-                    data-delivery-mode="courier"
-                    onclick="completeAiPaperwork('courier')">
-              🚚 Add Printed Packet to Basket
+            <button type="button"
+                    title="Send to Local Node AI"
+                    data-action="click->paperwork-copilot#sendMessage"
+                    onclick="sendLocalAiMessage()"
+                    style="width:38px; height:38px; border-radius:50%; background:var(--lime-bright); color:#120924; border:none; display:inline-flex; align-items:center; justify-content:center; font-size:15px; font-weight:900; cursor:pointer; flex-shrink:0; box-shadow:0 4px 14px rgba(197,255,41,0.3);">
+              ✦
             </button>
           </div>
         </div>
@@ -1142,15 +1212,6 @@
             </div>
           </div>
         </turbo-frame>
-      </div>
-
-      <!-- MEMBER BOTTOM NAV (5 TABS including Centralized Local Partner Calendar) -->
-      <div class="bottom-nav five-cols">
-        <button class="nav-tab active" id="m-nav-1" onclick="switchMemberTab(1)"><span>🛍️</span><span>1. Browse</span></button>
-        <button class="nav-tab" id="m-nav-5" onclick="switchMemberTab(5)"><span>🤖</span><span>2. AI Helper</span></button>
-        <button class="nav-tab" id="m-nav-2" onclick="switchMemberTab(2)"><span>📦</span><span id="nav-basket-label">3. Basket(2)</span></button>
-        <button class="nav-tab" id="m-nav-6" onclick="switchMemberTab(6)"><span>📅</span><span>4. Calendar</span></button>
-        <button class="nav-tab" id="m-nav-4" onclick="switchMemberTab(4)"><span>🗳️</span><span>5. Vote</span></button>
       </div>
     </div>
 

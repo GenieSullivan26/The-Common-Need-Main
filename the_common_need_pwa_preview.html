@@ -624,7 +624,7 @@
       </button>
     </div>
 
-    <!-- IN-APP PROFILE & INSTANCE ADDRESS MODAL (Editable once logged in) -->
+    <!-- IN-APP PROFILE & INSTANCE ADDRESS MODAL (Editable once logged in + Sign Out) -->
     <div id="pwa-profile-modal" class="hidden" style="position:absolute; inset:42px 0 0 0; background:rgba(18,9,36,0.96); backdrop-filter:blur(10px); z-index:900; padding:22px 20px; display:flex; flex-direction:column; justify-content:center;">
       <div class="dark-card" style="background:#1B0F33; border:1.5px solid rgba(197,255,41,0.4); border-radius:22px; padding:20px 18px; box-shadow:0 16px 40px rgba(0,0,0,0.6);">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
@@ -651,6 +651,10 @@
 
         <button type="button" id="pwa-profile-save-btn" class="cta-lime-btn" style="width:100%; font-size:13.5px; padding:12px; border-radius:14px; margin-top:0;" onclick="saveProfileAddressUpdate()">
           Save Address & Update Instance →
+        </button>
+
+        <button type="button" id="pwa-profile-signout-btn" onclick="signOutDecidim()" style="width:100%; margin-top:10px; background:rgba(255,255,255,0.06); color:var(--text-cream); border:1px solid rgba(255,255,255,0.16); border-radius:14px; padding:11px; font-size:13px; font-weight:700; cursor:pointer;">
+          Sign Out
         </button>
       </div>
     </div>
@@ -719,10 +723,63 @@
     </div>
 
     <!-- =========================================================
-         1. MEMBER PWA
+         1. MEMBER PWA (Google Gemini-Inspired Conversational UI)
          ========================================================= -->
-    <div id="role-view-member" style="display:flex; flex-direction:column; flex:1;">
-      <div class="pwa-header" id="member-pwa-header">
+    <div id="role-view-member" style="display:flex; flex-direction:column; flex:1; position:relative;">
+      <!-- GEMINI-STYLE TOP BAR (Top-Left Dropdown Menu + Top-Right Profile & Sign Out) -->
+      <div id="member-gemini-topbar" style="display:flex; justify-content:space-between; align-items:center; padding:12px 18px 8px; position:relative; z-index:820;">
+        <button type="button" id="member-top-menu-btn" onclick="toggleMemberNavDropdown()" style="background:transparent; border:none; color:var(--text-white); display:inline-flex; align-items:center; gap:12px; cursor:pointer; padding:6px 4px; font-family:inherit;">
+          <span style="display:inline-flex; flex-direction:column; gap:5px; width:18px;">
+            <span style="display:block; height:2px; width:18px; background:rgba(244,247,232,0.85); border-radius:2px;"></span>
+            <span style="display:block; height:2px; width:13px; background:rgba(244,247,232,0.85); border-radius:2px;"></span>
+          </span>
+          <span style="font-size:17px; font-weight:600; letter-spacing:-0.2px; display:inline-flex; align-items:center; gap:6px;">
+            <span>Common Need</span>
+            <span id="member-top-page-indicator" style="color:rgba(244,247,232,0.52); font-weight:400;">AI</span>
+            <span style="font-size:12px; color:rgba(244,247,232,0.52);">⌄</span>
+          </span>
+        </button>
+
+        <div style="display:inline-flex; align-items:center; gap:10px;">
+          <button type="button" title="New AI Chat" onclick="resetMemberGeminiChat()" style="width:34px; height:34px; border-radius:50%; background:transparent; border:1.5px dashed rgba(244,247,232,0.35); color:var(--text-cream); display:inline-flex; align-items:center; justify-content:center; font-size:14px; cursor:pointer;">
+            ✎
+          </button>
+          <button type="button" id="member-top-profile-btn" onclick="openProfileModal()" style="background:linear-gradient(135deg, #C5FF29 0%, #6B5B1E 100%); padding:2px; border:none; border-radius:999px; cursor:pointer; display:inline-flex; align-items:center; gap:6px; box-shadow:0 4px 12px rgba(197,255,41,0.2);">
+            <span id="member-top-avatar-initial" style="width:30px; height:30px; border-radius:50%; background:#160B2B; color:var(--lime-bright); font-size:13px; font-weight:800; display:inline-flex; align-items:center; justify-content:center;">
+              R
+            </span>
+          </button>
+        </div>
+      </div>
+
+      <!-- TOP-LEFT DROPDOWN MENU (Links to AI Home, Browse, Basket, Calendar, and Vote) -->
+      <div id="member-nav-dropdown" class="hidden" style="position:absolute; top:56px; left:16px; width:240px; background:rgba(24,13,46,0.98); backdrop-filter:blur(16px); border:1px solid rgba(197,255,41,0.32); border-radius:20px; padding:8px; box-shadow:0 20px 48px rgba(0,0,0,0.8); z-index:860; display:flex; flex-direction:column; gap:4px;">
+        <div style="font-size:10px; font-weight:700; letter-spacing:0.6px; color:rgba(244,247,232,0.45); padding:6px 12px 2px;">
+          DECIDIM MEMBER PORTAL
+        </div>
+        <button type="button" class="nav-tab active" id="m-nav-5" onclick="switchMemberTab(5)" style="flex-direction:row; justify-content:flex-start; gap:10px; padding:10px 12px; font-size:13px; border-radius:12px; width:100%;">
+          <span style="color:var(--lime-bright); font-size:15px;">✦</span>
+          <span>AI Assistant</span>
+        </button>
+        <button type="button" class="nav-tab" id="m-nav-1" onclick="switchMemberTab(1)" style="flex-direction:row; justify-content:flex-start; gap:10px; padding:10px 12px; font-size:13px; border-radius:12px; width:100%;">
+          <span>🛍️</span>
+          <span>Browse</span>
+        </button>
+        <button type="button" class="nav-tab" id="m-nav-2" onclick="switchMemberTab(2)" style="flex-direction:row; justify-content:flex-start; gap:10px; padding:10px 12px; font-size:13px; border-radius:12px; width:100%;">
+          <span>📦</span>
+          <span id="nav-basket-label">Basket (2)</span>
+        </button>
+        <button type="button" class="nav-tab" id="m-nav-6" onclick="switchMemberTab(6)" style="flex-direction:row; justify-content:flex-start; gap:10px; padding:10px 12px; font-size:13px; border-radius:12px; width:100%;">
+          <span>📅</span>
+          <span>Calendar</span>
+        </button>
+        <button type="button" class="nav-tab" id="m-nav-4" onclick="switchMemberTab(4)" style="flex-direction:row; justify-content:flex-start; gap:10px; padding:10px 12px; font-size:13px; border-radius:12px; width:100%;">
+          <span>🗳️</span>
+          <span>Vote</span>
+        </button>
+      </div>
+
+      <div class="pwa-header hidden" id="member-pwa-header">
         <!-- Search & Local AI Quick Bar -->
         <div id="member-search-row" style="display:flex; gap:8px; margin-bottom:10px; align-items:center;">
           <input type="text" id="member-catalog-search" class="dark-input" style="margin:0; flex:1;" placeholder="🔍 Search food, health, legal, housing..." oninput="searchMemberCatalog(this.value)">
@@ -757,7 +814,7 @@
       </div>
 
       <!-- MEMBER TAB 1: Expanded Goods & Community Services Catalog (All 19 Categories) -->
-      <div class="pwa-body" id="member-tab-1">
+      <div class="pwa-body hidden" id="member-tab-1">
         <div style="display:flex; justify-content:space-between; align-items:center; padding:0 2px;">
           <div style="font-size:12px; color:rgba(244,247,232,0.75); font-weight:500;" id="active-cat-banner-text">
             4 Neighborhood Hubs • 19 Community Categories
@@ -1199,92 +1256,107 @@
         </div>
       </div>
 
-      <!-- MEMBER TAB 5: Secure Local-Server AI Chatbot & Paperwork Co-Pilot -->
-      <div class="pwa-body hidden" id="member-tab-5">
-        <div class="lime-dashed-banner" style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
-          <div>
-            <div style="font-weight:800;">🔒 LOCAL NODE AI ASSISTANT (decidim-ai)</div>
-            <div style="font-size:11px;">Hosted 100% on East Oakland Server #OAK-01 • Zero Cloud Tracking</div>
-          </div>
-          <span class="olive-badge">OFFLINE-CAPABLE LLM</span>
+      <!-- MEMBER TAB 5 (DEFAULT HOME): Google Gemini-Inspired Local AI Assistant & Context Box -->
+      <div class="pwa-body" id="member-tab-5" style="justify-content:space-between; padding:18px 18px 22px; background:radial-gradient(circle at 50% 42%, rgba(197,255,41,0.09) 0%, rgba(22,11,43,0.3) 58%, transparent 100%);">
+        <div class="hidden">
+          LOCAL NODE AI ASSISTANT (decidim-ai) • ZERO EXTERNAL API • OFFLINE-CAPABLE LLM
         </div>
 
-        <!-- Quick Prompt Chips -->
-        <div class="sub-pill-bar">
-          <button class="cat-pill" onclick="sendLocalAiPrompt('Find food, garden seeds, pet kibble & co-op bread')">🍎 Food, Garden & Pets</button>
-          <button class="cat-pill" onclick="sendLocalAiPrompt('Help me fill out Social Services CalFresh, Medi-Cal & Veteran VA paperwork')">📋 Social & Veteran Forms</button>
-          <button class="cat-pill" onclick="sendLocalAiPrompt('I need Legal Aid eviction defense, Housing rent relief & Public Sector ID')">⚖️ Legal, Housing & Civic</button>
-          <button class="cat-pill" onclick="sendLocalAiPrompt('Find Mental Health counseling, Medical walker & Youth/Arts kits')">🧠 Health, Youth & Arts</button>
-        </div>
+        <!-- CENTER GEMINI HERO & CONVERSATION AREA -->
+        <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:12px 6px; overflow-y:auto;">
+          <div id="member-gemini-hero" style="display:flex; flex-direction:column; align-items:center; justify-content:center; transition:all 0.2s ease;">
+            <!-- 4-Point Gemini Sparkle Icon in Common Need Lime/Emerald Theme -->
+            <svg width="46" height="46" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" style="filter:drop-shadow(0 0 18px rgba(197,255,41,0.38));">
+              <defs>
+                <linearGradient id="commonNeedSparkle" x1="6" y1="6" x2="42" y2="42" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#C5FF29" />
+                  <stop offset="55%" stop-color="#95C623" />
+                  <stop offset="100%" stop-color="#6B5B1E" />
+                </linearGradient>
+              </defs>
+              <path d="M24 3C24 14.598 33.402 24 45 24C33.402 24 24 33.402 24 45C24 33.402 14.598 24 3 24C14.598 24 24 14.598 24 3Z" fill="url(#commonNeedSparkle)"/>
+            </svg>
 
-        <!-- Interactive Local AI Chat Thread -->
-        <div class="dark-card" style="display:flex; flex-direction:column; gap:8px;">
-          <div style="display:flex; justify-content:space-between; align-items:center;">
-            <span class="mono-sub" style="margin:0; border:1px solid var(--lime-bright);">LOCAL SERVER CHAT • ENCRYPTED SESSION</span>
-            <span style="font-size:10.5px; color:var(--lime-bright); font-family:monospace;">● Llama-3-Local (#OAK-01)</span>
+            <h1 id="member-gemini-greeting" style="font-size:28px; font-weight:500; color:var(--text-white); letter-spacing:-0.5px; line-height:1.25; margin:18px 0 8px;">
+              What can I help with,<br><span id="member-gemini-first-name" style="color:var(--lime-bright); font-weight:600;">Rosa</span>?
+            </h1>
+
+            <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:7px; margin-top:14px; max-width:340px;">
+              <button type="button" class="cat-pill" onclick="sendLocalAiPrompt('Find food, garden seeds, pet kibble & co-op bread')" style="font-size:11.5px; padding:6px 12px;">🍎 Food & Produce</button>
+              <button type="button" class="cat-pill" onclick="sendLocalAiPrompt('Help me fill out Social Services CalFresh, Medi-Cal & Veteran VA paperwork')" style="font-size:11.5px; padding:6px 12px;">📋 CalFresh & VA</button>
+              <button type="button" class="cat-pill" onclick="sendLocalAiPrompt('I need Legal Aid eviction defense, Housing rent relief & Public Sector ID')" style="font-size:11.5px; padding:6px 12px;">⚖️ Legal & Housing</button>
+              <button type="button" class="cat-pill" onclick="sendLocalAiPrompt('Find Mental Health counseling, Medical walker & Youth/Arts kits')" style="font-size:11.5px; padding:6px 12px;">🩺 Health & Care</button>
+            </div>
           </div>
 
-          <div id="local-ai-chat-log" style="max-height:210px; overflow-y:auto; display:flex; flex-direction:column; gap:8px; padding:4px 0;">
-            <div style="background:var(--bg-outer); border:1px solid var(--lime-bright); border-radius:12px; padding:10px; font-size:12px; line-height:1.45;">
-              <div style="font-family:monospace; font-size:10px; color:var(--lime-bright); font-weight:700; margin-bottom:4px;">
-                🤖 #OAK-01 LOCAL SERVER AI • ZERO EXTERNAL API
+          <!-- Interactive Local AI Chat Thread (Reveals when chatting) -->
+          <div id="local-ai-chat-log" class="hidden" style="width:100%; max-height:310px; overflow-y:auto; display:flex; flex-direction:column; gap:10px; padding:8px 2px; text-align:left; margin-top:10px;">
+          </div>
+
+          <!-- Guided Government & Non-Profit Paperwork Auto-Filler (Toggled via "Task" mode pill or "+" button) -->
+          <div id="member-paperwork-task-panel" class="dark-card hidden" style="width:100%; text-align:left; margin-top:12px; padding:14px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+              <span class="cat-tag-chip" style="margin:0;">ENCRYPTED LOCAL PAPERWORK CO-PILOT</span>
+              <span class="olive-badge" style="padding:3px 9px; font-size:10px;">ZERO MEANS-TEST</span>
+            </div>
+            <div style="font-size:13.5px; font-weight:700; margin-bottom:6px;">📋 Auto-Fill Non-Profit & Government Forms</div>
+
+            <select id="ai-form-template" class="dark-input" style="margin-top:4px;" onchange="updatePaperworkPreview()">
+              <option value="Social Services: CalFresh / SNAP, Medi-Cal & LIHEAP Packet">Social Services: CalFresh / SNAP, Medi-Cal & LIHEAP Packet</option>
+              <option value="Legal Aid: Eviction Defense & Record Expungement Intake">Legal Aid: Eviction Defense & Record Expungement Intake</option>
+              <option value="Housing: Emergency Rent Relief & Habitability Packet">Housing: Emergency Rent Relief & Habitability Packet</option>
+              <option value="Public Sector: Municipal ID & Paratransit Fee Waiver">Public Sector: Municipal ID & Paratransit Fee Waiver</option>
+              <option value="Veteran Services: VA Disability Claim & DD-214 Support Packet">Veteran Services: VA Disability Claim & DD-214 Support Packet</option>
+            </select>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-top:6px;">
+              <input type="text" id="ai-form-household" class="dark-input" style="margin:0;" value="Household Size: 3" oninput="updatePaperworkPreview()">
+              <input type="text" id="ai-form-lang" class="dark-input" style="margin:0;" value="Language: English / Español" oninput="updatePaperworkPreview()">
+            </div>
+
+            <input type="text" id="ai-form-situation" class="dark-input" value="Need expedited processing + porch delivery of printed signature page" oninput="updatePaperworkPreview()">
+
+            <div class="item-lime-card" style="flex-direction:column; align-items:flex-start; font-size:11px; gap:4px; margin-top:8px;">
+              <div id="ai-form-preview-text" style="line-height:1.4;">
+                • Form: Social Services: CalFresh / SNAP, Medi-Cal & LIHEAP Packet<br>
+                • Jurisdiction: Alameda County / Local Node #OAK-01<br>
+                • Qualifying 3-Day Expedited Review Checked ✓
               </div>
-              Welcome! I run directly on the East Oakland community server so your personal information never leaves our neighborhood node. I can:
-              <br>1. <strong>Search across all 19 community categories</strong> (Arts, Education, Garden, Pets, Health, Mental health, Medical, Legal aid, Employment, Food, Housing, Public safety, Recreation, Youth services, Social services, Public sector, Co-ops, Veteran services, Mutual Aid).
-              <br>2. <strong>Auto-fill government & non-profit paperwork</strong> (CalFresh, Medi-Cal, VA Claims, Legal Aid, Municipal ID) and have a volunteer courier bring printed forms to your door.
             </div>
-          </div>
 
-          <div style="display:flex; gap:6px; margin-top:4px;">
-            <input type="text" id="local-ai-user-input" class="dark-input" style="margin:0; flex:1;" placeholder="Ask for any category or paperwork help..." onkeydown="if(event.key==='Enter') sendLocalAiMessage()">
-            <button class="olive-badge" style="cursor:pointer; padding:0 14px; border-color:var(--lime-bright);" onclick="sendLocalAiMessage()">Send →</button>
+            <div style="display:flex; gap:6px; margin-top:10px;">
+              <button class="cta-olive-btn" style="padding:10px; flex:1; font-size:11.5px;" onclick="completeAiPaperwork('pdf')">
+                📄 Save Encrypted PDF
+              </button>
+              <button class="olive-badge" style="padding:10px; flex:1; font-size:11.5px; cursor:pointer; text-align:center;" onclick="completeAiPaperwork('courier')">
+                🚚 Add Packet to Basket
+              </button>
+            </div>
           </div>
         </div>
 
-        <!-- Guided Government & Non-Profit Paperwork Auto-Filler -->
-        <div class="dark-card">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-            <span class="mono-sub" style="margin:0; border:1px solid var(--olive-border);">ENCRYPTED LOCAL PAPERWORK CO-PILOT</span>
-            <span class="olive-badge">ZERO MEANS-TEST</span>
-          </div>
-          <div style="font-size:14px; font-weight:800; margin-bottom:4px;">📋 Auto-Fill Non-Profit & Government Forms</div>
-          <div style="font-size:11.5px; color:var(--text-cream); margin-bottom:8px;">
-            Your answers are processed in local RAM on Node #OAK-01 (`ActiveStorage` local vault) and purged after generating your PDF or courier print request:
-          </div>
-
-          <select id="ai-form-template" class="dark-input" style="margin-top:4px;" onchange="updatePaperworkPreview()">
-            <option value="Social Services: CalFresh / SNAP, Medi-Cal & LIHEAP Packet">Social Services: CalFresh / SNAP, Medi-Cal & LIHEAP Packet</option>
-            <option value="Legal Aid: Eviction Defense & Record Expungement Intake">Legal Aid: Eviction Defense & Record Expungement Intake</option>
-            <option value="Housing: Emergency Rent Relief & Habitability Packet">Housing: Emergency Rent Relief & Habitability Packet</option>
-            <option value="Public Sector: Municipal ID & Paratransit Fee Waiver">Public Sector: Municipal ID & Paratransit Fee Waiver</option>
-            <option value="Veteran Services: VA Disability Claim & DD-214 Support Packet">Veteran Services: VA Disability Claim & DD-214 Support Packet</option>
-          </select>
-
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-top:6px;">
-            <input type="text" id="ai-form-household" class="dark-input" style="margin:0;" value="Household Size: 3" oninput="updatePaperworkPreview()">
-            <input type="text" id="ai-form-lang" class="dark-input" style="margin:0;" value="Language: English / Español" oninput="updatePaperworkPreview()">
-          </div>
-
-          <input type="text" id="ai-form-situation" class="dark-input" value="Need expedited processing + porch delivery of printed signature page" oninput="updatePaperworkPreview()">
-
-          <div class="item-lime-card" style="flex-direction:column; align-items:flex-start; font-family:monospace; font-size:11px; gap:4px; margin-top:10px;">
-            <div style="font-weight:800; color:var(--bg-outer); background:var(--lime-bright); padding:2px 6px; border-radius:4px;">
-              LOCAL AI PRE-FILLED FORM SUMMARY:
-            </div>
-            <div id="ai-form-preview-text">
-              • Form: Social Services: CalFresh / SNAP, Medi-Cal & LIHEAP Packet<br>
-              • Jurisdiction: Alameda County / Local Node #OAK-01<br>
-              • Household: 1400 Block of 62nd Ave (Household Size: 3)<br>
-              • Fee Waiver & Expedited Flag: Qualifying 3-Day Expedited Review Checked ✓
-            </div>
-          </div>
-
-          <div style="display:flex; gap:6px; margin-top:10px;">
-            <button class="cta-olive-btn" style="padding:10px; flex:1; font-size:11.5px;" onclick="completeAiPaperwork('pdf')">
-              📄 Save Encrypted PDF
+        <!-- BOTTOM GEMINI-STYLE MODE TOGGLE ("Chat" | "Task") & AI CHATBOT CONTEXT BOX -->
+        <div style="display:flex; flex-direction:column; align-items:center; gap:12px; width:100%;">
+          <div style="display:inline-flex; align-items:center; gap:8px;">
+            <button type="button" id="gemini-mode-chat-btn" onclick="toggleMemberGeminiMode('chat')" style="background:rgba(197,255,41,0.12); color:var(--text-white); border:1px solid rgba(197,255,41,0.42); border-radius:999px; padding:7px 18px; font-size:13px; font-weight:600; cursor:pointer; transition:all 0.15s ease;">
+              Chat
             </button>
-            <button class="cta-olive-btn" style="padding:10px; flex:1; font-size:11.5px; background:var(--bg-outer);" onclick="completeAiPaperwork('courier')">
-              🚚 Add Printed Packet to Basket
+            <button type="button" id="gemini-mode-task-btn" onclick="toggleMemberGeminiMode('task')" style="background:transparent; color:rgba(244,247,232,0.75); border:1px solid transparent; border-radius:999px; padding:7px 18px; font-size:13px; font-weight:600; cursor:pointer; transition:all 0.15s ease;">
+              Task
+            </button>
+          </div>
+
+          <!-- GEMINI AI CHATBOT CONTEXT BOX -->
+          <div id="member-gemini-context-box" style="width:100%; background:#1C1032; border:1.5px solid rgba(197,255,41,0.28); border-radius:36px; padding:9px 11px 9px 15px; display:flex; align-items:center; gap:10px; box-shadow:0 12px 34px rgba(0,0,0,0.6);">
+            <button type="button" title="Open Paperwork Co-Pilot & Context" onclick="toggleMemberGeminiMode('task')" style="background:transparent; border:none; color:rgba(244,247,232,0.82); font-size:24px; font-weight:300; line-height:1; cursor:pointer; padding:0 4px;">
+              +
+            </button>
+            <input type="text" id="local-ai-user-input" placeholder="Ask The Common Need" onkeydown="if(event.key==='Enter') sendLocalAiMessage()" style="background:transparent; border:none; color:var(--text-white); font-size:15px; flex:1; outline:none; margin:0; padding:6px 0;">
+            <button type="button" title="Voice Input" onclick="triggerMemberVoicePrompt()" style="background:transparent; border:none; color:rgba(244,247,232,0.78); font-size:16px; cursor:pointer; padding:4px;">
+              🎙️
+            </button>
+            <button type="button" title="Send to Local Node AI" onclick="sendLocalAiMessage()" style="width:38px; height:38px; border-radius:50%; background:var(--lime-bright); color:#120924; border:none; display:inline-flex; align-items:center; justify-content:center; font-size:15px; font-weight:900; cursor:pointer; flex-shrink:0; box-shadow:0 4px 14px rgba(197,255,41,0.3);">
+              ✦
             </button>
           </div>
         </div>
@@ -1585,15 +1657,6 @@
 
           </div>
         </div>
-      </div>
-
-      <!-- MEMBER BOTTOM NAV (5 TABS including Centralized Local Partner Calendar) -->
-      <div class="bottom-nav five-cols">
-        <button class="nav-tab active" id="m-nav-1" onclick="switchMemberTab(1)"><span>🛍️</span><span>Browse</span></button>
-        <button class="nav-tab" id="m-nav-5" onclick="switchMemberTab(5)"><span>🤖</span><span>AI Helper</span></button>
-        <button class="nav-tab" id="m-nav-2" onclick="switchMemberTab(2)"><span>📦</span><span id="nav-basket-label">Basket (2)</span></button>
-        <button class="nav-tab" id="m-nav-6" onclick="switchMemberTab(6)"><span>📅</span><span>Calendar</span></button>
-        <button class="nav-tab" id="m-nav-4" onclick="switchMemberTab(4)"><span>🗳️</span><span>Vote</span></button>
       </div>
     </div>
 
@@ -2149,13 +2212,71 @@
       }
     }
 
+    function toggleMemberNavDropdown(forceOpen) {
+      const dropdownEl = document.getElementById('member-nav-dropdown');
+      if (!dropdownEl) return;
+      const isHidden = dropdownEl.classList.contains('hidden');
+      const shouldOpen = typeof forceOpen === 'boolean' ? forceOpen : isHidden;
+      dropdownEl.classList.toggle('hidden', !shouldOpen);
+    }
+
+    function toggleMemberGeminiMode(mode) {
+      const taskPanel = document.getElementById('member-paperwork-task-panel');
+      const chatBtn = document.getElementById('gemini-mode-chat-btn');
+      const taskBtn = document.getElementById('gemini-mode-task-btn');
+      const isTask = (mode === 'task');
+      if (taskPanel) taskPanel.classList.toggle('hidden', !isTask);
+      if (chatBtn) {
+        chatBtn.style.background = isTask ? 'transparent' : 'rgba(197,255,41,0.12)';
+        chatBtn.style.borderColor = isTask ? 'transparent' : 'rgba(197,255,41,0.42)';
+        chatBtn.style.color = isTask ? 'rgba(244,247,232,0.75)' : 'var(--text-white)';
+      }
+      if (taskBtn) {
+        taskBtn.style.background = isTask ? 'rgba(197,255,41,0.12)' : 'transparent';
+        taskBtn.style.borderColor = isTask ? 'rgba(197,255,41,0.42)' : 'transparent';
+        taskBtn.style.color = isTask ? 'var(--text-white)' : 'rgba(244,247,232,0.75)';
+      }
+    }
+
+    function resetMemberGeminiChat() {
+      switchMemberTab(5);
+      toggleMemberGeminiMode('chat');
+      const chatLog = document.getElementById('local-ai-chat-log');
+      if (chatLog) {
+        chatLog.innerHTML = '';
+        chatLog.classList.add('hidden');
+      }
+      const inputEl = document.getElementById('local-ai-user-input');
+      if (inputEl) inputEl.value = '';
+    }
+
+    function triggerMemberVoicePrompt() {
+      const inputEl = document.getElementById('local-ai-user-input');
+      if (inputEl) {
+        inputEl.value = 'Find fresh produce, garden seeds & CalFresh assistance';
+        inputEl.focus();
+      }
+      showToast('🎙️ Listening on Local Node #OAK-01 (Zero Cloud Voice)...');
+    }
+
     function switchMemberTab(tabIndex) {
+      toggleMemberNavDropdown(false);
       [1, 2, 4, 5, 6].forEach(i => {
         const tabEl = document.getElementById('member-tab-' + i);
         const navEl = document.getElementById('m-nav-' + i);
         if (tabEl) tabEl.classList.toggle('hidden', i !== tabIndex);
         if (navEl) navEl.classList.toggle('active', i === tabIndex);
       });
+      const pageNames = {
+        5: 'AI',
+        1: 'Browse',
+        2: 'Basket',
+        6: 'Calendar',
+        4: 'Vote'
+      };
+      const indicatorEl = document.getElementById('member-top-page-indicator');
+      if (indicatorEl) indicatorEl.textContent = pageNames[tabIndex] || 'AI';
+
       const showCatalogControls = (tabIndex === 1);
       const headerEl = document.getElementById('member-pwa-header');
       if (headerEl) headerEl.classList.toggle('hidden', !showCatalogControls);
@@ -2441,6 +2562,7 @@
 
     function openAiPaperworkFor(formTitle) {
       switchMemberTab(5);
+      toggleMemberGeminiMode('task');
       const selectEl = document.getElementById('ai-form-template');
       if (selectEl) {
         for (let i = 0; i < selectEl.options.length; i++) {
@@ -2468,9 +2590,11 @@
       const userText = (inputEl.value || '').trim();
       if (!userText) return;
 
+      chatLog.classList.remove('hidden');
+
       const userBubble = document.createElement('div');
-      userBubble.style.cssText = 'align-self:flex-end; background:var(--olive-badge); border:1px solid var(--olive-border); border-radius:12px; padding:8px 10px; font-size:12px; max-width:88%;';
-      userBubble.innerHTML = `<div style="font-family:monospace; font-size:9.5px; color:var(--lime-bright);">YOU (MEMBER)</div>${userText}`;
+      userBubble.style.cssText = 'align-self:flex-end; background:rgba(197,255,41,0.14); border:1px solid rgba(197,255,41,0.35); border-radius:18px 18px 4px 18px; padding:10px 14px; font-size:13px; color:var(--text-white); max-width:85%;';
+      userBubble.textContent = userText;
       chatLog.appendChild(userBubble);
 
       const lower = userText.toLowerCase();
@@ -2479,14 +2603,14 @@
       if (lower.includes('veteran') || lower.includes('va ') || lower.includes('calfresh') || lower.includes('social')) {
         replyHtml = `
           Matched in <strong>Social services & Veteran services</strong> at Fruitvale Resource Hub:
-          <br>• Pre-filled <strong>CalFresh/Medi-Cal/LIHEAP</strong> and <strong>VA Disability Claim / DD-214</strong> packets in the local Paperwork Co-Pilot below.
-          <br>• <button class="olive-badge" style="margin-top:6px; cursor:pointer;" onclick="addItemToBasket(this, 'Veteran & Social Services Care Packet', 'Veteran & Social Services')">+ Add Printed Packet & Veteran Care Tote</button>
+          <br>• Pre-filled <strong>CalFresh/Medi-Cal/LIHEAP</strong> and <strong>VA Disability Claim / DD-214</strong> packets in the Task panel.
+          <br><button class="olive-badge" style="margin-top:8px; cursor:pointer;" onclick="addItemToBasket(this, 'Veteran & Social Services Care Packet', 'Veteran & Social Services')">+ Add Printed Packet & Veteran Care Tote</button>
         `;
       } else if (lower.includes('legal') || lower.includes('housing') || lower.includes('public sector') || lower.includes('eviction')) {
         replyHtml = `
           Matched in <strong>Legal aid, Housing & Public sector</strong>:
           <br>• <strong>Eviction Defense & Expungement Clinic</strong> + <strong>Emergency Rent Relief & Weatherization Kit</strong> + <strong>Municipal ID / Paratransit Waiver</strong>.
-          <br>• <button class="olive-badge" style="margin-top:6px; cursor:pointer;" onclick="addItemToBasket(this, 'Legal Aid, Housing Weatherization & Municipal ID Packet', 'Legal & Housing Hub')">+ Add Housing Kit & Legal Packet</button>
+          <br><button class="olive-badge" style="margin-top:8px; cursor:pointer;" onclick="addItemToBasket(this, 'Legal Aid, Housing Weatherization & Municipal ID Packet', 'Legal & Housing Hub')">+ Add Housing Kit & Legal Packet</button>
         `;
       } else if (lower.includes('mental') || lower.includes('medical') || lower.includes('youth') || lower.includes('art')) {
         replyHtml = `
@@ -2494,7 +2618,7 @@
           <br>• <strong>Bilingual Peer Counseling & Weighted Grounding Kit</strong>
           <br>• <strong>Folding Mobility Walker & BP Cuff</strong>
           <br>• <strong>Youth STEM/Diaper Pack & Studio Art Box</strong>
-          <br>• <button class="olive-badge" style="margin-top:6px; cursor:pointer;" onclick="addItemToBasket(this, 'Holistic Health, Youth & Arts Bundle', 'Multi-Hub Care Share')">+ Add Matched Care Bundle</button>
+          <br><button class="olive-badge" style="margin-top:8px; cursor:pointer;" onclick="addItemToBasket(this, 'Holistic Health, Youth & Arts Bundle', 'Multi-Hub Care Share')">+ Add Matched Care Bundle</button>
         `;
       } else {
         replyHtml = `
@@ -2502,15 +2626,15 @@
           <br>• <strong>Organic Collard Greens & 25lb Grain Box</strong> (Food)
           <br>• <strong>Urban Garden Seed/Starts & 20lb Pet Kibble</strong> (Garden & Pets)
           <br>• <strong>Worker Co-op Sourdough & Mutual Aid Solar Lantern Kit</strong>
-          <br>• <button class="olive-badge" style="margin-top:6px; cursor:pointer;" onclick="addItemToBasket(this, 'Food, Garden, Pet & Co-op Solidarity Bundle', 'East Oakland Commons')">+ Add Matched Items to Care Basket</button>
+          <br><button class="olive-badge" style="margin-top:8px; cursor:pointer;" onclick="addItemToBasket(this, 'Food, Garden, Pet & Co-op Solidarity Bundle', 'East Oakland Commons')">+ Add Matched Items to Care Basket</button>
         `;
       }
 
       const aiBubble = document.createElement('div');
-      aiBubble.style.cssText = 'background:var(--bg-outer); border:1px solid var(--lime-bright); border-radius:12px; padding:10px; font-size:12px; line-height:1.45;';
+      aiBubble.style.cssText = 'background:rgba(27,15,51,0.92); border:1px solid rgba(255,255,255,0.1); border-radius:18px 18px 18px 4px; padding:12px 14px; font-size:12.5px; line-height:1.5; color:var(--text-cream);';
       aiBubble.innerHTML = `
-        <div style="font-family:monospace; font-size:10px; color:var(--lime-bright); font-weight:700; margin-bottom:4px;">
-          🤖 #OAK-01 LOCAL SERVER AI • 19-CATEGORY MATCH
+        <div style="font-size:10.5px; color:var(--lime-bright); font-weight:700; margin-bottom:4px; display:flex; align-items:center; gap:5px;">
+          <span>✦</span> <span>COMMON NEED LOCAL AI • #OAK-01</span>
         </div>
         ${replyHtml}
       `;
@@ -3006,6 +3130,16 @@
       return fallbackType || 'member';
     }
 
+    function updateMemberGeminiHeaderIdentity(session) {
+      if (!session) return;
+      const firstName = ((session.name || 'Rosa').trim().split(/\s+/)[0]) || 'Rosa';
+      const initial = firstName.charAt(0).toUpperCase() || 'R';
+      const firstEl = document.getElementById('member-gemini-first-name');
+      const initEl = document.getElementById('member-top-avatar-initial');
+      if (firstEl) firstEl.textContent = firstName;
+      if (initEl) initEl.textContent = initial;
+    }
+
     function renderStatusBarAuthPill(session) {
       const pillEl = document.getElementById('pwa-status-auth-pill');
       const instBarEl = document.getElementById('pwa-active-instance-bar');
@@ -3013,18 +3147,24 @@
       const instHostEl = document.getElementById('pwa-active-instance-host');
 
       if (session && session.authenticated && DECIDIM_SSO_PROFILES[session.userType]) {
-        if (pillEl) {
-          pillEl.innerHTML = `
-            <span style="display:inline-flex; align-items:center; gap:5px;">
-              <span style="font-size:10px; color:var(--lime-bright);">${session.instanceCode || '#OAK-01'}</span>
-              <button onclick="signOutDecidim()" style="background:rgba(197,255,41,0.14); color:var(--lime-bright); border:1px solid var(--lime-bright); border-radius:8px; padding:2px 8px; font-size:10px; font-weight:700; cursor:pointer; font-family:inherit;">Sign Out</button>
-            </span>
-          `;
-        }
-        if (instBarEl) {
-          instBarEl.classList.remove('hidden');
-          if (instTextEl) instTextEl.textContent = `📍 ${session.instanceName || 'East Oakland Local Node'} (${session.instanceCode || '#OAK-01'})`;
-          if (instHostEl) instHostEl.textContent = session.instanceHost || 'oakland-01.common-need.org';
+        updateMemberGeminiHeaderIdentity(session);
+        if (session.userType === 'member') {
+          if (pillEl) pillEl.textContent = `${session.instanceCode || '#OAK-01'} • 5G`;
+          if (instBarEl) instBarEl.classList.add('hidden');
+        } else {
+          if (pillEl) {
+            pillEl.innerHTML = `
+              <span style="display:inline-flex; align-items:center; gap:5px;">
+                <span style="font-size:10px; color:var(--lime-bright);">${session.instanceCode || '#OAK-01'}</span>
+                <button onclick="signOutDecidim()" style="background:rgba(197,255,41,0.14); color:var(--lime-bright); border:1px solid var(--lime-bright); border-radius:8px; padding:2px 8px; font-size:10px; font-weight:700; cursor:pointer; font-family:inherit;">Sign Out</button>
+              </span>
+            `;
+          }
+          if (instBarEl) {
+            instBarEl.classList.remove('hidden');
+            if (instTextEl) instTextEl.textContent = `📍 ${session.instanceName || 'East Oakland Local Node'} (${session.instanceCode || '#OAK-01'})`;
+            if (instHostEl) instHostEl.textContent = session.instanceHost || 'oakland-01.common-need.org';
+          }
         }
       } else {
         if (pillEl) pillEl.textContent = 'PWA • 5G';
@@ -3054,10 +3194,13 @@
           instanceHost: inst.host
         };
       }
+      updateMemberGeminiHeaderIdentity(activeSession);
       const instBarEl = document.getElementById('pwa-active-instance-bar');
       const instTextEl = document.getElementById('pwa-active-instance-text');
       const instHostEl = document.getElementById('pwa-active-instance-host');
-      if (instBarEl) {
+      if (role === 'member') {
+        if (instBarEl) instBarEl.classList.add('hidden');
+      } else if (instBarEl) {
         instBarEl.classList.remove('hidden');
         if (instTextEl) instTextEl.textContent = `📍 ${activeSession.instanceName} (${activeSession.instanceCode})`;
         if (instHostEl) instHostEl.textContent = activeSession.instanceHost;
