@@ -9,6 +9,7 @@ on:
 
 permissions:
   contents: read
+  actions: read
   packages: write
   pages: write
   id-token: write
@@ -30,7 +31,7 @@ jobs:
         run: |
           ruby -e 'Dir["**/*.rb"].each { |f| system("ruby", "-c", f, out: File::NULL) || abort("Syntax error in #{f}") }; puts "Verified #{Dir["**/*.rb"].size} Ruby files"'
 
-      - name: Run 74 RSpec Unit & 5-Role PWA System Specs
+      - name: Run 80 RSpec Unit & 5-Role PWA System Specs
         run: |
           ruby -I gems/decidim-module-common_need/spec -r spec_helper -e 'Dir["gems/decidim-module-common_need/spec/**/*_spec.rb"].sort.each { |f| load f }'
 
@@ -71,19 +72,28 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      - name: Build Standalone Role PWA Entrypoints & 404 Fallback
+        run: |
+          touch public/.nojekyll
+          cp public/index.html public/404.html
+          for route in member volunteer partner nonprofit local-node local_node central-hub federation login sign_in; do
+            mkdir -p "public/${route}"
+            cp public/index.html "public/${route}/index.html"
+            cp public/manifest.json "public/${route}/manifest.json"
+            cp public/service-worker.js "public/${route}/service-worker.js"
+          done
+
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
-        continue-on-error: true
 
       - name: Upload PWA Artifact (public/)
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           path: "./public"
 
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-        continue-on-error: true
 
   deploy-cloud-run-optional:
     name: Deploy to Google Cloud Run (When GCP_SA_KEY Secret Is Set)

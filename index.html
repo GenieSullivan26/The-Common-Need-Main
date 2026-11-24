@@ -595,16 +595,23 @@
         partner: 'nonprofit',
         nonprofit: 'nonprofit',
         local_node: 'localnode',
+        'local-node': 'localnode',
         localnode: 'localnode',
         node_admin: 'localnode',
         federation: 'network',
+        'central-hub': 'network',
+        central_hub: 'network',
         network: 'network',
         login: 'login',
-        sign_in: 'login'
+        sign_in: 'login',
+        'sign-in': 'login'
       };
       var params = new URLSearchParams(window.location.search);
       var rawRole = (params.get('role') || '').toLowerCase();
-      var pathSeg = (window.location.pathname.split('/').filter(Boolean).pop() || '').toLowerCase();
+      var cleanSegs = window.location.pathname.split('/').filter(function(s) {
+        return s && s.toLowerCase() !== 'index.html';
+      });
+      var pathSeg = (cleanSegs.pop() || '').toLowerCase();
       var lockedRole = aliases[rawRole] || aliases[pathSeg] || null;
       window.__LOCKED_PWA_ROLE__ = lockedRole;
       if (lockedRole) {
