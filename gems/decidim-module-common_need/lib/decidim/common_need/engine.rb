@@ -26,6 +26,8 @@ module Decidim
         # Role 1: Member PWA (Decidim::CommonNeed::MemberPortal)
         namespace :member_portal, path: "member" do
           get "catalog", to: "catalog#index"
+          post "resource_navigator/chat", to: "ai_assistant#chat"
+          post "resource_navigator/paperwork", to: "ai_assistant#generate_paperwork"
           post "ai_assistant/chat", to: "ai_assistant#chat"
           post "ai_assistant/paperwork", to: "ai_assistant#generate_paperwork"
           resource :care_basket, only: [:show, :update] do

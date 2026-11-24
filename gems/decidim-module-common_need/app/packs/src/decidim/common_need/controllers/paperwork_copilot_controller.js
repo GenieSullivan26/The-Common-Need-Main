@@ -21,8 +21,8 @@ export default class extends Controller {
 
   static values = {
     nodeCode: { type: String, default: "#OAK-01" },
-    chatEndpoint: { type: String, default: "/member/ai_assistant/chat" },
-    paperworkEndpoint: { type: String, default: "/member/ai_assistant/paperwork" }
+    chatEndpoint: { type: String, default: "/member/resource_navigator/chat" },
+    paperworkEndpoint: { type: String, default: "/member/resource_navigator/paperwork" }
   }
 
   sendQuickPrompt(event) {
@@ -58,29 +58,47 @@ export default class extends Controller {
 
   sendMessage(event) {
     if (event) event.preventDefault()
+    if (typeof window.sendLocalAiMessage === "function") {
+      window.sendLocalAiMessage()
+      return
+    }
     if (!this.hasUserInputTarget || !this.hasChatLogTarget) return
 
     const userText = (this.userInputTarget.value || "").trim()
     if (!userText) return
 
+    this.chatLogTarget.classList.remove("hidden")
+
     const userBubble = document.createElement("div")
     userBubble.style.cssText =
-      "align-self:flex-end; background:var(--olive-badge); border:1px solid var(--olive-border); border-radius:12px; padding:8px 10px; font-size:12px; max-width:88%;"
-    userBubble.innerHTML = `<div style="font-family:monospace; font-size:9.5px; color:var(--lime-bright);">YOU (MEMBER)</div>${this.escapeHtml(userText)}`
+      "align-self:flex-end; background:rgba(197,255,41,0.14); border:1px solid rgba(197,255,41,0.35); border-radius:18px 18px 4px 18px; padding:10px 14px; font-size:13px; color:var(--text-white); max-width:85%;"
+    userBubble.textContent = userText
     this.chatLogTarget.appendChild(userBubble)
 
-    const aiBubble = document.createElement("div")
-    aiBubble.style.cssText =
-      "background:var(--bg-outer); border:1px solid var(--lime-bright); border-radius:12px; padding:10px; font-size:12px; line-height:1.45;"
-    aiBubble.innerHTML = `
-      <div style="font-family:monospace; font-size:10px; color:var(--lime-bright); font-weight:700; margin-bottom:4px;">
-        🧭 COMMON NEED RESOURCE NAVIGATOR • ${this.nodeCodeValue}
+    const liveItems = this.scanLiveCatalogCards()
+    const replyHtml = this.buildLocalReplyHtml(userText, liveItems)
+
+    const navBubble = document.createElement("div")
+    navBubble.style.cssText =
+      "background:rgba(27,15,51,0.95); border:1px solid rgba(197,255,41,0.22); border-radius:18px 18px 18px 4px; padding:12px 14px; font-size:12.5px; line-height:1.5;"
+    navBubble.innerHTML = `
+      <div style="font-family:monospace; font-size:10px; color:var(--lime-bright); font-weight:700; margin-bottom:5px;">
+        🧭 COMMON NEED RESOURCE NAVIGATOR • ${this.nodeCodeValue} (${liveItems.length} LIVE ITEMS)
       </div>
-      ${this.buildLocalReplyHtml(userText)}
+      ${replyHtml}
     `
-    this.chatLogTarget.appendChild(aiBubble)
+    this.chatLogTarget.appendChild(navBubble)
     this.chatLogTarget.scrollTop = this.chatLogTarget.scrollHeight
     this.userInputTarget.value = ""
+  }
+
+  scanLiveCatalogCards() {
+    return Array.from(document.querySelectorAll("#member-tab-1 .item-lime-card")).map((card) => ({
+      title: (card.querySelector(".item-title")?.textContent || "").trim(),
+      category: (card.dataset.category || "mutual_aid").trim(),
+      isSurplus: card.dataset.liveSurplus === "true",
+      blob: card.textContent.toLowerCase()
+    })).filter((i) => i.title)
   }
 
   updatePreview() {
@@ -118,41 +136,57 @@ export default class extends Controller {
         window.showToast(`Generated encrypted PDF for "${formName}" in your local ${this.nodeCodeValue} vault!`)
       }
     } else if (typeof window.addItemToBasket === "function") {
-      window.addItemToBasket(null, formName, "Paperwork Co-Pilot • Fruitvale Hub")
+      window.addItemToBasket(null, formName, "Resource Navigator • Fruitvale Hub")
     }
   }
 
-  buildLocalReplyHtml(userText) {
+  buildLocalReplyHtml(userText, liveItems = []) {
     const lower = userText.toLowerCase()
+    const tokens = (lower.match(/[a-z0-9-]+/g) || []).filter((w) => w.length >= 3)
+    const matched = liveItems
+      .map((item) => {
+        let score = item.isSurplus ? 2 : 0
+        tokens.forEach((tok) => {
+          if (item.title.toLowerCase().includes(tok)) score += 6
+          else if (item.blob.includes(tok)) score += 2
+        })
+        return { ...item, score }
+      })
+      .filter((i) => i.score > 0)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 4)
+
+    const itemsList = matched.length > 0
+      ? matched.map((m) => `• ${m.isSurplus ? "<strong>[NEW LIVE SURPLUS]</strong> " : ""}<strong>${this.escapeHtml(m.title)}</strong>`).join("<br>")
+      : "• <strong>Organic Collard Greens &amp; 25lb Grain Box</strong><br>• <strong>Urban Garden Seed/Starts &amp; 20lb Pet Kibble</strong>"
+
     if (lower.includes("veteran") || lower.includes("va ") || lower.includes("calfresh") || lower.includes("social")) {
       return `
-        Matched in <strong>Social services & Veteran services</strong> at Fruitvale Resource Hub:
-        <br>• Pre-filled <strong>CalFresh/Medi-Cal/LIHEAP</strong> and <strong>VA Disability Claim / DD-214</strong> packets in the local Paperwork Co-Pilot below.
-        <br>• <button class="olive-badge" style="margin-top:6px; cursor:pointer;" onclick="addItemToBasket(this, 'Veteran & Social Services Care Packet', 'Veteran & Social Services')">+ Add Printed Packet & Veteran Care Tote</button>
+        <div><strong>Social Services, CalFresh (SNAP) &amp; Veterans Navigation</strong></div>
+        <div>• <strong>3-Day Expedited CalFresh:</strong> &lt;$150 monthly income &amp; &lt;$100 cash (or rent+utilities &gt; income) qualifies for 3-day emergency EBT; no asset test and Public Charge safe.</div>
+        <div>• <strong>$0 VA Intent to File:</strong> Locks in up to 1 year of retroactive disability back-pay.</div>
+        <div style="margin-top:6px;">${itemsList}</div>
       `
     }
     if (lower.includes("legal") || lower.includes("housing") || lower.includes("public sector") || lower.includes("eviction")) {
       return `
-        Matched in <strong>Legal aid, Housing & Public sector</strong>:
-        <br>• <strong>Eviction Defense & Expungement Clinic</strong> + <strong>Emergency Rent Relief & Weatherization Kit</strong> + <strong>Municipal ID / Paratransit Waiver</strong>.
-        <br>• <button class="olive-badge" style="margin-top:6px; cursor:pointer;" onclick="addItemToBasket(this, 'Legal Aid, Housing Weatherization & Municipal ID Packet', 'Legal & Housing Hub')">+ Add Housing Kit & Legal Packet</button>
+        <div><strong>Housing Stability, Eviction Defense &amp; Municipal ID Navigation</strong></div>
+        <div>• <strong>Urgent 10-Business-Day Rule:</strong> File an Answer (<code>UD-105</code>) within 10 court business days of an Unlawful Detainer summons to prevent default lockout.</div>
+        <div>• <strong>Rent &amp; LIHEAP Relief:</strong> Pair emergency back-rent grants with LIHEAP utility shutoff protection.</div>
+        <div style="margin-top:6px;">${itemsList}</div>
       `
     }
     if (lower.includes("mental") || lower.includes("medical") || lower.includes("youth") || lower.includes("art")) {
       return `
-        Matched across <strong>Mental health, Medical, Youth services & Arts</strong>:
-        <br>• <strong>Bilingual Peer Counseling & Weighted Grounding Kit</strong>
-        <br>• <strong>Folding Mobility Walker & BP Cuff</strong>
-        <br>• <strong>Youth STEM/Diaper Pack & Studio Art Box</strong>
-        <br>• <button class="olive-badge" style="margin-top:6px; cursor:pointer;" onclick="addItemToBasket(this, 'Holistic Health, Youth & Arts Bundle', 'Multi-Hub Care Share')">+ Add Matched Care Bundle</button>
+        <div><strong>Full-Scope Medi-Cal, Medical Equipment &amp; Youth Care</strong></div>
+        <div>• <strong>Full-Scope Medi-Cal &amp; IHSS:</strong> Open to income-eligible CA residents of all ages regardless of immigration status (zero asset test).</div>
+        <div style="margin-top:6px;">${itemsList}</div>
       `
     }
     return `
-      Matched across <strong>Food, Garden, Pets, Co-ops & Mutual Aid</strong>:
-      <br>• <strong>Organic Collard Greens & 25lb Grain Box</strong> (Food)
-      <br>• <strong>Urban Garden Seed/Starts & 20lb Pet Kibble</strong> (Garden & Pets)
-      <br>• <strong>Worker Co-op Sourdough & Mutual Aid Solar Lantern Kit</strong>
-      <br>• <button class="olive-badge" style="margin-top:6px; cursor:pointer;" onclick="addItemToBasket(this, 'Food, Garden, Pet & Co-op Solidarity Bundle', 'East Oakland Commons')">+ Add Matched Items to Care Basket</button>
+      <div><strong>Live Community Nourishment &amp; Social Service Navigation</strong></div>
+      <div>• All free goods, partner surplus shares, and clinics on this PWA require $0 and zero means-testing.</div>
+      <div style="margin-top:6px;">${itemsList}</div>
     `
   }
 

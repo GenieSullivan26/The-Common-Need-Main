@@ -3,18 +3,32 @@
 module Decidim
   module CommonNeed
     module MemberPortal
-      # Local Node #OAK-01 AI Assistant & Encrypted Paperwork Co-Pilot controller.
-      # Strictly routes to local Ollama (`127.0.0.1:11434`) with zero external cloud tracking.
+      # Local Node Resource Navigator & Encrypted Paperwork controller.
+      # Trained on live free goods, partner surplus, and an expert social service knowledge base.
       class AiAssistantController < Decidim::CommonNeed::ApplicationController
         def chat
           prompt = params[:prompt].to_s.strip
+          navigator = Decidim::CommonNeed::ResourceNavigatorService.new(node_code: current_local_node_code)
+          result = navigator.navigate(
+            prompt,
+            extra_surplus_items: params[:live_surplus_items] || [],
+            extra_events: params[:live_events] || []
+          )
+
           render json: {
             node_code: current_local_node_code,
-            model: Decidim::CommonNeed.local_ollama_model,
             endpoint: Decidim::CommonNeed.local_ollama_endpoint,
             external_bytes_sent: 0,
             prompt: prompt,
-            reply_html: build_local_ai_reply(prompt)
+            live_catalog_count: result[:live_catalog_count],
+            live_surplus_count: result[:live_surplus_count],
+            matched_categories: result[:matched_categories],
+            matched_domains: result[:matched_domains],
+            matched_items: result[:matched_items],
+            matched_events: result[:matched_events],
+            expert_guidance: result[:expert_guidance],
+            recommended_forms: result[:recommended_forms],
+            reply_html: result[:reply_html]
           }
         end
 
@@ -33,21 +47,6 @@ module Decidim
             zero_means_testing: true,
             external_bytes_sent: 0
           }
-        end
-
-        private
-
-        def build_local_ai_reply(prompt)
-          lower = prompt.downcase
-          if lower.include?("veteran") || lower.include?("calfresh") || lower.include?("social")
-            "Matched in Social services & Veteran services at Fruitvale Resource Hub: Pre-filled CalFresh/Medi-Cal/LIHEAP and VA Disability Claim / DD-214 packets."
-          elsif lower.include?("legal") || lower.include?("housing") || lower.include?("eviction")
-            "Matched in Legal aid, Housing & Public sector: Eviction Defense & Expungement Clinic + Emergency Rent Relief & Weatherization Kit + Municipal ID Waiver."
-          elsif lower.include?("mental") || lower.include?("medical") || lower.include?("youth") || lower.include?("art")
-            "Matched across Mental health, Medical, Youth services & Arts: Bilingual Peer Counseling, Folding Mobility Walker & Youth STEM/Art Bundle."
-          else
-            "Matched across Food, Garden, Pets, Co-ops & Mutual Aid at East Oakland Collective Pantry & Commons."
-          end
         end
       end
     end

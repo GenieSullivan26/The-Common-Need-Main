@@ -154,4 +154,60 @@ RSpec.describe "Decidim::CommonNeed Services" do
       expect(bundle[:docker_compose_yaml]).to include('HOUSEHOLD_PII_BYTES_ON_HUB: "0"')
     end
   end
+
+  describe Decidim::CommonNeed::ResourceNavigatorService do
+    before { Decidim::CommonNeed::ResourceNavigatorService.clear_registered_live_surplus! }
+
+    let(:navigator) { Decidim::CommonNeed::ResourceNavigatorService.new(node_code: "#OAK-01") }
+
+    it "indexes all 19 live free goods & services on the instance PWA with zero external bytes sent" do
+      res = navigator.navigate("What free goods and services are available right now?")
+      expect(res[:external_bytes_sent]).to eq(0)
+      expect(res[:live_catalog_count]).to eq(19)
+      expect(res[:matched_items]).not_to be_empty
+      expect(res[:reply_html]).to include("Live Free Goods, Surplus &amp; Services Index")
+    end
+
+    it "dynamically learns newly posted Partner surplus items and surfaces them immediately in Member chat" do
+      Decidim::CommonNeed::ResourceNavigatorService.register_live_surplus_item!(
+        name: "Fresh Bok Choy & Ginger Bundle",
+        stock_quantity: 25,
+        category: "food",
+        node_code: "#OAK-01"
+      )
+
+      res = navigator.navigate("Do you have fresh bok choy or ginger today?")
+      expect(res[:live_catalog_count]).to eq(20)
+      expect(res[:live_surplus_count]).to eq(1)
+      expect(res[:matched_items].first[:title]).to eq("Fresh Bok Choy & Ginger Bundle")
+      expect(res[:matched_items].first[:live_surplus]).to be_truthy
+      expect(res[:reply_html]).to include("LIVE SURPLUS")
+      expect(res[:reply_html]).to include("Fresh Bok Choy &amp; Ginger Bundle")
+      Decidim::CommonNeed::ResourceNavigatorService.clear_registered_live_surplus!
+    end
+
+    it "provides expert social service navigation across CalFresh, Eviction Defense, Full-Scope Medi-Cal/IHSS, VA Intent to File, Public Charge, and Youth/Worker rights" do
+      food_res = navigator.navigate("My family is hungry and needs groceries and emergency CalFresh SNAP")
+      expect(food_res[:matched_domains]).to include(:food_nutrition)
+      expect(food_res[:expert_guidance].join(" ")).to include("3-Day Expedited CalFresh")
+
+      eviction_res = navigator.navigate("My landlord served an unlawful detainer eviction notice and my PGE electric bill is past due")
+      expect(eviction_res[:matched_domains]).to include(:housing_eviction)
+      expect(eviction_res[:expert_guidance].join(" ")).to include("10 business days")
+      expect(eviction_res[:recommended_forms]).to include("Legal Aid: Eviction Defense & Record Expungement Intake")
+
+      health_res = navigator.navigate("Need Medi-Cal coverage, IHSS caregiver help, and a folding mobility walker")
+      expect(health_res[:matched_domains]).to include(:healthcare_mental_health)
+      expect(health_res[:expert_guidance].join(" ")).to include("Full-Scope Medi-Cal")
+      expect(health_res[:matched_items].map { |i| i[:title] }.join(" ")).to include("Mobility Walker")
+
+      vet_res = navigator.navigate("Veteran needing VA disability claim and DD-214 retrieval")
+      expect(vet_res[:matched_domains]).to include(:veteran_benefits)
+      expect(vet_res[:expert_guidance].join(" ")).to include("VA Form 21-0966")
+
+      imm_res = navigator.navigate("Will food or Municipal ID affect green card Public Charge rules?")
+      expect(imm_res[:matched_domains]).to include(:immigration_civic_id)
+      expect(imm_res[:expert_guidance].join(" ")).to include("Public Charge")
+    end
+  end
 end

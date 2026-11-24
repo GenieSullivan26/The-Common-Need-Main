@@ -780,6 +780,7 @@
         </div>
 
         <turbo-frame id="member-catalog-frame" data-catalog-filter-target="turboFrame">
+          <div id="member-live-surplus-feed" class="member-hub-card"></div>
           <% @hubs.each do |hub| %>
             <%= cell("decidim/common_need/hub_card", hub).call %>
           <% end %>
@@ -883,21 +884,25 @@
         </div>
 
         <!-- CENTER HERO & CONVERSATION AREA -->
-        <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:12px 6px; overflow-y:auto; scrollbar-width:none; -ms-overflow-style:none;">
+        <div id="member-navigator-viewport" style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:8px 4px; overflow-y:auto; scrollbar-width:none; -ms-overflow-style:none;">
           <div id="member-gemini-hero" style="display:flex; flex-direction:column; align-items:center; justify-content:center; transition:all 0.2s ease;">
-            <h1 id="member-gemini-greeting" style="font-size:28px; font-weight:500; color:var(--text-white); letter-spacing:-0.5px; line-height:1.25; margin:8px 0;">
+            <h1 id="member-gemini-greeting" style="font-size:28px; font-weight:500; color:var(--text-white); letter-spacing:-0.5px; line-height:1.25; margin:8px 0 6px;">
               What can I help with,<br><span id="member-gemini-first-name" style="color:var(--lime-bright); font-weight:600;">Rosa</span>?
             </h1>
+            <div id="navigator-live-catalog-badge" style="font-size:11.5px; color:rgba(244,247,232,0.58); margin-bottom:4px;">
+              Synced with 19 live free goods & services • Social Service Guide
+            </div>
 
-            <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:7px; margin-top:14px; max-width:340px;">
+            <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:7px; margin-top:12px; max-width:348px;">
               <button type="button" class="cat-pill" data-action="click->paperwork-copilot#sendQuickPrompt" data-prompt="Find food, garden seeds, pet kibble & co-op bread" onclick="sendLocalAiPrompt('Find food, garden seeds, pet kibble & co-op bread')" style="font-size:11.5px; padding:6px 12px;">🍎 Food & Produce</button>
               <button type="button" class="cat-pill" data-action="click->paperwork-copilot#sendQuickPrompt" data-prompt="Help me fill out Social Services CalFresh, Medi-Cal & Veteran VA paperwork" onclick="sendLocalAiPrompt('Help me fill out Social Services CalFresh, Medi-Cal & Veteran VA paperwork')" style="font-size:11.5px; padding:6px 12px;">📋 CalFresh & VA</button>
               <button type="button" class="cat-pill" data-action="click->paperwork-copilot#sendQuickPrompt" data-prompt="I need Legal Aid eviction defense, Housing rent relief & Public Sector ID" onclick="sendLocalAiPrompt('I need Legal Aid eviction defense, Housing rent relief & Public Sector ID')" style="font-size:11.5px; padding:6px 12px;">⚖️ Legal & Housing</button>
               <button type="button" class="cat-pill" data-action="click->paperwork-copilot#sendQuickPrompt" data-prompt="Find Mental Health counseling, Medical walker & Youth/Arts kits" onclick="sendLocalAiPrompt('Find Mental Health counseling, Medical walker & Youth/Arts kits')" style="font-size:11.5px; padding:6px 12px;">🩺 Health & Care</button>
+              <button type="button" class="cat-pill" data-action="click->paperwork-copilot#sendQuickPrompt" data-prompt="What free goods, new surplus, and clinics are available right now?" onclick="sendLocalAiPrompt('What free goods, new surplus, and clinics are available right now?')" style="font-size:11.5px; padding:6px 12px;">🧭 What's Free & Live Today?</button>
             </div>
           </div>
 
-          <div id="local-ai-chat-log" data-paperwork-copilot-target="chatLog" class="hidden" style="width:100%; max-height:310px; overflow-y:auto; scrollbar-width:none; -ms-overflow-style:none; display:flex; flex-direction:column; gap:10px; padding:8px 2px; text-align:left; margin-top:10px;">
+          <div id="local-ai-chat-log" data-paperwork-copilot-target="chatLog" class="hidden" style="width:100%; flex:1; max-height:480px; overflow-y:auto; scrollbar-width:none; -ms-overflow-style:none; display:flex; flex-direction:column; gap:12px; padding:6px 2px; text-align:left;">
           </div>
 
           <!-- Guided Government & Non-Profit Paperwork Auto-Filler (Toggled via "Task" mode pill or "+" button) -->
@@ -2067,6 +2072,69 @@
       sendLocalAiPrompt(`Help me complete the ${formTitle} on our local server`);
     }
 
+    function escapeNavHtml(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function escapeJsArg(str) {
+      return String(str || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+    }
+
+    function getStoredLiveSurplusItems() {
+      try {
+        const parsed = JSON.parse(localStorage.getItem('common_need_live_surplus_items') || '[]');
+        return Array.isArray(parsed) ? parsed : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function inferSurplusCategory(name) {
+      const lower = String(name || '').toLowerCase();
+      if (/diaper|formula|baby|infant|stroller|toy|backpack|youth|kid/.test(lower)) return 'youth_services';
+      if (/walker|wheelchair|cane|blood pressure|wound|medical|medicine/.test(lower)) return 'medical';
+      if (/mask|n95|filter|sanitizer|hygiene/.test(lower)) return 'health';
+      if (/narcan|naloxone|lantern|battery|first-aid|safety/.test(lower)) return 'public_safety';
+      if (/coat|jacket|blanket|sleeping bag|tent|heater|dehumidifier|rent/.test(lower)) return 'housing';
+      if (/dog|cat|kibble|pet|leash|flea/.test(lower)) return 'pets';
+      if (/seed|compost|soil|plant|garden/.test(lower)) return 'garden';
+      if (/laptop|computer|book|ged|esl|study/.test(lower)) return 'education';
+      if (/boot|ppe|hardhat|vest|tool|union/.test(lower)) return 'employment';
+      return 'food';
+    }
+
+    function syncLiveSurplusAndEventsToMemberPwa() {
+      const surplusItems = getStoredLiveSurplusItems();
+      const memberFeedEl = document.getElementById('member-live-surplus-feed');
+      if (memberFeedEl) {
+        memberFeedEl.innerHTML = surplusItems.map(item => {
+          const safeTitle = escapeNavHtml(item.title);
+          const jsTitle = escapeJsArg(item.title);
+          return `
+            <div class="item-lime-card" data-category="${escapeNavHtml(item.category || 'food')}" data-live-surplus="true" style="border-color:rgba(197,255,41,0.42); background:rgba(197,255,41,0.06);">
+              <div>
+                <span class="cat-tag-chip">🆕 LIVE PARTNER SURPLUS</span>
+                <div class="item-title">${safeTitle}</div>
+                <div class="mono-sub" style="margin:0;">Fresh Partner Surplus • Zero Means-Testing</div>
+                <div style="font-size:11px; color:#F4F7E8; margin-top:2px;">Yield: ${escapeNavHtml(item.qty)} Live Shares Available Now</div>
+              </div>
+              <button class="olive-badge" style="cursor:pointer; border-color:var(--lime-bright);" onclick="addItemToBasket(this, '${jsTitle}', 'Live Partner Surplus • East Oakland Hub')">+ Add Share</button>
+            </div>
+          `;
+        }).join('');
+      }
+      const allCatalogCards = document.querySelectorAll('#member-tab-1 .item-lime-card').length || (19 + surplusItems.length);
+      const badgeEl = document.getElementById('navigator-live-catalog-badge');
+      if (badgeEl) {
+        const surplusSuffix = surplusItems.length > 0 ? ` (${surplusItems.length} new surplus)` : '';
+        badgeEl.textContent = `Synced with ${allCatalogCards} live free goods & services${surplusSuffix} • Social Service Guide`;
+      }
+    }
+
     function sendLocalAiPrompt(promptText) {
       const inputEl = document.getElementById('local-ai-user-input');
       if (inputEl) inputEl.value = promptText;
@@ -2081,51 +2149,83 @@
       const userText = (inputEl.value || '').trim();
       if (!userText) return;
 
+      const heroEl = document.getElementById('member-gemini-hero');
+      if (heroEl) heroEl.classList.add('hidden');
+      const viewportEl = document.getElementById('member-navigator-viewport');
+      if (viewportEl) viewportEl.style.justifyContent = 'flex-start';
+      chatLog.classList.remove('hidden');
+
       const userBubble = document.createElement('div');
-      userBubble.style.cssText = 'align-self:flex-end; background:var(--olive-badge); border:1px solid var(--olive-border); border-radius:12px; padding:8px 10px; font-size:12px; max-width:88%;';
-      userBubble.innerHTML = `<div style="font-family:monospace; font-size:9.5px; color:var(--lime-bright);">YOU (MEMBER)</div>${userText}`;
+      userBubble.style.cssText = 'align-self:flex-end; background:rgba(197,255,41,0.14); border:1px solid rgba(197,255,41,0.35); border-radius:18px 18px 4px 18px; padding:10px 14px; font-size:13px; color:var(--text-white); max-width:85%;';
+      userBubble.textContent = userText;
       chatLog.appendChild(userBubble);
 
+      syncLiveSurplusAndEventsToMemberPwa();
       const lower = userText.toLowerCase();
-      let replyHtml = '';
+      const liveCards = Array.from(document.querySelectorAll('#member-tab-1 .item-lime-card'));
+      const tokens = (lower.match(/[a-z0-9\-]+/g) || []).filter(w => w.length >= 3);
 
+      const matchedDomCards = liveCards
+        .map(c => {
+          const title = (c.querySelector('.item-title')?.textContent || '').trim();
+          const blob = c.textContent.toLowerCase();
+          let score = c.dataset.liveSurplus === 'true' ? 2 : 0;
+          tokens.forEach(t => {
+            if (title.toLowerCase().includes(t)) score += 6;
+            else if (blob.includes(t)) score += 2;
+          });
+          return { title, isSurplus: c.dataset.liveSurplus === 'true', score };
+        })
+        .filter(x => x.title && x.score > 0)
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 4);
+
+      const liveItemsListHtml = matchedDomCards.length > 0
+        ? matchedDomCards.map(m => `• ${m.isSurplus ? '<strong>[NEW LIVE SURPLUS]</strong> ' : ''}<strong>${escapeNavHtml(m.title)}</strong>`).join('<br>')
+        : '• <strong>Organic Collard Greens &amp; 25lb Staple Grain Box</strong><br>• <strong>Urban Garden Seed/Starts &amp; 20lb Pet Kibble</strong>';
+
+      let guidanceHtml = '';
       if (lower.includes('veteran') || lower.includes('va ') || lower.includes('calfresh') || lower.includes('social')) {
-        replyHtml = `
-          Matched in <strong>Social services & Veteran services</strong> at Fruitvale Resource Hub:
-          <br>• Pre-filled <strong>CalFresh/Medi-Cal/LIHEAP</strong> and <strong>VA Disability Claim / DD-214</strong> packets in the local Resource Navigator below.
-          <br>• <button class="olive-badge" style="margin-top:6px; cursor:pointer;" onclick="addItemToBasket(this, 'Veteran & Social Services Care Packet', 'Veteran & Social Services')">+ Add Printed Packet & Veteran Care Tote</button>
+        guidanceHtml = `
+          <div><strong>Social Services, CalFresh (SNAP) &amp; Veterans Navigation</strong></div>
+          <div style="margin-top:4px;">• <strong>3-Day Expedited CalFresh:</strong> Households with &lt;$150 monthly income &amp; &lt;$100 liquid cash (or rent+utilities &gt; income) qualify for 3-day emergency EBT with no asset test and zero Public Charge impact.</div>
+          <div>• <strong>$0 VA Intent to File:</strong> VA Form 21-0966 locks in up to 1 year of retroactive disability back-pay via an accredited VSO.</div>
+          <div style="margin-top:6px;"><strong>📦 Live Free Goods &amp; Services Matched (${liveCards.length} on Instance):</strong><br>${liveItemsListHtml}</div>
+          <button class="olive-badge" style="margin-top:8px; cursor:pointer;" onclick="addItemToBasket(this, 'Veteran & Social Services Care Packet', 'Veteran & Social Services')">+ Add Printed Packet &amp; Veteran Care Tote</button>
         `;
-      } else if (lower.includes('legal') || lower.includes('housing') || lower.includes('public sector') || lower.includes('eviction')) {
-        replyHtml = `
-          Matched in <strong>Legal aid, Housing & Public sector</strong>:
-          <br>• <strong>Eviction Defense & Expungement Clinic</strong> + <strong>Emergency Rent Relief & Weatherization Kit</strong> + <strong>Municipal ID / Paratransit Waiver</strong>.
-          <br>• <button class="olive-badge" style="margin-top:6px; cursor:pointer;" onclick="addItemToBasket(this, 'Legal Aid, Housing Weatherization & Municipal ID Packet', 'Legal & Housing Hub')">+ Add Housing Kit & Legal Packet</button>
+      } else if (lower.includes('legal') || lower.includes('housing') || lower.includes('public sector') || lower.includes('eviction') || lower.includes('rent')) {
+        guidanceHtml = `
+          <div><strong>Housing Stability, Eviction Defense &amp; Municipal ID Navigation</strong></div>
+          <div style="margin-top:4px;">• <strong>Urgent 10-Business-Day Rule:</strong> File an Answer (<code>UD-105</code>) within 10 court business days of an Unlawful Detainer summons to prevent default lockout. Landlords cannot legally self-evict or shut off utilities.</div>
+          <div>• <strong>Rent, LIHEAP &amp; City ID:</strong> Combine emergency back-rent grants, LIHEAP utility shutoff protection, and fee-waived Municipal IDs.</div>
+          <div style="margin-top:6px;"><strong>📦 Live Free Goods &amp; Services Matched (${liveCards.length} on Instance):</strong><br>${liveItemsListHtml}</div>
+          <button class="olive-badge" style="margin-top:8px; cursor:pointer;" onclick="addItemToBasket(this, 'Legal Aid, Housing Weatherization & Municipal ID Packet', 'Legal & Housing Hub')">+ Add Housing Kit &amp; Legal Packet</button>
         `;
-      } else if (lower.includes('mental') || lower.includes('medical') || lower.includes('youth') || lower.includes('art')) {
-        replyHtml = `
-          Matched across <strong>Mental health, Medical, Youth services & Arts</strong>:
-          <br>• <strong>Bilingual Peer Counseling & Weighted Grounding Kit</strong>
-          <br>• <strong>Folding Mobility Walker & BP Cuff</strong>
-          <br>• <strong>Youth STEM/Diaper Pack & Studio Art Box</strong>
-          <br>• <button class="olive-badge" style="margin-top:6px; cursor:pointer;" onclick="addItemToBasket(this, 'Holistic Health, Youth & Arts Bundle', 'Multi-Hub Care Share')">+ Add Matched Care Bundle</button>
+      } else if (lower.includes('mental') || lower.includes('medical') || lower.includes('youth') || lower.includes('art') || lower.includes('diaper') || lower.includes('walker')) {
+        guidanceHtml = `
+          <div><strong>Full-Scope Medi-Cal, Medical Equipment, Peer Support &amp; Youth Care</strong></div>
+          <div style="margin-top:4px;">• <strong>Full-Scope Medi-Cal &amp; IHSS:</strong> Available to income-eligible CA residents of all ages regardless of immigration status (no asset test), including IHSS paid family caregiving.</div>
+          <div>• <strong>Zero-Barrier Delivery:</strong> Sanitized ADA walkers, N95s, non-police peer counseling kits, and Size 1–5 infant diapers deliver free.</div>
+          <div style="margin-top:6px;"><strong>📦 Live Free Goods &amp; Services Matched (${liveCards.length} on Instance):</strong><br>${liveItemsListHtml}</div>
+          <button class="olive-badge" style="margin-top:8px; cursor:pointer;" onclick="addItemToBasket(this, 'Holistic Health, Youth & Arts Bundle', 'Multi-Hub Care Share')">+ Add Matched Care Bundle</button>
         `;
       } else {
-        replyHtml = `
-          Matched across <strong>Food, Garden, Pets, Co-ops & Mutual Aid</strong>:
-          <br>• <strong>Organic Collard Greens & 25lb Grain Box</strong> (Food)
-          <br>• <strong>Urban Garden Seed/Starts & 20lb Pet Kibble</strong> (Garden & Pets)
-          <br>• <strong>Worker Co-op Sourdough & Mutual Aid Solar Lantern Kit</strong>
-          <br>• <button class="olive-badge" style="margin-top:6px; cursor:pointer;" onclick="addItemToBasket(this, 'Food, Garden, Pet & Co-op Solidarity Bundle', 'East Oakland Commons')">+ Add Matched Items to Care Basket</button>
+        guidanceHtml = `
+          <div><strong>Live Community Nourishment &amp; Social Service Navigation</strong></div>
+          <div style="margin-top:4px;">• <strong>100% Unconditional Solidarity:</strong> All ${liveCards.length} free goods, partner surplus shares, and clinics on this PWA require $0 and zero means-testing.</div>
+          <div>• <strong>Benefits Co-Navigation:</strong> Ask about 3-day emergency CalFresh, eviction defense, Medi-Cal/IHSS, WIC/diapers, VA claims, or union work gear anytime.</div>
+          <div style="margin-top:6px;"><strong>📦 Live Free Goods &amp; Services Matched (${liveCards.length} on Instance):</strong><br>${liveItemsListHtml}</div>
+          <button class="olive-badge" style="margin-top:8px; cursor:pointer;" onclick="addItemToBasket(this, 'Food, Garden, Pet & Co-op Solidarity Bundle', 'East Oakland Commons')">+ Add Matched Items to Care Basket</button>
         `;
       }
 
       const aiBubble = document.createElement('div');
-      aiBubble.style.cssText = 'background:var(--bg-outer); border:1px solid var(--lime-bright); border-radius:12px; padding:10px; font-size:12px; line-height:1.45;';
+      aiBubble.style.cssText = 'background:rgba(27,15,51,0.95); border:1px solid rgba(197,255,41,0.22); border-radius:18px 18px 18px 4px; padding:12px 14px; font-size:12.5px; line-height:1.5;';
       aiBubble.innerHTML = `
-        <div style="font-family:monospace; font-size:10px; color:var(--lime-bright); font-weight:700; margin-bottom:4px;">
-          🧭 COMMON NEED RESOURCE NAVIGATOR • #OAK-01
+        <div style="font-family:monospace; font-size:10px; color:var(--lime-bright); font-weight:700; margin-bottom:5px;">
+          🧭 COMMON NEED RESOURCE NAVIGATOR • <%= current_local_node_code %> (${liveCards.length} LIVE ITEMS)
         </div>
-        ${replyHtml}
+        ${guidanceHtml}
       `;
       chatLog.appendChild(aiBubble);
       chatLog.scrollTop = chatLog.scrollHeight;
@@ -2266,7 +2366,7 @@
     }
 
     function updateBasketLabels() {
-      document.getElementById('nav-basket-label').textContent = `3. Basket(${basketCount})`;
+      document.getElementById('nav-basket-label').textContent = `Basket (${basketCount})`;
       document.getElementById('basket-item-count').textContent = basketCount;
       const loadEl = document.getElementById('ledger-summary-load');
       if (loadEl) {
@@ -2330,22 +2430,37 @@
     function postSurplusItem() {
       const nameInput = document.getElementById('surplus-name-input');
       const qtyInput = document.getElementById('surplus-qty-input');
-      const name = nameInput.value.trim() || 'Fresh Bok Choy & Ginger Bundle';
+      const name = (nameInput.value || '').trim() || 'Fresh Bok Choy & Ginger Bundle';
       const qty = qtyInput.value || '20';
+
+      const newItem = {
+        id: 'surplus-' + Date.now(),
+        title: name,
+        qty: String(qty),
+        category: inferSurplusCategory(name),
+        postedAt: new Date().toISOString()
+      };
+
+      try {
+        const existing = getStoredLiveSurplusItems();
+        existing.unshift(newItem);
+        localStorage.setItem('common_need_live_surplus_items', JSON.stringify(existing.slice(0, 25)));
+      } catch (e) {}
 
       const card = document.createElement('div');
       card.className = 'dark-card';
       card.style.cssText = 'display:flex; justify-content:space-between; align-items:center;';
       card.innerHTML = `
         <div>
-          <div style="font-size:13.5px; font-weight:700;">${name}</div>
-          <div class="mono-sub" style="margin:6px 0 0;">Fresh Surplus • Local Node #1</div>
+          <div style="font-size:13.5px; font-weight:700;">${escapeNavHtml(name)}</div>
+          <div class="mono-sub" style="margin:6px 0 0;">Live Surplus Synced to Member PWA</div>
         </div>
-        <span class="olive-badge">${qty}<br>left</span>
+        <span class="olive-badge">${escapeNavHtml(qty)}<br>left</span>
       `;
       document.getElementById('live-inventory-list').prepend(card);
+      syncLiveSurplusAndEventsToMemberPwa();
       nameInput.value = '';
-      showToast(`Posted ${qty}x "${name}" to East Oakland Local Node Catalog!`);
+      showToast(`Posted ${qty}x "${name}" — Live in Member Catalog & Resource Navigator!`);
     }
 
     function initLeafletMap() {

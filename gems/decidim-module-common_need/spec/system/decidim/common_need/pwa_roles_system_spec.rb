@@ -120,9 +120,13 @@ RSpec.describe "The Common Need 5-Role PWA Suite System Specs", type: :system do
       expect(page).to have_content("San Antonio Arts, Youth, Education & Worker Center")
     end
 
-    it "renders the Local Resource Navigator with 5 guided paperwork templates and ZERO EXTERNAL API badge" do
+    it "renders the Local Resource Navigator synced with live free goods & services, Social Service Guide badge, and 5 guided paperwork templates" do
       expect(page).to have_content("LOCAL NODE RESOURCE NAVIGATOR")
       expect(page).to have_content("ZERO EXTERNAL API")
+      expect(page).to have_css("#navigator-live-catalog-badge")
+      expect(page).to have_css("#member-live-surplus-feed")
+      expect(page).to have_content("Synced with 19 live free goods & services • Social Service Guide")
+      expect(page).to have_content("What's Free & Live Today?")
       expect(page).to have_content("Social Services: CalFresh / SNAP, Medi-Cal & LIHEAP Packet")
       expect(page).to have_content("Legal Aid: Eviction Defense & Record Expungement Intake")
       expect(page).to have_content("Housing: Emergency Rent Relief & Habitability Packet")

@@ -842,6 +842,8 @@
           <div class="mono-sub">Food, Mutual Aid, Co-ops, Urban Garden & Pet Care • 1.2 mi away</div>
           <hr style="border-color: var(--lime-bright); margin: 6px 0;">
 
+          <div id="member-live-surplus-feed"></div>
+
           <!-- Category: Food -->
           <div class="item-lime-card" data-category="food">
             <div>
@@ -1270,22 +1272,26 @@
         </div>
 
         <!-- CENTER HERO & CONVERSATION AREA -->
-        <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:12px 6px; overflow-y:auto; scrollbar-width:none; -ms-overflow-style:none;">
+        <div id="member-navigator-viewport" style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:8px 4px; overflow-y:auto; scrollbar-width:none; -ms-overflow-style:none;">
           <div id="member-gemini-hero" style="display:flex; flex-direction:column; align-items:center; justify-content:center; transition:all 0.2s ease;">
-            <h1 id="member-gemini-greeting" style="font-size:28px; font-weight:500; color:var(--text-white); letter-spacing:-0.5px; line-height:1.25; margin:8px 0;">
+            <h1 id="member-gemini-greeting" style="font-size:28px; font-weight:500; color:var(--text-white); letter-spacing:-0.5px; line-height:1.25; margin:8px 0 6px;">
               What can I help with,<br><span id="member-gemini-first-name" style="color:var(--lime-bright); font-weight:600;">Rosa</span>?
             </h1>
+            <div id="navigator-live-catalog-badge" style="font-size:11.5px; color:rgba(244,247,232,0.58); margin-bottom:4px;">
+              Synced with 19 live free goods & services • Social Service Guide
+            </div>
 
-            <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:7px; margin-top:14px; max-width:340px;">
+            <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:7px; margin-top:12px; max-width:348px;">
               <button type="button" class="cat-pill" onclick="sendLocalAiPrompt('Find food, garden seeds, pet kibble & co-op bread')" style="font-size:11.5px; padding:6px 12px;">🍎 Food & Produce</button>
               <button type="button" class="cat-pill" onclick="sendLocalAiPrompt('Help me fill out Social Services CalFresh, Medi-Cal & Veteran VA paperwork')" style="font-size:11.5px; padding:6px 12px;">📋 CalFresh & VA</button>
               <button type="button" class="cat-pill" onclick="sendLocalAiPrompt('I need Legal Aid eviction defense, Housing rent relief & Public Sector ID')" style="font-size:11.5px; padding:6px 12px;">⚖️ Legal & Housing</button>
               <button type="button" class="cat-pill" onclick="sendLocalAiPrompt('Find Mental Health counseling, Medical walker & Youth/Arts kits')" style="font-size:11.5px; padding:6px 12px;">🩺 Health & Care</button>
+              <button type="button" class="cat-pill" onclick="sendLocalAiPrompt('What free goods, new surplus, and clinics are available right now?')" style="font-size:11.5px; padding:6px 12px;">🧭 What's Free & Live Today?</button>
             </div>
           </div>
 
           <!-- Interactive Resource Navigator Thread (Reveals when chatting) -->
-          <div id="local-ai-chat-log" class="hidden" style="width:100%; max-height:310px; overflow-y:auto; scrollbar-width:none; -ms-overflow-style:none; display:flex; flex-direction:column; gap:10px; padding:8px 2px; text-align:left; margin-top:10px;">
+          <div id="local-ai-chat-log" class="hidden" style="width:100%; flex:1; max-height:480px; overflow-y:auto; scrollbar-width:none; -ms-overflow-style:none; display:flex; flex-direction:column; gap:12px; padding:6px 2px; text-align:left;">
           </div>
 
           <!-- Guided Government & Non-Profit Paperwork Auto-Filler (Toggled via "Task" mode pill or "+" button) -->
@@ -2236,6 +2242,10 @@
     function resetMemberGeminiChat() {
       switchMemberTab(5);
       toggleMemberGeminiMode('chat');
+      const heroEl = document.getElementById('member-gemini-hero');
+      if (heroEl) heroEl.classList.remove('hidden');
+      const viewportEl = document.getElementById('member-navigator-viewport');
+      if (viewportEl) viewportEl.style.justifyContent = 'center';
       const chatLog = document.getElementById('local-ai-chat-log');
       if (chatLog) {
         chatLog.innerHTML = '';
@@ -2456,6 +2466,156 @@
       showToast('Exported #OAK-01 Local Partner Calendar (iCalendar .ics feed) to your device!');
     }
 
+    function escapeNavHtml(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function escapeJsArg(str) {
+      return String(str || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+    }
+
+    function getActiveInstanceInfo() {
+      try {
+        const s = JSON.parse(sessionStorage.getItem('common_need_decidim_sso') || 'null');
+        if (s && s.instanceCode) {
+          return { code: s.instanceCode, name: s.instanceName || 'Local Node' };
+        }
+      } catch (e) {}
+      return { code: '#OAK-01', name: 'East Oakland Local Node' };
+    }
+
+    function getStoredLiveSurplusItems() {
+      try {
+        const parsed = JSON.parse(localStorage.getItem('common_need_live_surplus_items') || '[]');
+        return Array.isArray(parsed) ? parsed : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function getStoredLivePartnerEvents() {
+      try {
+        const parsed = JSON.parse(localStorage.getItem('common_need_live_partner_events') || '[]');
+        return Array.isArray(parsed) ? parsed : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function inferSurplusCategory(name) {
+      const lower = String(name || '').toLowerCase();
+      if (/diaper|formula|baby|infant|stroller|toy|backpack|youth|kid/.test(lower)) return 'youth_services';
+      if (/walker|wheelchair|cane|blood pressure|wound|medical|medicine/.test(lower)) return 'medical';
+      if (/mask|n95|filter|sanitizer|hygiene/.test(lower)) return 'health';
+      if (/narcan|naloxone|lantern|battery|first-aid|safety/.test(lower)) return 'public_safety';
+      if (/coat|jacket|blanket|sleeping bag|tent|heater|dehumidifier|rent/.test(lower)) return 'housing';
+      if (/dog|cat|kibble|pet|leash|flea/.test(lower)) return 'pets';
+      if (/seed|compost|soil|plant|garden/.test(lower)) return 'garden';
+      if (/laptop|computer|book|ged|esl|study/.test(lower)) return 'education';
+      if (/boot|ppe|hardhat|vest|tool|union/.test(lower)) return 'employment';
+      if (/paint|brush|sketch|art|canvas/.test(lower)) return 'arts';
+      if (/soccer|ball|yoga|bike|park/.test(lower)) return 'recreation';
+      return 'food';
+    }
+
+    function renderPartnerEventCardDom(ev) {
+      const listEl = document.getElementById('member-calendar-events-list');
+      if (!listEl || !ev || !ev.id) return;
+      if (listEl.querySelector(`[data-live-event-id="${ev.id}"]`)) return;
+
+      const safeTitle = escapeNavHtml(ev.title);
+      const jsTitle = escapeJsArg(ev.title);
+      const card = document.createElement('div');
+      card.className = 'dark-card calendar-event-card';
+      card.dataset.liveEventId = ev.id;
+      card.dataset.day = ev.dayVal || 'Thu Nov 5';
+      card.dataset.org = 'east_oakland';
+      card.dataset.lat = '37.7651';
+      card.dataset.lng = '-122.1755';
+      card.dataset.location = '7800 MacArthur Blvd';
+      card.dataset.keywords = `${String(ev.title).toLowerCase()} ${String(ev.catLabel).toLowerCase()} east oakland collective pantry live partner event`;
+      card.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+          <span class="cat-tag-chip" style="margin:0;">${escapeNavHtml(ev.catLabel)}</span>
+          <span class="olive-badge">${escapeNavHtml(ev.dayLabel)}</span>
+        </div>
+        <div class="pantry-title" style="font-size:15px;">${safeTitle}</div>
+        <div class="mono-sub" style="margin:4px 0;">Hosted by: East Oakland Collective Pantry • 📍 7800 MacArthur Blvd (1.2 mi)</div>
+        <div class="item-lime-card" style="flex-direction:column; align-items:flex-start; font-size:12px; line-height:1.4; margin:6px 0;">
+          <div>Newly posted partner community event on the local node calendar. Open to all neighbors with zero means-testing.</div>
+          <div style="font-family:monospace; font-size:10.5px; color:var(--bg-outer); background:var(--lime-bright); padding:2px 6px; border-radius:4px; font-weight:800; margin-top:4px;">
+            ✓ Live Partner Update • ✓ Open Registration
+          </div>
+        </div>
+        <div style="display:flex; gap:6px; margin-top:6px;">
+          <button class="olive-badge" style="flex:1; cursor:pointer; padding:8px; text-align:center; border-color:var(--lime-bright);" onclick="rsvpPartnerEvent(this, '${jsTitle}')">
+            + RSVP on Local Node
+          </button>
+          <button class="olive-badge" style="flex:1; cursor:pointer; padding:8px; text-align:center; background:var(--bg-outer);" onclick="addItemToBasket(this, '${jsTitle} Care Pack', 'Calendar Event • East Oakland Hub')">
+            🚚 Request Event Kit Delivery
+          </button>
+        </div>
+      `;
+      listEl.prepend(card);
+    }
+
+    function syncLiveSurplusAndEventsToMemberPwa() {
+      const surplusItems = getStoredLiveSurplusItems();
+      const memberFeedEl = document.getElementById('member-live-surplus-feed');
+      const partnerInvEl = document.getElementById('live-inventory-list');
+
+      if (memberFeedEl) {
+        memberFeedEl.innerHTML = surplusItems.map(item => {
+          const safeTitle = escapeNavHtml(item.title);
+          const jsTitle = escapeJsArg(item.title);
+          const cat = escapeNavHtml(item.category || 'food');
+          return `
+            <div class="item-lime-card" data-category="${cat}" data-live-surplus="true" data-surplus-id="${escapeNavHtml(item.id)}" style="border-color:rgba(197,255,41,0.42); background:rgba(197,255,41,0.06);">
+              <div>
+                <span class="cat-tag-chip" style="background:rgba(197,255,41,0.2); color:var(--lime-bright);">🆕 LIVE PARTNER SURPLUS</span>
+                <div class="item-title">${safeTitle}</div>
+                <div class="mono-sub" style="margin:0;">Fresh Partner Surplus • Zero Means-Testing • ${escapeNavHtml(item.instanceCode || '#OAK-01')}</div>
+                <div style="font-size:11px; color:#F4F7E8; margin-top:2px;">Yield: ${escapeNavHtml(item.qty)} Live Shares Available Now • Free Courier Delivery</div>
+              </div>
+              <button class="olive-badge" style="cursor:pointer; border-color:var(--lime-bright);" onclick="addItemToBasket(this, '${jsTitle}', 'Live Partner Surplus • East Oakland Hub')">+ Add Share</button>
+            </div>
+          `;
+        }).join('');
+      }
+
+      if (partnerInvEl) {
+        partnerInvEl.querySelectorAll('[data-live-partner-surplus-id]').forEach(el => el.remove());
+        surplusItems.slice().reverse().forEach(item => {
+          const card = document.createElement('div');
+          card.className = 'dark-card';
+          card.dataset.livePartnerSurplusId = item.id;
+          card.style.cssText = 'display:flex; justify-content:space-between; align-items:center; border-color:rgba(197,255,41,0.35);';
+          card.innerHTML = `
+            <div>
+              <div class="item-title">${escapeNavHtml(item.title)}</div>
+              <div class="mono-sub" style="margin:2px 0 0;">Live Surplus Synced to Member PWA • ${escapeNavHtml(item.instanceCode || '#OAK-01')}</div>
+            </div>
+            <span class="olive-badge">${escapeNavHtml(item.qty)} left</span>
+          `;
+          partnerInvEl.prepend(card);
+        });
+      }
+
+      const partnerEvents = getStoredLivePartnerEvents();
+      partnerEvents.slice().reverse().forEach(ev => renderPartnerEventCardDom(ev));
+
+      const allCatalogCards = document.querySelectorAll('#member-tab-1 .item-lime-card').length || (19 + surplusItems.length);
+      const badgeEl = document.getElementById('navigator-live-catalog-badge');
+      if (badgeEl) {
+        const surplusSuffix = surplusItems.length > 0 ? ` (${surplusItems.length} new surplus)` : '';
+        badgeEl.textContent = `Synced with ${allCatalogCards} live free goods & services${surplusSuffix} • Social Service Guide`;
+      }
+    }
+
     function postPartnerCalendarEvent() {
       const titleInput = document.getElementById('partner-event-title');
       const daySelect = document.getElementById('partner-event-day');
@@ -2466,43 +2626,26 @@
       const dayLabel = daySelect ? daySelect.options[daySelect.selectedIndex].text : 'Thu Nov 5 • 5:00 PM';
       const catLabel = (catInput.value || '').trim() || '🤝 MUTUAL AID • 🍎 FOOD';
 
-      const listEl = document.getElementById('member-calendar-events-list');
-      if (listEl) {
-        const card = document.createElement('div');
-        card.className = 'dark-card calendar-event-card';
-        card.dataset.day = dayVal;
-        card.dataset.org = 'east_oakland';
-        card.dataset.lat = '37.7651';
-        card.dataset.lng = '-122.1755';
-        card.dataset.location = '7800 MacArthur Blvd';
-        card.dataset.keywords = `${title.toLowerCase()} ${catLabel.toLowerCase()} east oakland collective pantry`;
-        card.innerHTML = `
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
-            <span class="cat-tag-chip" style="margin:0;">${catLabel}</span>
-            <span class="olive-badge">${dayLabel}</span>
-          </div>
-          <div class="pantry-title" style="font-size:15px;">${title}</div>
-          <div class="mono-sub" style="margin:4px 0;">Hosted by: East Oakland Collective Pantry • 📍 7800 MacArthur Blvd (1.2 mi)</div>
-          <div class="item-lime-card" style="flex-direction:column; align-items:flex-start; font-size:12px; line-height:1.4; margin:6px 0;">
-            <div>Newly posted partner community event on the #OAK-01 local node calendar. Open to all neighbors with zero means-testing.</div>
-            <div style="font-family:monospace; font-size:10.5px; color:var(--bg-outer); background:var(--lime-bright); padding:2px 6px; border-radius:4px; font-weight:800; margin-top:4px;">
-              ✓ Just Published • ✓ Open Registration
-            </div>
-          </div>
-          <div style="display:flex; gap:6px; margin-top:6px;">
-            <button class="olive-badge" style="flex:1; cursor:pointer; padding:8px; text-align:center; border-color:var(--lime-bright);" onclick="rsvpPartnerEvent(this, '${title.replace(/'/g, "\\'")}')">
-              + RSVP on Local Node
-            </button>
-            <button class="olive-badge" style="flex:1; cursor:pointer; padding:8px; text-align:center; background:var(--bg-outer);" onclick="addItemToBasket(this, '${title.replace(/'/g, "\\'")} Care Pack', 'Calendar Event • East Oakland Hub')">
-              🚚 Request Event Kit Delivery
-            </button>
-          </div>
-        `;
-        listEl.prepend(card);
-        filterMemberCalendar();
-      }
+      const newEv = {
+        id: 'ev-' + Date.now(),
+        title: title,
+        dayVal: dayVal,
+        dayLabel: dayLabel,
+        catLabel: catLabel,
+        postedAt: new Date().toISOString()
+      };
+
+      try {
+        const existing = getStoredLivePartnerEvents();
+        existing.unshift(newEv);
+        localStorage.setItem('common_need_live_partner_events', JSON.stringify(existing.slice(0, 20)));
+      } catch (e) {}
+
+      renderPartnerEventCardDom(newEv);
+      if (typeof filterMemberCalendar === 'function') filterMemberCalendar();
+      syncLiveSurplusAndEventsToMemberPwa();
       if (titleInput) titleInput.value = '';
-      showToast(`Published "${title}" to the centralized Member PWA Calendar!`);
+      showToast(`Published "${title}" to the Member Calendar & Resource Navigator!`);
     }
 
     function toggleDeliveryUpdatesBanner(forceOpen) {
@@ -2577,6 +2720,381 @@
       sendLocalAiMessage();
     }
 
+    const NAVIGATOR_STOP_WORDS = new Set([
+      'a','an','and','are','as','at','be','by','can','do','find','for','free','from','get','give',
+      'have','help','how','i','im','in','is','it','looking','me','my','need','near','of','on','or',
+      'our','please','right','some','tell','that','the','there','they','this','to','today','up','us',
+      'want','what','where','who','with','you','your','now','local','server','complete'
+    ]);
+
+    const SOCIAL_SERVICE_DOMAINS = [
+      {
+        key: 'food_nutrition',
+        title: 'Food Security, CalFresh (SNAP), WIC & Nourishment',
+        categories: ['food', 'garden', 'pets', 'co_ops', 'mutual_aid', 'social_services'],
+        keywords: [
+          'food','hungry','groceries','eat','produce','vegetable','vegetables','greens','collards','kale',
+          'grain','rice','beans','oats','bread','sourdough','olive oil','vegan','gluten','halal','kosher',
+          'seed','seeds','garden','compost','pet','pets','dog','cat','kibble','flea','calfresh','snap',
+          'ebt','wic','meal','meals','pantry','kitchen','bok choy','ginger','fruit','soup'
+        ],
+        guidance: [
+          '<strong>$0 Zero Means-Testing:</strong> Every produce box, 25lb staple grain box, co-op loaf, garden seed kit, and 20lb pet kibble pack on this PWA is 100% free with zero income, ID, or citizenship checks.',
+          '<strong>3-Day Expedited CalFresh (Emergency SNAP):</strong> Households with &lt;$150 monthly gross income &amp; &lt;$100 liquid cash (or rent + utilities exceeding gross income) qualify by law for <strong>3-day emergency EBT issuance</strong>.',
+          '<strong>No Asset Limit &amp; Public Charge Safe:</strong> CalFresh and WIC have no asset test for most households, welcome SSI/SSP seniors, and <strong>do NOT count</strong> under USCIS Public Charge rules.'
+        ],
+        recommendedForm: 'Social Services: CalFresh / SNAP, Medi-Cal & LIHEAP Packet',
+        followUps: ['How do I qualify for 3-day emergency CalFresh?', 'Do you have pet food or garden seeds?']
+      },
+      {
+        key: 'housing_eviction',
+        title: 'Housing Stability, Eviction Defense, Rent Relief & Utility Protection',
+        categories: ['housing', 'legal_aid', 'social_services'],
+        keywords: [
+          'housing','rent','eviction','evicted','landlord','tenant','lease','notice','unlawful detainer',
+          'ud-105','court','summons','lockout','mold','leak','heat','weatherization','dehumidifier',
+          'utility','utilities','pge','electric','gas','water','shutoff','arrears','liheap','unhoused',
+          'shelter','habitability','coat','blanket'
+        ],
+        guidance: [
+          '<strong>Urgent 10-Business-Day Court Rule:</strong> If served a California Unlawful Detainer Summons &amp; Complaint, you have <strong>10 business days</strong> (excluding weekends &amp; court holidays) to file an Answer (<code>UD-105</code>) so you are not locked out by default.',
+          '<strong>Illegal Lockouts &amp; Utility Shutoffs:</strong> A landlord cannot legally change locks, remove belongings, or cut power/water without a court judgment and sheriff’s writ. Save all notices, texts, and mold/repair photos.',
+          '<strong>Back-Rent &amp; LIHEAP Utility Relief:</strong> Pair emergency back-rent grants and our free Home Weatherization/Dehumidifier Kit with <strong>LIHEAP + Medical Baseline</strong> utility shutoff protection.'
+        ],
+        recommendedForm: 'Legal Aid: Eviction Defense & Record Expungement Intake',
+        followUps: ['I got a 3-day eviction notice — what do I do first?', 'Help me apply for rent & LIHEAP utility relief']
+      },
+      {
+        key: 'healthcare_mental_health',
+        title: 'Healthcare, Full-Scope Medi-Cal, Medical Equipment & Peer Support',
+        categories: ['medical', 'health', 'mental_health', 'public_safety'],
+        keywords: [
+          'health','medical','doctor','clinic','medi-cal','medical','insurance','hospital','walker',
+          'wheelchair','cane','mobility','blood pressure','wound','mask','masks','n95','air filter',
+          'smoke','immunocompromised','mental','counseling','therapy','trauma','stress','anxiety',
+          'weighted blanket','grounding','crisis','narcan','naloxone','overdose','harm reduction',
+          'ihss','caregiver','disability','senior'
+        ],
+        guidance: [
+          '<strong>Full-Scope Medi-Cal (All Ages &amp; Statuses):</strong> Income-eligible California residents of <strong>all ages regardless of immigration status</strong> qualify for full-scope Medi-Cal (medical, dental, vision, mental health) with zero asset test.',
+          '<strong>IHSS Caregiver Pay &amp; Free Medical Gear:</strong> Medi-Cal seniors and disabled neighbors can enroll in <strong>In-Home Supportive Services (IHSS)</strong> to pay a family/chosen caregiver, and request sanitized ADA walkers, BP cuffs, and N95s for free porch delivery.',
+          '<strong>Non-Carceral Mental Health &amp; Harm Reduction:</strong> Confidential bilingual peer counseling, weighted grounding blankets, Narcan 2-packs, and night escorts operate with zero police involvement.'
+        ],
+        recommendedForm: 'Social Services: CalFresh / SNAP, Medi-Cal & LIHEAP Packet',
+        followUps: ['Request a folding mobility walker & N95 masks', 'Book bilingual peer counseling & grounding kit']
+      },
+      {
+        key: 'veteran_benefits',
+        title: 'Veterans VA Disability Claims, DD-214, PACT Act & Supportive Care',
+        categories: ['veteran_services', 'housing', 'social_services'],
+        keywords: [
+          'veteran','veterans','va','military','dd-214','dd214','discharge','disability','vso',
+          'pact','burn pit','ptsd','hud-vash','ssvf'
+        ],
+        guidance: [
+          '<strong>Lock In Retroactive Back-Pay Today:</strong> Filing an <strong>Intent to File (<code>VA Form 21-0966</code>)</strong> locks in your effective back-pay date for up to 1 full year while gathering medical nexus letters and service records.',
+          '<strong>$0 Accredited VSO Representation:</strong> Under federal law, accredited Veteran Service Officers prepare initial VA disability claims, PACT Act toxic-exposure claims, and DD-214 retrievals at zero cost.',
+          '<strong>Discharge Upgrades &amp; SSVF / HUD-VASH:</strong> Veterans with Other-Than-Honorable discharges linked to PTSD/TBI/MST can petition for upgrades unlocking VA healthcare and rapid housing vouchers.'
+        ],
+        recommendedForm: 'Veteran Services: VA Disability Claim & DD-214 Support Packet',
+        followUps: ['Open the VA Disability & DD-214 support packet', 'When is the next Veteran & Legal clinic?']
+      },
+      {
+        key: 'immigration_civic_id',
+        title: 'Municipal City ID, Immigration Legal Aid, Public Charge & Transit',
+        categories: ['public_sector', 'legal_aid'],
+        keywords: [
+          'id','municipal','passport','undocumented','immigrant','immigration','asylum','green card',
+          'public charge','citizenship','transit','bus','bart','clipper','paratransit','expungement','record'
+        ],
+        guidance: [
+          '<strong>Clear USCIS Public Charge Protection:</strong> Using Common Need mutual aid, food pantries, WIC, CalFresh, Municipal IDs, emergency rent relief, or community Medi-Cal <strong>does NOT</strong> count against green card / Public Charge applications.',
+          '<strong>Fee-Waived Municipal City ID:</strong> Accepts foreign passports, consular IDs, and local mail with a 100% fee waiver — valid for schools, city services, health clinics, and credit unions.',
+          '<strong>50% Transit Discounts &amp; ADA Lift Vans:</strong> Enroll in <strong>Clipper START</strong> reduced regional fares and <strong>East Bay ADA Paratransit</strong> door-to-door lift transport in one step.'
+        ],
+        recommendedForm: 'Public Sector: Municipal ID & Paratransit Fee Waiver',
+        followUps: ['Prepare my Municipal ID & Paratransit fee waiver', 'Does food or CalFresh affect immigration status?']
+      },
+      {
+        key: 'family_youth_education',
+        title: 'Children, Infants (Diapers/Formula), Computers & Youth/Adult Education',
+        categories: ['youth_services', 'education', 'arts', 'recreation'],
+        keywords: [
+          'baby','infant','diaper','diapers','wipes','formula','child','children','kids','youth',
+          'school','backpack','stem','laptop','computer','linux','internet','ged','esl','english',
+          'tutoring','childcare','calworks','art','arts','paint','screenprinting','soccer','basketball',
+          'yoga','park','recreation'
+        ],
+        guidance: [
+          '<strong>Immediate Infant, Youth &amp; Study Kits:</strong> Size 1–5 infant diapers, formula, K-12 STEM backpacks, permanent refurbished Linux laptops, studio art boxes, and soccer/park kits deliver free with zero means-testing.',
+          '<strong>CalWORKs &amp; Subsidized Childcare:</strong> Families with children can combine WIC nutrition with <strong>CalWORKs</strong> cash aid, county diaper stipends, and Stage 1 / Alternative Payment childcare vouchers.',
+          '<strong>McKinney-Vento School Rights:</strong> Students in doubled-up or unstable housing have the federal right to immediate school enrollment without prior records plus free transportation.'
+        ],
+        recommendedForm: 'Social Services: CalFresh / SNAP, Medi-Cal & LIHEAP Packet',
+        followUps: ['Request infant diapers, formula & STEM backpack', 'Request a refurbished Linux laptop & ESL/GED books']
+      },
+      {
+        key: 'employment_worker_rights',
+        title: 'Union Apprenticeships, Work Boots/PPE, Training & Worker Rights',
+        categories: ['employment', 'education', 'legal_aid'],
+        keywords: [
+          'job','jobs','work','employment','unemployed','career','union','trade','trades','apprenticeship',
+          'construction','osha','boots','ppe','hardhat','resume','wage','unpaid','overtime','paycheck','fired'
+        ],
+        guidance: [
+          '<strong>Free Union Entry &amp; OSHA-10 Gear:</strong> Steel-toe work boots, high-vis vests, hardhats, resume prep, and building-trades hiring hall referrals are delivered free so gear costs never block a paycheck.',
+          '<strong>Wage Theft Protections for All Workers:</strong> California Labor Commissioner claims recover unpaid wages, overtime, and stolen tips <strong>regardless of immigration status or cash pay</strong>.',
+          '<strong>UI / SDI &amp; Paid Training Grants:</strong> Combine Unemployment or State Disability / Paid Family Leave (UI/SDI/PFL) with <strong>WIOA</strong> job-training stipends.'
+        ],
+        recommendedForm: 'Legal Aid: Eviction Defense & Record Expungement Intake',
+        followUps: ['Add steel-toe work boots & apprenticeship kit', 'When is the Union Apprenticeship & Laptop Expo?']
+      }
+    ];
+
+    function scanLiveInstanceResources() {
+      syncLiveSurplusAndEventsToMemberPwa();
+      const catalogItems = [];
+
+      document.querySelectorAll('#member-tab-1 .member-hub-card').forEach(hubCard => {
+        const hubTitle = (hubCard.querySelector('.pantry-title')?.textContent || 'Local Community Hub').trim();
+        const hubMeta = (hubCard.querySelectorAll('.mono-sub')[1]?.textContent || '').trim();
+        const shortHub = hubTitle.split(' ').slice(0, 3).join(' ');
+
+        hubCard.querySelectorAll('.item-lime-card').forEach(card => {
+          const title = (card.querySelector('.item-title')?.textContent || '').trim();
+          if (!title) return;
+
+          const category = (card.dataset.category || 'mutual_aid').trim();
+          const chip = (card.querySelector('.cat-tag-chip')?.textContent || category.toUpperCase()).trim();
+          const tags = (card.querySelector('.mono-sub')?.textContent || '').trim();
+          const yieldDivs = card.querySelectorAll('div > div');
+          const yieldText = (yieldDivs[yieldDivs.length - 1]?.textContent || '').trim();
+          const isLiveSurplus = card.dataset.liveSurplus === 'true';
+
+          const btn = card.querySelector('button');
+          const onclickRaw = btn ? (btn.getAttribute('onclick') || '') : '';
+          let actionType = 'basket';
+          let paperworkForm = '';
+          let basketName = title;
+          let basketHub = `${chip.replace(/^[^\w]+/, '').trim() || 'Share'} • ${shortHub}`;
+
+          if (onclickRaw.includes('openAiPaperworkFor')) {
+            actionType = 'paperwork';
+            const m = onclickRaw.match(/openAiPaperworkFor\('([^']+)'\)/);
+            paperworkForm = m ? m[1] : title;
+          } else if (onclickRaw.includes('addItemToBasket')) {
+            const m = onclickRaw.match(/addItemToBasket\(this,\s*'([^']+)',\s*'([^']+)'\)/);
+            if (m) {
+              basketName = m[1];
+              basketHub = m[2];
+            }
+          }
+
+          catalogItems.push({
+            title,
+            category,
+            chip,
+            hubTitle,
+            hubMeta,
+            shortHub,
+            tags,
+            yieldText,
+            isLiveSurplus,
+            actionType,
+            paperworkForm,
+            basketName,
+            basketHub,
+            searchBlob: `${title} ${category.replace('_', ' ')} ${chip} ${tags} ${yieldText} ${hubTitle}`.toLowerCase()
+          });
+        });
+      });
+
+      const liveEvents = [];
+      document.querySelectorAll('#member-calendar-events-list .calendar-event-card').forEach(evCard => {
+        const title = (evCard.querySelector('.pantry-title')?.textContent || '').trim();
+        if (!title) return;
+        const badge = (evCard.querySelector('.olive-badge')?.textContent || '').trim();
+        const host = (evCard.querySelector('.mono-sub')?.textContent || '').trim();
+        const desc = (evCard.querySelector('.item-lime-card div')?.textContent || '').trim();
+        const isLiveEvent = !!evCard.dataset.liveEventId;
+        liveEvents.push({
+          title,
+          badge,
+          host,
+          desc,
+          isLiveEvent,
+          searchBlob: `${title} ${badge} ${host} ${desc} ${evCard.dataset.keywords || ''}`.toLowerCase()
+        });
+      });
+
+      return { catalogItems, liveEvents };
+    }
+
+    function buildResourceNavigatorReplyHtml(userText) {
+      const { catalogItems, liveEvents } = scanLiveInstanceResources();
+      const inst = getActiveInstanceInfo();
+      const lower = String(userText || '').toLowerCase().trim();
+      const tokens = (lower.match(/[a-z0-9\-]+/g) || []).filter(
+        w => w.length >= 2 && !NAVIGATOR_STOP_WORDS.has(w)
+      );
+
+      const isOverviewQuery = /\b(what.*available|what's free|whats free|all free|everything|new surplus|what do you have|list all|updated|inventory|catalog)\b/.test(lower);
+      const liveSurplusItems = catalogItems.filter(i => i.isLiveSurplus);
+
+      // Score social service knowledge domains
+      const domainScores = SOCIAL_SERVICE_DOMAINS.map(domain => {
+        let score = 0;
+        domain.keywords.forEach(kw => {
+          if (kw.includes(' ')) {
+            if (lower.includes(kw)) score += 5;
+          } else if (tokens.includes(kw)) {
+            score += 3;
+          } else if (tokens.some(t => t.length >= 4 && (kw.startsWith(t) || t.startsWith(kw)))) {
+            score += 2;
+          }
+        });
+        return { domain, score };
+      }).filter(d => d.score > 0).sort((a, b) => b.score - a.score);
+
+      const matchedDomains = domainScores.length > 0
+        ? domainScores.slice(0, 2).map(d => d.domain)
+        : [SOCIAL_SERVICE_DOMAINS[0]];
+
+      const domainCats = new Set();
+      matchedDomains.forEach(d => d.categories.forEach(c => domainCats.add(c)));
+
+      // Score live catalog items on the PWA
+      let matchedItems = [];
+      if (isOverviewQuery) {
+        const standardHighlights = catalogItems.filter(i => !i.isLiveSurplus).slice(0, 4);
+        matchedItems = [...liveSurplusItems, ...standardHighlights].slice(0, 6);
+      } else {
+        const scoredItems = catalogItems.map(item => {
+          let score = 0;
+          const titleLower = item.title.toLowerCase();
+          tokens.forEach(tok => {
+            if (titleLower.includes(tok)) score += 8;
+            else if (item.searchBlob.includes(tok)) score += 3;
+          });
+          if (domainCats.has(item.category)) score += 2;
+          if (item.isLiveSurplus && (lower.includes('surplus') || lower.includes('new') || lower.includes('fresh') || domainCats.has(item.category))) {
+            score += 3;
+          }
+          return { item, score };
+        }).filter(entry => entry.score > 0).sort((a, b) => b.score - a.score);
+
+        matchedItems = scoredItems.length > 0
+          ? scoredItems.slice(0, 4).map(e => e.item)
+          : [...liveSurplusItems.slice(0, 2), ...catalogItems.slice(0, 3)].slice(0, 4);
+      }
+
+      // Score live partner calendar clinics & pop-ups
+      const matchedEvents = liveEvents.map(ev => {
+        let score = 0;
+        tokens.forEach(tok => {
+          if (ev.searchBlob.includes(tok)) score += 3;
+        });
+        domainCats.forEach(cat => {
+          if (ev.searchBlob.includes(cat.replace('_', ' '))) score += 1;
+        });
+        if (isOverviewQuery && ev.isLiveEvent) score += 4;
+        return { ev, score };
+      }).filter(e => e.score >= 2 || (isOverviewQuery && e.ev.isLiveEvent))
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 2)
+        .map(e => e.ev);
+
+      const renderItemActionBtn = (item) => {
+        if (item.actionType === 'paperwork') {
+          const jsForm = escapeJsArg(item.paperworkForm || item.title);
+          return `<button type="button" class="olive-badge" style="cursor:pointer; border-color:var(--lime-bright); flex-shrink:0; font-size:10.5px; padding:5px 9px;" onclick="openAiPaperworkFor('${jsForm}')">🧭 Auto-Fill</button>`;
+        }
+        const jsName = escapeJsArg(item.basketName || item.title);
+        const jsHub = escapeJsArg(item.basketHub || item.shortHub);
+        return `<button type="button" class="olive-badge" style="cursor:pointer; border-color:var(--lime-bright); flex-shrink:0; font-size:10.5px; padding:5px 9px;" onclick="addItemToBasket(this, '${jsName}', '${jsHub}')">+ Add Free</button>`;
+      };
+
+      const itemsCardsHtml = matchedItems.map(item => {
+        const surplusTag = item.isLiveSurplus
+          ? `<span style="background:var(--lime-bright); color:#120924; font-size:9.5px; font-weight:800; padding:1px 5px; border-radius:4px; margin-right:5px;">NEW LIVE SURPLUS</span>`
+          : '';
+        return `
+          <div style="background:rgba(255,255,255,0.04); border:1px solid ${item.isLiveSurplus ? 'rgba(197,255,41,0.45)' : 'rgba(255,255,255,0.09)'}; border-radius:12px; padding:8px 10px; display:flex; justify-content:space-between; align-items:center; gap:8px; margin-top:6px;">
+            <div style="min-width:0;">
+              <div style="font-size:12px; font-weight:700; color:var(--text-white); line-height:1.3;">${surplusTag}${escapeNavHtml(item.title)}</div>
+              <div style="font-size:10.5px; color:rgba(244,247,232,0.68); margin-top:2px;">${escapeNavHtml(item.shortHub)} • ${escapeNavHtml(item.yieldText || item.tags)}</div>
+            </div>
+            ${renderItemActionBtn(item)}
+          </div>
+        `;
+      }).join('');
+
+      let guidanceBullets = [];
+      if (isOverviewQuery) {
+        guidanceBullets = [
+          `<strong>Live Instance Inventory (${catalogItems.length} Free Offerings):</strong> ${inst.name} (${inst.code}) currently has <strong>${catalogItems.length} active free goods &amp; services</strong> across 4 verified hubs${liveSurplusItems.length > 0 ? ` — including <strong>${liveSurplusItems.length} newly posted Partner Surplus share(s)</strong>` : ''} — plus <strong>${liveEvents.length} community clinics &amp; pop-ups</strong>.`,
+          `<strong>100% Unconditional Solidarity:</strong> Everything listed is $0 with zero means-testing, zero ID barriers, and free volunteer porch delivery (including ADA step-up &amp; 60-second wait options).`
+        ];
+      } else {
+        matchedDomains.forEach(d => {
+          guidanceBullets.push(...d.guidance.slice(0, matchedDomains.length > 1 ? 2 : 3));
+        });
+      }
+
+      const guidanceHtml = guidanceBullets.slice(0, 3).map(
+        tip => `<div style="margin-top:4px;">• ${tip}</div>`
+      ).join('');
+
+      const eventsHtml = matchedEvents.length > 0 ? `
+        <div style="margin-top:10px; padding-top:8px; border-top:1px solid rgba(255,255,255,0.08);">
+          <div style="font-size:11px; font-weight:700; color:var(--lime-bright); margin-bottom:4px;">📅 UPCOMING LOCAL CLINICS &amp; POP-UPS</div>
+          ${matchedEvents.map(ev => `
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; background:rgba(255,255,255,0.03); border-radius:10px; padding:6px 9px; margin-top:4px;">
+              <div style="font-size:11px; line-height:1.35;">
+                <strong style="color:var(--text-white);">${escapeNavHtml(ev.title)}</strong>
+                <div style="font-size:10px; color:rgba(244,247,232,0.65);">${escapeNavHtml(ev.badge)} • ${escapeNavHtml(ev.host.replace('Hosted by: ', ''))}</div>
+              </div>
+              <button type="button" class="olive-badge" style="cursor:pointer; font-size:10px; padding:4px 8px; flex-shrink:0;" onclick="rsvpPartnerEvent(this, '${escapeJsArg(ev.title)}')">+ RSVP</button>
+            </div>
+          `).join('')}
+        </div>
+      ` : '';
+
+      const primaryDomain = matchedDomains[0];
+      const followUpList = isOverviewQuery
+        ? ['Find food, produce & 3-day emergency CalFresh', 'Help with eviction defense, rent relief & utilities']
+        : (primaryDomain.followUps || []);
+
+      const followUpsHtml = followUpList.length > 0 ? `
+        <div style="display:flex; flex-wrap:wrap; gap:5px; margin-top:10px;">
+          ${followUpList.map(q => `
+            <button type="button" class="cat-pill" style="font-size:10.5px; padding:4px 10px;" onclick="sendLocalAiPrompt('${escapeJsArg(q)}')">↳ ${escapeNavHtml(q)}</button>
+          `).join('')}
+        </div>
+      ` : '';
+
+      const sectionTitle = isOverviewQuery
+        ? `Live Free Goods, Surplus &amp; Clinics on ${escapeNavHtml(inst.code)}`
+        : matchedDomains.map(d => escapeNavHtml(d.title)).join(' + ');
+
+      return {
+        instanceCode: inst.code,
+        catalogCount: catalogItems.length,
+        html: `
+          <div style="font-size:13px; font-weight:700; color:var(--text-white); margin-bottom:4px;">${sectionTitle}</div>
+          <div style="font-size:11.5px; color:rgba(244,247,232,0.88); line-height:1.45;">
+            ${guidanceHtml}
+          </div>
+          <div style="margin-top:10px;">
+            <div style="font-size:10.5px; font-weight:700; letter-spacing:0.4px; color:var(--lime-bright);">📦 MATCHED LIVE FREE GOODS &amp; SERVICES (${matchedItems.length} OF ${catalogItems.length} ON INSTANCE)</div>
+            ${itemsCardsHtml}
+          </div>
+          ${eventsHtml}
+          ${followUpsHtml}
+        `
+      };
+    }
+
     function sendLocalAiMessage() {
       const inputEl = document.getElementById('local-ai-user-input');
       const chatLog = document.getElementById('local-ai-chat-log');
@@ -2585,6 +3103,11 @@
       const userText = (inputEl.value || '').trim();
       if (!userText) return;
 
+      const heroEl = document.getElementById('member-gemini-hero');
+      if (heroEl) heroEl.classList.add('hidden');
+      const viewportEl = document.getElementById('member-navigator-viewport');
+      if (viewportEl) viewportEl.style.justifyContent = 'flex-start';
+
       chatLog.classList.remove('hidden');
 
       const userBubble = document.createElement('div');
@@ -2592,46 +3115,16 @@
       userBubble.textContent = userText;
       chatLog.appendChild(userBubble);
 
-      const lower = userText.toLowerCase();
-      let replyHtml = '';
-
-      if (lower.includes('veteran') || lower.includes('va ') || lower.includes('calfresh') || lower.includes('social')) {
-        replyHtml = `
-          Matched in <strong>Social services & Veteran services</strong> at Fruitvale Resource Hub:
-          <br>• Pre-filled <strong>CalFresh/Medi-Cal/LIHEAP</strong> and <strong>VA Disability Claim / DD-214</strong> packets in the Task panel.
-          <br><button class="olive-badge" style="margin-top:8px; cursor:pointer;" onclick="addItemToBasket(this, 'Veteran & Social Services Care Packet', 'Veteran & Social Services')">+ Add Printed Packet & Veteran Care Tote</button>
-        `;
-      } else if (lower.includes('legal') || lower.includes('housing') || lower.includes('public sector') || lower.includes('eviction')) {
-        replyHtml = `
-          Matched in <strong>Legal aid, Housing & Public sector</strong>:
-          <br>• <strong>Eviction Defense & Expungement Clinic</strong> + <strong>Emergency Rent Relief & Weatherization Kit</strong> + <strong>Municipal ID / Paratransit Waiver</strong>.
-          <br><button class="olive-badge" style="margin-top:8px; cursor:pointer;" onclick="addItemToBasket(this, 'Legal Aid, Housing Weatherization & Municipal ID Packet', 'Legal & Housing Hub')">+ Add Housing Kit & Legal Packet</button>
-        `;
-      } else if (lower.includes('mental') || lower.includes('medical') || lower.includes('youth') || lower.includes('art')) {
-        replyHtml = `
-          Matched across <strong>Mental health, Medical, Youth services & Arts</strong>:
-          <br>• <strong>Bilingual Peer Counseling & Weighted Grounding Kit</strong>
-          <br>• <strong>Folding Mobility Walker & BP Cuff</strong>
-          <br>• <strong>Youth STEM/Diaper Pack & Studio Art Box</strong>
-          <br><button class="olive-badge" style="margin-top:8px; cursor:pointer;" onclick="addItemToBasket(this, 'Holistic Health, Youth & Arts Bundle', 'Multi-Hub Care Share')">+ Add Matched Care Bundle</button>
-        `;
-      } else {
-        replyHtml = `
-          Matched across <strong>Food, Garden, Pets, Co-ops & Mutual Aid</strong>:
-          <br>• <strong>Organic Collard Greens & 25lb Grain Box</strong> (Food)
-          <br>• <strong>Urban Garden Seed/Starts & 20lb Pet Kibble</strong> (Garden & Pets)
-          <br>• <strong>Worker Co-op Sourdough & Mutual Aid Solar Lantern Kit</strong>
-          <br><button class="olive-badge" style="margin-top:8px; cursor:pointer;" onclick="addItemToBasket(this, 'Food, Garden, Pet & Co-op Solidarity Bundle', 'East Oakland Commons')">+ Add Matched Items to Care Basket</button>
-        `;
-      }
+      const navResult = buildResourceNavigatorReplyHtml(userText);
 
       const aiBubble = document.createElement('div');
-      aiBubble.style.cssText = 'background:rgba(27,15,51,0.92); border:1px solid rgba(255,255,255,0.1); border-radius:18px 18px 18px 4px; padding:12px 14px; font-size:12.5px; line-height:1.5; color:var(--text-cream);';
+      aiBubble.style.cssText = 'background:rgba(27,15,51,0.95); border:1px solid rgba(197,255,41,0.22); border-radius:18px 18px 18px 4px; padding:12px 14px; font-size:12.5px; line-height:1.5; color:var(--text-cream);';
       aiBubble.innerHTML = `
-        <div style="font-size:10.5px; color:var(--lime-bright); font-weight:700; margin-bottom:4px; display:flex; align-items:center; gap:5px;">
-          <span>🧭 COMMON NEED RESOURCE NAVIGATOR • #OAK-01</span>
+        <div style="font-size:10px; color:var(--lime-bright); font-weight:700; margin-bottom:6px; display:flex; justify-content:space-between; align-items:center; gap:6px;">
+          <span>🧭 COMMON NEED RESOURCE NAVIGATOR • ${escapeNavHtml(navResult.instanceCode)}</span>
+          <span style="color:rgba(244,247,232,0.55); font-weight:600;">${navResult.catalogCount} LIVE ITEMS</span>
         </div>
-        ${replyHtml}
+        ${navResult.html}
       `;
       chatLog.appendChild(aiBubble);
       chatLog.scrollTop = chatLog.scrollHeight;
@@ -2836,22 +3329,28 @@
     function postSurplusItem() {
       const nameInput = document.getElementById('surplus-name-input');
       const qtyInput = document.getElementById('surplus-qty-input');
-      const name = nameInput.value.trim() || 'Fresh Bok Choy & Ginger Bundle';
+      const name = (nameInput.value || '').trim() || 'Fresh Bok Choy & Ginger Bundle';
       const qty = qtyInput.value || '20';
+      const inst = getActiveInstanceInfo();
 
-      const card = document.createElement('div');
-      card.className = 'dark-card';
-      card.style.cssText = 'display:flex; justify-content:space-between; align-items:center;';
-      card.innerHTML = `
-        <div>
-          <div style="font-size:13.5px; font-weight:700;">${name}</div>
-          <div class="mono-sub" style="margin:6px 0 0;">Fresh Surplus • Local Node #1</div>
-        </div>
-        <span class="olive-badge">${qty}<br>left</span>
-      `;
-      document.getElementById('live-inventory-list').prepend(card);
-      nameInput.value = '';
-      showToast(`Posted ${qty}x "${name}" to East Oakland Local Node Catalog!`);
+      const newItem = {
+        id: 'surplus-' + Date.now(),
+        title: name,
+        qty: String(qty),
+        category: inferSurplusCategory(name),
+        instanceCode: inst.code,
+        postedAt: new Date().toISOString()
+      };
+
+      try {
+        const existing = getStoredLiveSurplusItems();
+        existing.unshift(newItem);
+        localStorage.setItem('common_need_live_surplus_items', JSON.stringify(existing.slice(0, 25)));
+      } catch (e) {}
+
+      syncLiveSurplusAndEventsToMemberPwa();
+      if (nameInput) nameInput.value = '';
+      showToast(`Posted ${qty}x "${name}" — Live in Member Catalog & Resource Navigator!`);
     }
 
     function initLeafletMap() {
@@ -3453,8 +3952,15 @@
         switchRole(lockedRole);
       }
     }
+    syncLiveSurplusAndEventsToMemberPwa();
     applyLockedPwaRole();
+    window.addEventListener("storage", (ev) => {
+      if (!ev.key || ev.key.startsWith("common_need_live_")) {
+        syncLiveSurplusAndEventsToMemberPwa();
+      }
+    });
     window.addEventListener("DOMContentLoaded", () => {
+      syncLiveSurplusAndEventsToMemberPwa();
       applyLockedPwaRole();
       if ("serviceWorker" in navigator) {
         navigator.serviceWorker.register("./service-worker.js").catch(() => {});
