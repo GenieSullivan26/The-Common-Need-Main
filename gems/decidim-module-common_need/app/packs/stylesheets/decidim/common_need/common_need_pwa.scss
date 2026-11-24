@@ -31,19 +31,19 @@ body.common-need-pwa-body,
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: 100vh;
-  padding: 12px 10px 28px;
+  min-height: 100dvh;
+  padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
 }
 
 /* ROLE SWITCHER */
 .role-switcher-box {
-  width: 100%;
-  max-width: 430px;
+  width: calc(100% - 20px);
+  max-width: 460px;
   background-color: var(--lime-primary);
   border: 3px solid var(--lime-bright);
   border-radius: 20px;
   padding: 8px;
-  margin-bottom: 14px;
+  margin: 10px 10px 4px;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -71,38 +71,20 @@ body.common-need-pwa-body,
   }
 }
 
-/* PHONE FRAME */
+/* EDGE-TO-EDGE APP VIEWPORT */
 .phone-frame {
   width: 100%;
-  max-width: 430px;
+  max-width: 480px;
   background-color: var(--bg-phone);
-  border: 5px solid var(--lime-bright);
-  border-radius: 42px;
+  border: none;
+  border-radius: 0;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  min-height: 780px;
+  flex: 1;
+  min-height: 100dvh;
   position: relative;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
-}
-
-.status-bar {
-  background-color: var(--bg-outer);
-  color: var(--lime-bright);
-  font-family: ui-monospace, SFMono-Regular, monospace;
-  font-size: 12px;
-  padding: 12px 22px 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.notch-pill {
-  width: 84px;
-  height: 16px;
-  background-color: var(--olive-badge);
-  border: 1px solid var(--olive-border);
-  border-radius: 10px;
+  box-shadow: none;
 }
 
 .pwa-header {

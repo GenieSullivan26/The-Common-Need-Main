@@ -2,8 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <meta name="theme-color" content="#95C623">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#120924">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <link rel="manifest" href="./manifest.json">
   <title>The Common Need • Federated Mutual Aid Network</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -26,26 +28,31 @@
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    body {
+    html, body {
       background-color: var(--bg-outer);
       color: var(--text-white);
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      min-height: 100vh;
+      min-height: 100dvh;
+      width: 100%;
+    }
+
+    body {
       display: flex;
       flex-direction: column;
       align-items: center;
-      min-height: 100vh;
-      padding: 12px 10px 28px;
+      padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
     }
 
     /* ROLE SWITCHER */
     .role-switcher-box {
-      width: 100%;
-      max-width: 430px;
+      width: calc(100% - 20px);
+      max-width: 460px;
       background: rgba(27, 15, 51, 0.92);
       border: 1px solid rgba(197, 255, 41, 0.25);
       border-radius: 999px;
       padding: 6px;
-      margin-bottom: 14px;
+      margin: 10px 10px 4px;
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
@@ -76,39 +83,26 @@
       box-shadow: 0 2px 10px rgba(197, 255, 41, 0.25);
     }
 
-    /* PHONE FRAME */
+    /* EDGE-TO-EDGE APP VIEWPORT */
     .phone-frame {
       width: 100%;
-      max-width: 430px;
+      max-width: 480px;
       background: linear-gradient(180deg, #160B2B 0%, #120924 100%);
-      border: 2px solid rgba(197, 255, 41, 0.32);
-      border-radius: 40px;
+      border: none;
+      border-radius: 0;
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      min-height: 780px;
+      flex: 1;
+      min-height: 100dvh;
       position: relative;
-      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.05);
+      box-shadow: none;
     }
 
-    .status-bar {
-      background: rgba(13, 6, 26, 0.96);
-      color: rgba(244, 247, 232, 0.85);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      font-size: 11.5px;
-      font-weight: 600;
-      padding: 12px 22px 10px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .notch-pill {
-      width: 76px;
-      height: 14px;
-      background-color: #07030F;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 999px;
+    @media (max-width: 600px) {
+      .phone-frame {
+        max-width: 100%;
+      }
     }
 
     .pwa-header {
@@ -621,25 +615,24 @@
     })();
   </script>
 
-  <!-- PHONE FRAME -->
+  <!-- EDGE-TO-EDGE APP VIEWPORT -->
   <div class="phone-frame">
-    <div class="status-bar">
-      <span>9:41 AM</span>
-      <div class="notch-pill"></div>
-      <span id="pwa-status-auth-pill">PWA • 5G</span>
-    </div>
-
-    <!-- ACTIVE INSTANCE LINK BANNER (Shown when authenticated into a PWA) -->
-    <div id="pwa-active-instance-bar" class="hidden" style="background:rgba(13,6,26,0.95); border-bottom:1px solid rgba(197,255,41,0.2); padding:7px 16px; font-size:11.5px; color:var(--lime-bright); display:flex; justify-content:space-between; align-items:center; gap:8px;">
+    <!-- ACTIVE INSTANCE LINK BANNER (Shown when authenticated into Volunteer / Partner PWA) -->
+    <div id="pwa-active-instance-bar" class="hidden" style="background:rgba(13,6,26,0.95); border-bottom:1px solid rgba(197,255,41,0.2); padding:8px 16px; font-size:11.5px; color:var(--lime-bright); display:flex; justify-content:space-between; align-items:center; gap:8px;">
       <span id="pwa-active-instance-text" style="font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">📍 East Oakland Local Node (#OAK-01)</span>
       <span id="pwa-active-instance-host" class="hidden">oakland-01.common-need.org</span>
-      <button type="button" id="pwa-open-profile-btn" onclick="openProfileModal()" style="background:rgba(197,255,41,0.12); color:var(--lime-bright); border:1px solid rgba(197,255,41,0.35); border-radius:999px; padding:3px 10px; font-size:11px; font-weight:700; cursor:pointer; white-space:nowrap; flex-shrink:0;">
-        👤 Profile
-      </button>
+      <div style="display:inline-flex; align-items:center; gap:6px; flex-shrink:0;">
+        <button type="button" id="pwa-open-profile-btn" onclick="openProfileModal()" style="background:rgba(197,255,41,0.12); color:var(--lime-bright); border:1px solid rgba(197,255,41,0.35); border-radius:999px; padding:4px 10px; font-size:11px; font-weight:700; cursor:pointer; white-space:nowrap;">
+          👤 Profile
+        </button>
+        <button type="button" onclick="signOutDecidim()" style="background:rgba(255,255,255,0.06); color:var(--text-cream); border:1px solid rgba(255,255,255,0.18); border-radius:999px; padding:4px 10px; font-size:11px; font-weight:700; cursor:pointer; white-space:nowrap;">
+          Sign Out
+        </button>
+      </div>
     </div>
 
     <!-- IN-APP PROFILE & INSTANCE ADDRESS MODAL (Editable once logged in + Sign Out) -->
-    <div id="pwa-profile-modal" class="hidden" style="position:absolute; inset:42px 0 0 0; background:rgba(18,9,36,0.96); backdrop-filter:blur(10px); z-index:900; padding:22px 20px; display:flex; flex-direction:column; justify-content:center;">
+    <div id="pwa-profile-modal" class="hidden" style="position:absolute; inset:0; background:rgba(18,9,36,0.96); backdrop-filter:blur(10px); z-index:900; padding:22px 20px; display:flex; flex-direction:column; justify-content:center;">
       <div class="dark-card" style="background:#1B0F33; border:1.5px solid rgba(197,255,41,0.4); border-radius:22px; padding:20px 18px; box-shadow:0 16px 40px rgba(0,0,0,0.6);">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
           <div>
@@ -3626,7 +3619,6 @@
     }
 
     function renderStatusBarAuthPill(session) {
-      const pillEl = document.getElementById('pwa-status-auth-pill');
       const instBarEl = document.getElementById('pwa-active-instance-bar');
       const instTextEl = document.getElementById('pwa-active-instance-text');
       const instHostEl = document.getElementById('pwa-active-instance-host');
@@ -3634,26 +3626,14 @@
       if (session && session.authenticated && DECIDIM_SSO_PROFILES[session.userType]) {
         updateMemberGeminiHeaderIdentity(session);
         if (session.userType === 'member') {
-          if (pillEl) pillEl.textContent = `${session.instanceCode || '#OAK-01'} • 5G`;
           if (instBarEl) instBarEl.classList.add('hidden');
-        } else {
-          if (pillEl) {
-            pillEl.innerHTML = `
-              <span style="display:inline-flex; align-items:center; gap:5px;">
-                <span style="font-size:10px; color:var(--lime-bright);">${session.instanceCode || '#OAK-01'}</span>
-                <button onclick="signOutDecidim()" style="background:rgba(197,255,41,0.14); color:var(--lime-bright); border:1px solid var(--lime-bright); border-radius:8px; padding:2px 8px; font-size:10px; font-weight:700; cursor:pointer; font-family:inherit;">Sign Out</button>
-              </span>
-            `;
-          }
-          if (instBarEl) {
-            instBarEl.classList.remove('hidden');
-            if (instTextEl) instTextEl.textContent = `📍 ${session.instanceName || 'East Oakland Local Node'} (${session.instanceCode || '#OAK-01'})`;
-            if (instHostEl) instHostEl.textContent = session.instanceHost || 'oakland-01.common-need.org';
-          }
+        } else if (instBarEl) {
+          instBarEl.classList.remove('hidden');
+          if (instTextEl) instTextEl.textContent = `📍 ${session.instanceName || 'East Oakland Local Node'} (${session.instanceCode || '#OAK-01'})`;
+          if (instHostEl) instHostEl.textContent = session.instanceHost || 'oakland-01.common-need.org';
         }
-      } else {
-        if (pillEl) pillEl.textContent = 'PWA • 5G';
-        if (instBarEl) instBarEl.classList.add('hidden');
+      } else if (instBarEl) {
+        instBarEl.classList.add('hidden');
       }
     }
 
