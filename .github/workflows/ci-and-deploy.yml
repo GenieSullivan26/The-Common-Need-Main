@@ -60,14 +60,11 @@ jobs:
             ghcr.io/geniesullivan26/the-common-need-main:latest
             ghcr.io/geniesullivan26/the-common-need-main:${{ github.sha }}
 
-  deploy-github-pages-pwa:
-    name: Deploy 5-Role PWA Preview to GitHub Pages
+  build-github-pages-pwa:
+    name: Build & Upload 5-Role PWA Artifact
     needs: rspec-and-security-audit
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -87,13 +84,25 @@ jobs:
         uses: actions/configure-pages@v5
 
       - name: Upload PWA Artifact (public/)
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-pages-artifact@v5
         with:
           path: "./public"
 
+  deploy-github-pages-pwa:
+    name: Deploy 5-Role PWA Preview to GitHub Pages
+    needs: build-github-pages-pwa
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Wait for Artifact Indexing
+        run: sleep 4
+
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
 
   deploy-cloud-run-optional:
     name: Deploy to Google Cloud Run (When GCP_SA_KEY Secret Is Set)
