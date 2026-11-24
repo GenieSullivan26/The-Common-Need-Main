@@ -1301,11 +1301,14 @@
           <div id="local-ai-chat-log" class="hidden" style="width:100%; flex:1; max-height:480px; overflow-y:auto; scrollbar-width:none; -ms-overflow-style:none; display:flex; flex-direction:column; gap:12px; padding:6px 2px; text-align:left;">
           </div>
 
-          <!-- Guided Government & Non-Profit Paperwork Auto-Filler (Toggled via "Task" mode pill or "+" button) -->
+          <!-- Guided Government & Non-Profit Paperwork Auto-Filler (Toggled via "+" button or Auto-Fill action) -->
           <div id="member-paperwork-task-panel" class="dark-card hidden" style="width:100%; text-align:left; margin-top:12px; padding:14px;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
               <span class="cat-tag-chip" style="margin:0;">ENCRYPTED LOCAL RESOURCE NAVIGATOR</span>
-              <span class="olive-badge" style="padding:3px 9px; font-size:10px;">ZERO MEANS-TEST</span>
+              <div style="display:inline-flex; align-items:center; gap:6px;">
+                <span class="olive-badge" style="padding:3px 9px; font-size:10px;">ZERO MEANS-TEST</span>
+                <button type="button" title="Close Forms" onclick="toggleMemberGeminiMode('chat')" style="background:transparent; border:none; color:rgba(244,247,232,0.7); font-size:14px; cursor:pointer; padding:0 4px;">✕</button>
+              </div>
             </div>
             <div style="font-size:13.5px; font-weight:700; margin-bottom:6px;">📋 Auto-Fill Non-Profit & Government Forms</div>
 
@@ -1343,20 +1346,10 @@
           </div>
         </div>
 
-        <!-- BOTTOM MODE TOGGLE ("Chat" | "Task") & RESOURCE NAVIGATOR CONTEXT BOX -->
-        <div style="display:flex; flex-direction:column; align-items:center; gap:12px; width:100%;">
-          <div style="display:inline-flex; align-items:center; gap:8px;">
-            <button type="button" id="gemini-mode-chat-btn" onclick="toggleMemberGeminiMode('chat')" style="background:rgba(197,255,41,0.12); color:var(--text-white); border:1px solid rgba(197,255,41,0.42); border-radius:999px; padding:7px 18px; font-size:13px; font-weight:600; cursor:pointer; transition:all 0.15s ease;">
-              Chat
-            </button>
-            <button type="button" id="gemini-mode-task-btn" onclick="toggleMemberGeminiMode('task')" style="background:transparent; color:rgba(244,247,232,0.75); border:1px solid transparent; border-radius:999px; padding:7px 18px; font-size:13px; font-weight:600; cursor:pointer; transition:all 0.15s ease;">
-              Task
-            </button>
-          </div>
-
-          <!-- RESOURCE NAVIGATOR CONTEXT BOX -->
+        <!-- BOTTOM RESOURCE NAVIGATOR CONTEXT BOX -->
+        <div style="display:flex; flex-direction:column; align-items:center; width:100%;">
           <div id="member-gemini-context-box" style="width:100%; background:#1C1032; border:1.5px solid rgba(197,255,41,0.28); border-radius:36px; padding:9px 11px 9px 15px; display:flex; align-items:center; gap:10px; box-shadow:0 12px 34px rgba(0,0,0,0.6);">
-            <button type="button" title="Open Resource Navigator Forms & Context" onclick="toggleMemberGeminiMode('task')" style="background:transparent; border:none; color:rgba(244,247,232,0.82); font-size:24px; font-weight:300; line-height:1; cursor:pointer; padding:0 4px;">
+            <button type="button" title="Toggle Auto-Fill Forms" onclick="toggleMemberGeminiMode()" style="background:transparent; border:none; color:rgba(244,247,232,0.82); font-size:24px; font-weight:300; line-height:1; cursor:pointer; padding:0 4px;">
               +
             </button>
             <input type="text" id="local-ai-user-input" placeholder="Ask The Common Need" onkeydown="if(event.key==='Enter') sendLocalAiMessage()" style="background:transparent; border:none; color:var(--text-white); font-size:15px; flex:1; outline:none; margin:0; padding:6px 0;">
@@ -2230,20 +2223,11 @@
 
     function toggleMemberGeminiMode(mode) {
       const taskPanel = document.getElementById('member-paperwork-task-panel');
-      const chatBtn = document.getElementById('gemini-mode-chat-btn');
-      const taskBtn = document.getElementById('gemini-mode-task-btn');
-      const isTask = (mode === 'task');
-      if (taskPanel) taskPanel.classList.toggle('hidden', !isTask);
-      if (chatBtn) {
-        chatBtn.style.background = isTask ? 'transparent' : 'rgba(197,255,41,0.12)';
-        chatBtn.style.borderColor = isTask ? 'transparent' : 'rgba(197,255,41,0.42)';
-        chatBtn.style.color = isTask ? 'rgba(244,247,232,0.75)' : 'var(--text-white)';
-      }
-      if (taskBtn) {
-        taskBtn.style.background = isTask ? 'rgba(197,255,41,0.12)' : 'transparent';
-        taskBtn.style.borderColor = isTask ? 'rgba(197,255,41,0.42)' : 'transparent';
-        taskBtn.style.color = isTask ? 'var(--text-white)' : 'rgba(244,247,232,0.75)';
-      }
+      if (!taskPanel) return;
+      const shouldShow = mode === 'task'
+        ? true
+        : (mode === 'chat' ? false : taskPanel.classList.contains('hidden'));
+      taskPanel.classList.toggle('hidden', !shouldShow);
     }
 
     function resetMemberGeminiChat() {
