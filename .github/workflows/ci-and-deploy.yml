@@ -71,6 +71,8 @@ jobs:
 
       - name: Build Standalone Role PWA Entrypoints & 404 Fallback
         run: |
+          SHORT_SHA="${GITHUB_SHA:0:8}"
+          sed -i "s/common-need-pwa-v3/common-need-pwa-${SHORT_SHA}/g" public/service-worker.js
           touch public/.nojekyll
           cp public/index.html public/404.html
           for route in member volunteer partner nonprofit local-node local_node central-hub federation login sign_in; do
