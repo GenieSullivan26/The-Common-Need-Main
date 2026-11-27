@@ -145,12 +145,13 @@ RSpec.describe "The Common Need 5-Role PWA Suite System Specs", type: :system do
       expect(page).to have_content("DISPATCH VOLUNTEER CARE COURIER →")
     end
 
-    it "renders Tab 4 (Partner Events Calendar) with 3-mode view switcher (List View, Calendar View, Map View) and .ics export" do
+    it "renders Tab 4 (Partner Events Calendar) with 2-mode view switcher (List View, Calendar View) without Map View or .ics banner" do
       expect(page).to have_content("📋 List View")
       expect(page).to have_content("🗓️ Calendar View")
-      expect(page).to have_content("🗺️ Map View")
-      expect(page).to have_css("#calendar-events-leaflet-map")
-      expect(page).to have_content("⬇ iCal (.ics)")
+      expect(page).not_to have_content("🗺️ Map View")
+      expect(page).not_to have_css("#calendar-events-leaflet-map")
+      expect(page).not_to have_content("⬇ iCal (.ics)")
+      expect(page).not_to have_content("LOCAL AREA PARTNER CALENDAR")
       expect(page).to have_content("Community Harvest Dinner & Winter Seed/Compost Swap")
       expect(page).to have_content("Tenant Eviction Defense, CalFresh & Veterans VA Claim Clinic")
     end

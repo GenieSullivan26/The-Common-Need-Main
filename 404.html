@@ -456,7 +456,7 @@
     /* CALENDAR VIEW SWITCHER & MONTH GRID */
     .cal-mode-switcher {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(2, 1fr);
       gap: 6px;
       background: rgba(255, 255, 255, 0.04);
       padding: 5px;
@@ -1371,28 +1371,15 @@
 
       <!-- MEMBER TAB 6: Searchable Centralized Local Partner Calendar (decidim-meetings) -->
       <div class="pwa-body hidden" id="member-tab-6">
-        <div class="lime-dashed-banner" style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
-          <div>
-            <div style="font-weight:800;">📅 LOCAL AREA PARTNER CALENDAR (decidim-meetings)</div>
-            <div style="font-size:11px;">Centralized feed of all events posted by verified partner orgs in #OAK-01</div>
-          </div>
-          <button class="olive-badge" style="cursor:pointer; border-color:var(--lime-bright);" onclick="exportLocalCalendarIcs()">
-            ⬇ iCal (.ics)
-          </button>
-        </div>
-
-        <!-- Search, 3-Mode View Toggle (List | Calendar | Map) & Dropdown Filters -->
+        <!-- Search, 2-Mode View Toggle (List | Calendar) & Dropdown Filters -->
         <div class="dark-card" style="padding:10px;">
-          <!-- 3-Mode Viewing Switcher -->
+          <!-- 2-Mode Viewing Switcher -->
           <div class="cal-mode-switcher" style="margin-bottom:8px;">
             <button class="cal-mode-btn active" id="cal-view-btn-list" onclick="switchCalendarViewMode('list')">
               📋 List View
             </button>
             <button class="cal-mode-btn" id="cal-view-btn-grid" onclick="switchCalendarViewMode('grid')">
               🗓️ Calendar View
-            </button>
-            <button class="cal-mode-btn" id="cal-view-btn-map" onclick="switchCalendarViewMode('map')">
-              🗺️ Map View
             </button>
           </div>
 
@@ -1497,20 +1484,6 @@
 
           <div class="mono-sub" id="calendar-grid-selection-banner" style="margin:10px 0 0; width:100%; text-align:center;">
             Showing all November 2026 partner events below • Tap a date cell to filter
-          </div>
-        </div>
-
-        <!-- VIEW MODE 3: INTERACTIVE MAP VIEW (Decidim::Map::DynamicMap) -->
-        <div class="dark-card hidden" id="calendar-map-view-container" style="padding:10px;">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-            <span class="mono-sub" style="margin:0;">DECIDIM::MAP::DYNAMICMAP • GEOLOCATED EVENTS</span>
-            <button class="olive-badge" style="cursor:pointer; font-size:10px; padding:3px 8px;" onclick="resetCalendarMapBounds()">
-              ⌖ Fit All Pins
-            </button>
-          </div>
-          <div id="calendar-events-leaflet-map" style="width:100%; height:220px; border-radius:12px; border:2px solid var(--lime-bright);"></div>
-          <div style="font-size:11px; color:var(--text-cream); margin-top:6px;">
-            Tap any pin on the map to inspect the partner event, RSVP, or filter the cards below.
           </div>
         </div>
 
@@ -2282,45 +2255,24 @@
       const showCatalogControls = (tabIndex === 1);
       const headerEl = document.getElementById('member-pwa-header');
       if (headerEl) headerEl.classList.toggle('hidden', !showCatalogControls);
-
-      if (tabIndex === 6 && activeCalendarViewMode === 'map') {
-        setTimeout(() => {
-          initCalendarLeafletMap();
-          if (calendarLeafletMap) calendarLeafletMap.invalidateSize();
-        }, 150);
-      }
     }
 
     let activeCalendarDay = 'all';
     let activeCalendarOrg = 'all';
     let activeCalendarViewMode = 'list';
-    let calendarLeafletMap = null;
-    let calendarMapMarkersLayer = null;
 
     function switchCalendarViewMode(mode) {
       activeCalendarViewMode = mode;
-      ['list', 'grid', 'map'].forEach(m => {
+      ['list', 'grid'].forEach(m => {
         const btn = document.getElementById('cal-view-btn-' + m);
         if (btn) btn.classList.toggle('active', m === mode);
       });
 
       const listContainer = document.getElementById('calendar-list-view-container');
       const gridContainer = document.getElementById('calendar-grid-view-container');
-      const mapContainer = document.getElementById('calendar-map-view-container');
 
-      if (listContainer) listContainer.classList.toggle('hidden', mode !== 'list');
+      if (listContainer) listContainer.classList.remove('hidden');
       if (gridContainer) gridContainer.classList.toggle('hidden', mode !== 'grid');
-      if (mapContainer) mapContainer.classList.toggle('hidden', mode !== 'map');
-
-      if (mode === 'map') {
-        setTimeout(() => {
-          initCalendarLeafletMap();
-          if (calendarLeafletMap) {
-            calendarLeafletMap.invalidateSize();
-            syncCalendarMapMarkers();
-          }
-        }, 120);
-      }
     }
 
     function selectCalendarDayFromGrid(day) {
@@ -2370,52 +2322,6 @@
       showToast('🔊 Voice Navigation: "' + step.text + '"');
     }
 
-    function initCalendarLeafletMap() {
-      if (calendarLeafletMap) return;
-      const mapEl = document.getElementById('calendar-events-leaflet-map');
-      if (!mapEl || typeof L === 'undefined') return;
-
-      calendarLeafletMap = L.map('calendar-events-leaflet-map', { zoomControl: true }).setView([37.779, -122.222], 12);
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '© OpenStreetMap'
-      }).addTo(calendarLeafletMap);
-
-      calendarMapMarkersLayer = L.layerGroup().addTo(calendarLeafletMap);
-      syncCalendarMapMarkers();
-    }
-
-    function syncCalendarMapMarkers() {
-      if (!calendarLeafletMap || !calendarMapMarkersLayer) return;
-      calendarMapMarkersLayer.clearLayers();
-
-      const bounds = [];
-      document.querySelectorAll('#member-calendar-events-list .calendar-event-card').forEach(card => {
-        if (card.style.display === 'none') return;
-        const lat = parseFloat(card.dataset.lat || '37.7651');
-        const lng = parseFloat(card.dataset.lng || '-122.1755');
-        const titleEl = card.querySelector('.pantry-title');
-        const badgeEl = card.querySelector('.olive-badge');
-        const loc = card.dataset.location || 'Oakland Local Hub';
-        const title = titleEl ? titleEl.textContent : 'Partner Event';
-        const when = badgeEl ? badgeEl.textContent : '';
-
-        const marker = L.marker([lat, lng]);
-        marker.bindPopup(`<strong>${title}</strong><br>${when}<br>📍 ${loc}`);
-        marker.addTo(calendarMapMarkersLayer);
-        bounds.push([lat, lng]);
-      });
-
-      if (bounds.length > 0) {
-        calendarLeafletMap.fitBounds(bounds, { padding: [24, 24], maxZoom: 14 });
-      }
-    }
-
-    function resetCalendarMapBounds() {
-      syncCalendarMapMarkers();
-      showToast('Centered map on all visible partner event locations in #OAK-01.');
-    }
-
     function filterMemberCalendar() {
       const searchEl = document.getElementById('calendar-search-input');
       const dateSelect = document.getElementById('calendar-date-select');
@@ -2447,20 +2353,12 @@
 
       const countEl = document.getElementById('cal-total-count');
       if (countEl) countEl.textContent = visibleCount;
-
-      if (calendarLeafletMap) {
-        syncCalendarMapMarkers();
-      }
     }
 
     function rsvpPartnerEvent(btn, eventTitle) {
       btn.textContent = '✓ Registered (QR Pass Saved)';
       btn.style.backgroundColor = '#120924';
       showToast(`Registered for "${eventTitle}" via Decidim::Meetings! Added to your local schedule.`);
-    }
-
-    function exportLocalCalendarIcs() {
-      showToast('Exported #OAK-01 Local Partner Calendar (iCalendar .ics feed) to your device!');
     }
 
     function escapeNavHtml(str) {

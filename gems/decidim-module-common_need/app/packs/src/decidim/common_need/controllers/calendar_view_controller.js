@@ -5,7 +5,6 @@ export default class extends Controller {
     "modeButton",
     "listContainer",
     "gridContainer",
-    "mapContainer",
     "searchInput",
     "dateSelect",
     "orgSelect",
@@ -13,20 +12,11 @@ export default class extends Controller {
     "totalCount",
     "gridDayCell",
     "gridBanner",
-    "mapCanvas",
     "eventCard"
   ]
 
   static values = {
-    mode: { type: String, default: "list" },
-    defaultLat: { type: Number, default: 37.779 },
-    defaultLng: { type: Number, default: -122.222 },
-    defaultZoom: { type: Number, default: 12 }
-  }
-
-  connect() {
-    this.leafletMap = null
-    this.markersLayer = null
+    mode: { type: String, default: "list" }
   }
 
   switchMode(event) {
@@ -38,23 +28,10 @@ export default class extends Controller {
     })
 
     if (this.hasListContainerTarget) {
-      this.listContainerTarget.classList.toggle("hidden", mode !== "list")
+      this.listContainerTarget.classList.remove("hidden")
     }
     if (this.hasGridContainerTarget) {
       this.gridContainerTarget.classList.toggle("hidden", mode !== "grid")
-    }
-    if (this.hasMapContainerTarget) {
-      this.mapContainerTarget.classList.toggle("hidden", mode !== "map")
-    }
-
-    if (mode === "map") {
-      setTimeout(() => {
-        this.initLeafletMap()
-        if (this.leafletMap) {
-          this.leafletMap.invalidateSize()
-          this.syncMapMarkers()
-        }
-      }, 120)
     }
   }
 
@@ -105,66 +82,6 @@ export default class extends Controller {
 
     if (this.hasTotalCountTarget) {
       this.totalCountTarget.textContent = visibleCount
-    }
-
-    if (this.leafletMap) {
-      this.syncMapMarkers()
-    }
-  }
-
-  initLeafletMap() {
-    if (this.leafletMap || !this.hasMapCanvasTarget || typeof window.L === "undefined") {
-      return
-    }
-
-    this.leafletMap = window.L.map(this.mapCanvasTarget, { zoomControl: true }).setView(
-      [this.defaultLatValue, this.defaultLngValue],
-      this.defaultZoomValue
-    )
-
-    window.L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      maxZoom: 19,
-      attribution: "© OpenStreetMap • Decidim::Map::DynamicMap"
-    }).addTo(this.leafletMap)
-
-    this.markersLayer = window.L.layerGroup().addTo(this.leafletMap)
-    this.syncMapMarkers()
-  }
-
-  syncMapMarkers() {
-    if (!this.leafletMap || !this.markersLayer || typeof window.L === "undefined") {
-      return
-    }
-
-    this.markersLayer.clearLayers()
-    const bounds = []
-
-    this.eventCardTargets.forEach((card) => {
-      if (card.style.display === "none") return
-
-      const lat = parseFloat(card.dataset.lat || "37.7651")
-      const lng = parseFloat(card.dataset.lng || "-122.1755")
-      const titleEl = card.querySelector(".pantry-title")
-      const badgeEl = card.querySelector(".olive-badge")
-      const loc = card.dataset.location || "Oakland Local Hub"
-      const title = titleEl ? titleEl.textContent : "Partner Event"
-      const when = badgeEl ? badgeEl.textContent : ""
-
-      const marker = window.L.marker([lat, lng])
-      marker.bindPopup(`<strong>${title}</strong><br>${when}<br>📍 ${loc}`)
-      marker.addTo(this.markersLayer)
-      bounds.push([lat, lng])
-    })
-
-    if (bounds.length > 0) {
-      this.leafletMap.fitBounds(bounds, { padding: [24, 24], maxZoom: 14 })
-    }
-  }
-
-  resetMapBounds() {
-    this.syncMapMarkers()
-    if (typeof window.showToast === "function") {
-      window.showToast("Centered map on all visible partner event locations in #OAK-01.")
     }
   }
 }
