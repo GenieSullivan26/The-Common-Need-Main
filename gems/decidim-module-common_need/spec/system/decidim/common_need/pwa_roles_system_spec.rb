@@ -104,7 +104,7 @@ RSpec.describe "The Common Need 5-Role PWA Suite System Specs", type: :system do
       expect(page).to have_content("Basket (2)")
       expect(page).to have_content("Calendar")
       expect(page).to have_content("Vote")
-      expect(page).to have_content("NO MEANS-TESTING")
+      expect(page).not_to have_content("NO MEANS-TESTING")
       expect(page).to have_content("UNCONDITIONAL SOLIDARITY")
     end
 
