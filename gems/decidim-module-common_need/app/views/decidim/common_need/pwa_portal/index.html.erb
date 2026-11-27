@@ -626,6 +626,76 @@
       </div>
     </div>
 
+    <!-- IN-APP PARTNER EVENT RSVP & CHECK-IN PASS MODAL -->
+    <div id="pwa-event-rsvp-modal" class="hidden" style="position:fixed; inset:0; background:rgba(18,9,36,0.94); backdrop-filter:blur(10px); z-index:930; padding:18px; display:flex; flex-direction:column; justify-content:center; align-items:center; overflow-y:auto;">
+      <div class="dark-card" style="width:100%; max-width:430px; background:#1B0F33; border:1.5px solid rgba(197,255,41,0.45); border-radius:22px; padding:18px; box-shadow:0 18px 44px rgba(0,0,0,0.75);">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px; margin-bottom:10px;">
+          <div style="min-width:0;">
+            <span class="olive-badge" id="rsvp-modal-status-pill" style="font-size:10px; padding:3px 9px; border-radius:999px;">📅 PARTNER EVENT RSVP</span>
+            <h2 class="pantry-title" id="rsvp-modal-event-title" style="font-family:inherit; font-size:17px; margin:6px 0 2px; line-height:1.25;">Partner Event</h2>
+            <div id="rsvp-modal-event-when" style="font-size:11.5px; color:var(--lime-bright); font-weight:700;"></div>
+            <div id="rsvp-modal-event-where" class="mono-sub" style="margin:2px 0 0; font-size:11px;"></div>
+          </div>
+          <button type="button" onclick="closeEventRsvpModal()" style="background:rgba(255,255,255,0.08); color:var(--text-white); border:1px solid rgba(255,255,255,0.15); border-radius:999px; width:30px; height:30px; font-size:14px; font-weight:700; cursor:pointer; flex-shrink:0;">✕</button>
+        </div>
+
+        <!-- Confirmed Check-In Pass (Reveals once RSVPed) -->
+        <div id="rsvp-modal-pass-section" class="hidden" style="background:rgba(197,255,41,0.08); border:1px solid rgba(197,255,41,0.38); border-radius:16px; padding:12px; margin-bottom:12px; display:flex; align-items:center; gap:12px;">
+          <div id="rsvp-modal-qr-box" style="flex-shrink:0; background:var(--lime-bright); border-radius:10px; padding:6px; display:flex; align-items:center; justify-content:center;"></div>
+          <div style="min-width:0; flex:1;">
+            <div style="font-size:10px; font-weight:800; letter-spacing:0.5px; color:var(--lime-bright);">✓ CONFIRMED CHECK-IN PASS</div>
+            <div id="rsvp-modal-pass-code" style="font-family:ui-monospace, SFMono-Regular, monospace; font-size:14px; font-weight:800; color:var(--text-white); margin:2px 0;">RSVP-OAK-0000</div>
+            <div id="rsvp-modal-pass-summary" style="font-size:11.5px; color:rgba(244,247,232,0.85);"></div>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr auto; gap:10px; align-items:end; margin-bottom:10px;">
+          <div>
+            <label style="font-size:11.5px; font-weight:600; color:var(--text-cream); display:block; margin-bottom:4px;">Your Name or Alias</label>
+            <input type="text" id="rsvp-attendee-name" class="dark-input" value="Rosa Morales" placeholder="First name or alias" style="margin:0; padding:9px 11px; font-size:13px;">
+          </div>
+          <div>
+            <label style="font-size:11.5px; font-weight:600; color:var(--text-cream); display:block; margin-bottom:4px;">Spots</label>
+            <div class="stepper-pill" style="height:38px; padding:0 10px; gap:10px;">
+              <span onclick="adjustRsvpPartySize(-1)" style="cursor:pointer; user-select:none;">−</span>
+              <span id="rsvp-party-size-val" style="min-width:14px; text-align:center;">1</span>
+              <span onclick="adjustRsvpPartySize(1)" style="cursor:pointer; user-select:none;">+</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="background:rgba(255,255,255,0.035); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:8px 12px; margin-bottom:10px;">
+          <div style="font-size:11px; font-weight:700; color:rgba(244,247,232,0.72); margin-bottom:4px;">Support &amp; Accessibility Options (Optional)</div>
+          <label class="check-row" style="padding:4px 0; font-size:12px;">
+            <span>🧒 Childcare space needed</span>
+            <input type="checkbox" id="rsvp-chk-childcare">
+          </label>
+          <label class="check-row" style="padding:4px 0; font-size:12px;">
+            <span>♿ Mobility / ADA seating</span>
+            <input type="checkbox" id="rsvp-chk-ada">
+          </label>
+          <label class="check-row" style="padding:4px 0; font-size:12px; border-bottom:none;">
+            <span>🗣️ Language interpretation</span>
+            <input type="checkbox" id="rsvp-chk-interp">
+          </label>
+        </div>
+
+        <input type="text" id="rsvp-notes-input" class="dark-input" placeholder="Dietary needs, language, or note for partner host (optional)" style="margin:0 0 12px 0; padding:9px 11px; font-size:12px;">
+
+        <button type="button" id="rsvp-confirm-btn" class="cta-olive-btn" style="padding:12px; font-size:13.5px; margin-top:0;" onclick="submitEventRsvpForm()">
+          Confirm RSVP →
+        </button>
+        <div id="rsvp-existing-actions" class="hidden" style="display:flex; gap:8px; margin-top:8px;">
+          <button type="button" onclick="closeEventRsvpModal()" style="flex:1; background:rgba(255,255,255,0.08); color:var(--text-white); border:1px solid rgba(255,255,255,0.18); border-radius:14px; padding:10px; font-size:12.5px; font-weight:700; cursor:pointer;">
+            Done
+          </button>
+          <button type="button" id="rsvp-cancel-btn" onclick="cancelActiveModalRsvp()" style="flex:1; background:rgba(255,107,107,0.12); color:#ff9b9b; border:1px solid rgba(255,107,107,0.4); border-radius:14px; padding:10px; font-size:12.5px; font-weight:700; cursor:pointer;">
+            Cancel RSVP
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- =========================================================
          0. SLEEK DECIDIM SIGN-ON & CREATE ACCOUNT GATE
          ========================================================= -->
@@ -1093,6 +1163,17 @@
           </div>
         </div>
 
+        <!-- MY EVENT RSVPs SUMMARY CARD (Reveals when Member has >= 1 RSVP) -->
+        <div class="dark-card hidden" id="member-my-rsvps-card" style="padding:12px; border-color:rgba(197,255,41,0.45);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <span class="pantry-title" style="margin:0; font-size:14px; color:var(--lime-bright);">
+              🎟️ My Event RSVPs (<span id="member-my-rsvps-count">0</span>)
+            </span>
+            <span class="mono-sub" style="margin:0; font-size:10.5px;">Tap Pass for QR Check-In</span>
+          </div>
+          <div id="member-my-rsvps-list" style="display:flex; flex-direction:column; gap:8px;"></div>
+        </div>
+
         <!-- VIEW MODE 2: INTERACTIVE MONTHLY CALENDAR GRID VIEW -->
         <div class="dark-card hidden" id="calendar-grid-view-container" data-calendar-view-target="gridContainer" style="padding:12px;">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
@@ -1343,9 +1424,22 @@
             </select>
             <input type="text" id="partner-event-cat" class="dark-input" style="margin:0; font-size:11.5px;" value="🤝 MUTUAL AID • 🍎 FOOD">
           </div>
+          <div style="display:grid; grid-template-columns:1fr 96px; gap:6px; margin-top:6px;">
+            <input type="text" id="partner-event-location" class="dark-input" style="margin:0; font-size:11.5px;" placeholder="📍 Location (e.g., 7800 MacArthur Blvd)">
+            <input type="number" id="partner-event-capacity" class="dark-input" style="margin:0; font-size:11.5px;" value="40" min="1" placeholder="Spots">
+          </div>
+          <input type="text" id="partner-event-desc" class="dark-input" style="margin-top:6px; font-size:11.5px;" placeholder="Event details, accessibility, or what to bring (optional)">
           <button class="cta-olive-btn" style="padding:10px; margin-top:8px;" onclick="postPartnerCalendarEvent()">
             + Publish Event to Member Calendar →
           </button>
+        </div>
+
+        <div class="dark-card hidden" id="partner-events-rsvp-roster" style="padding:12px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <span style="font-size:13px; font-weight:700; color:var(--lime-bright);">🎟️ PUBLISHED EVENTS &amp; MEMBER RSVPs</span>
+            <span class="olive-badge" id="partner-total-rsvps-badge">0 RSVPed</span>
+          </div>
+          <div id="partner-events-rsvp-list" style="display:flex; flex-direction:column; gap:8px;"></div>
         </div>
 
         <div id="live-inventory-list" style="display:flex; flex-direction:column; gap:10px;">
@@ -1837,59 +1931,466 @@
       if (countEl) countEl.textContent = visibleCount;
     }
 
+    let activeRsvpModalContext = null;
+
+    function slugifyEventId(title) {
+      return 'ev-' + String(title || 'event')
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-|-$/g, '')
+        .slice(0, 64);
+    }
+
+    function getEventCardId(card) {
+      if (!card) return '';
+      if (card.dataset.eventId) return card.dataset.eventId;
+      const titleText = card.querySelector('.pantry-title')?.textContent || 'partner-event';
+      const id = card.dataset.liveEventId || slugifyEventId(titleText);
+      card.dataset.eventId = id;
+      return id;
+    }
+
+    function getStoredLivePartnerEvents() {
+      try {
+        const parsed = JSON.parse(localStorage.getItem('common_need_live_partner_events') || '[]');
+        return Array.isArray(parsed) ? parsed : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function getStoredEventRsvps() {
+      try {
+        const parsed = JSON.parse(localStorage.getItem('common_need_live_event_rsvps') || '{}');
+        return (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) ? parsed : {};
+      } catch (e) {
+        return {};
+      }
+    }
+
+    function saveStoredEventRsvps(rsvpMap) {
+      try {
+        localStorage.setItem('common_need_live_event_rsvps', JSON.stringify(rsvpMap || {}));
+      } catch (e) {}
+    }
+
+    function buildQrPassSvg(code) {
+      const str = String(code || 'RSVP-OAK-0000');
+      let hash = 2166136261;
+      for (let i = 0; i < str.length; i++) {
+        hash ^= str.charCodeAt(i);
+        hash = Math.imul(hash, 16777619);
+      }
+      const size = 9;
+      let rects = '';
+      for (let r = 0; r < size; r++) {
+        for (let c = 0; c < size; c++) {
+          const inTL = r < 3 && c < 3;
+          const inTR = r < 3 && c >= size - 3;
+          const inBL = r >= size - 3 && c < 3;
+          let on = false;
+          if (inTL || inTR || inBL) {
+            const lr = r < 3 ? r : r - (size - 3);
+            const lc = c < 3 ? c : c - (size - 3);
+            on = !(lr === 1 && lc === 1) || (lr === 1 && lc === 1);
+            if ((lr === 1 && lc === 0) || (lr === 0 && lc === 1) || (lr === 2 && lc === 1) || (lr === 1 && lc === 2)) {
+              on = false;
+            }
+          } else {
+            const bitIdx = (r * size + c) % 31;
+            on = ((hash >>> bitIdx) ^ (r * 7 + c * 13)) % 2 === 0;
+          }
+          if (on) {
+            rects += `<rect x="${c * 6 + 3}" y="${r * 6 + 3}" width="5" height="5" rx="1" fill="#120924"/>`;
+          }
+        }
+      }
+      return `<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">${rects}</svg>`;
+    }
+
+    function inferEventTopic(catLabel, title) {
+      const lower = `${catLabel || ''} ${title || ''}`.toLowerCase();
+      if (/legal|housing|eviction|veteran|public sector|id|calfresh|social/.test(lower)) return 'legal';
+      if (/medical|health|mental|narcan|safety|walker/.test(lower)) return 'health';
+      if (/youth|art|education|employment|union|laptop/.test(lower)) return 'youth';
+      return 'food';
+    }
+
+    function renderPartnerEventCardDom(ev) {
+      const listEl = document.getElementById('member-calendar-events-list');
+      if (!listEl || !ev || !ev.id) return;
+      if (listEl.querySelector(`[data-live-event-id="${ev.id}"]`)) return;
+
+      const safeTitle = escapeNavHtml(ev.title);
+      const jsTitle = escapeJsArg(ev.title);
+      const loc = ev.location || '7800 MacArthur Blvd';
+      const capacity = Math.max(1, parseInt(ev.capacity || '40', 10) || 40);
+      const desc = ev.desc || 'Newly posted partner community event on the local node calendar. Open to all neighbors with zero means-testing.';
+      const hostName = ev.hostName || 'East Oakland Collective Pantry';
+      const card = document.createElement('div');
+      card.className = 'dark-card calendar-event-card';
+      card.dataset.liveEventId = ev.id;
+      card.dataset.eventId = ev.id;
+      card.dataset.day = ev.dayVal || 'Thu Nov 5';
+      card.dataset.org = ev.orgCode || 'east_oakland';
+      card.dataset.topic = inferEventTopic(ev.catLabel, ev.title);
+      card.dataset.location = loc;
+      card.dataset.keywords = `${String(ev.title).toLowerCase()} ${String(ev.catLabel).toLowerCase()} ${String(loc).toLowerCase()} ${String(hostName).toLowerCase()} live partner event`;
+      card.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+          <span class="cat-tag-chip" style="margin:0;">${escapeNavHtml(ev.catLabel)}</span>
+          <span class="olive-badge">${escapeNavHtml(ev.dayLabel)}</span>
+        </div>
+        <div class="pantry-title" style="font-size:15px;">${safeTitle}</div>
+        <div class="mono-sub" style="margin:4px 0;">Hosted by: ${escapeNavHtml(hostName)} • 📍 ${escapeNavHtml(loc)}</div>
+        <div class="item-lime-card" style="flex-direction:column; align-items:flex-start; font-size:12px; line-height:1.4; margin:6px 0;">
+          <div>${escapeNavHtml(desc)}</div>
+          <div style="font-family:monospace; font-size:10.5px; color:var(--bg-outer); background:var(--lime-bright); padding:2px 6px; border-radius:4px; font-weight:800; margin-top:4px;">
+            ✓ Live Partner Event • 0 / ${capacity} Spots Registered
+          </div>
+        </div>
+        <div style="display:flex; gap:6px; margin-top:6px;">
+          <button class="olive-badge" style="flex:1; cursor:pointer; padding:8px; text-align:center; border-color:var(--lime-bright);" onclick="rsvpPartnerEvent(this, '${jsTitle}')">
+            + RSVP on Local Node
+          </button>
+          <button class="olive-badge" style="flex:1; cursor:pointer; padding:8px; text-align:center; background:var(--bg-outer);" onclick="addItemToBasket(this, '${jsTitle} Care Pack', 'Calendar Event • East Oakland Hub')">
+            🚚 Request Event Kit Delivery
+          </button>
+        </div>
+      `;
+      listEl.prepend(card);
+    }
+
+    function openEventRsvpModal(context) {
+      const modal = document.getElementById('pwa-event-rsvp-modal');
+      if (!modal || !context) return;
+      activeRsvpModalContext = context;
+
+      const rsvps = getStoredEventRsvps();
+      const existing = rsvps[context.eventId] || null;
+      const defaultName = (document.getElementById('pwa-profile-name-display')?.textContent || 'Rosa Morales').trim();
+
+      const titleEl = document.getElementById('rsvp-modal-event-title');
+      const whenEl = document.getElementById('rsvp-modal-event-when');
+      const whereEl = document.getElementById('rsvp-modal-event-where');
+      const pillEl = document.getElementById('rsvp-modal-status-pill');
+      if (titleEl) titleEl.textContent = context.title || 'Partner Event';
+      if (whenEl) whenEl.textContent = context.when || '';
+      if (whereEl) whereEl.textContent = context.where || '';
+      if (pillEl) pillEl.textContent = existing ? '✓ CONFIRMED EVENT RSVP' : '📅 PARTNER EVENT RSVP';
+
+      const nameInput = document.getElementById('rsvp-attendee-name');
+      const qtySpan = document.getElementById('rsvp-party-size-val');
+      const chkChildcare = document.getElementById('rsvp-chk-childcare');
+      const chkAda = document.getElementById('rsvp-chk-ada');
+      const chkInterp = document.getElementById('rsvp-chk-interp');
+      const notesInput = document.getElementById('rsvp-notes-input');
+
+      if (nameInput) nameInput.value = existing ? existing.attendeeName : defaultName;
+      if (qtySpan) qtySpan.textContent = String(existing ? existing.partySize : 1);
+      if (chkChildcare) chkChildcare.checked = !!(existing && existing.childcare);
+      if (chkAda) chkAda.checked = !!(existing && existing.ada);
+      if (chkInterp) chkInterp.checked = !!(existing && existing.interp);
+      if (notesInput) notesInput.value = existing ? (existing.notes || '') : '';
+
+      renderRsvpModalPassState(existing);
+      modal.classList.remove('hidden');
+    }
+
+    function renderRsvpModalPassState(existing) {
+      const passSection = document.getElementById('rsvp-modal-pass-section');
+      const qrBox = document.getElementById('rsvp-modal-qr-box');
+      const codeEl = document.getElementById('rsvp-modal-pass-code');
+      const summaryEl = document.getElementById('rsvp-modal-pass-summary');
+      const confirmBtn = document.getElementById('rsvp-confirm-btn');
+      const existingActions = document.getElementById('rsvp-existing-actions');
+      const pillEl = document.getElementById('rsvp-modal-status-pill');
+
+      if (existing) {
+        if (passSection) passSection.classList.remove('hidden');
+        if (qrBox) qrBox.innerHTML = buildQrPassSvg(existing.passCode);
+        if (codeEl) codeEl.textContent = existing.passCode;
+        const tags = [];
+        if (existing.childcare) tags.push('🧒 Childcare');
+        if (existing.ada) tags.push('♿ ADA');
+        if (existing.interp) tags.push('🗣️ Interp');
+        const tagText = tags.length > 0 ? ` • ${tags.join(', ')}` : '';
+        if (summaryEl) {
+          summaryEl.textContent = `${existing.partySize} ${existing.partySize === 1 ? 'Spot' : 'Spots'} for ${existing.attendeeName}${tagText}`;
+        }
+        if (confirmBtn) confirmBtn.textContent = '✓ Save RSVP Changes';
+        if (existingActions) existingActions.classList.remove('hidden');
+        if (pillEl) pillEl.textContent = '✓ CONFIRMED EVENT RSVP';
+      } else {
+        if (passSection) passSection.classList.add('hidden');
+        if (confirmBtn) confirmBtn.textContent = 'Confirm RSVP →';
+        if (existingActions) existingActions.classList.add('hidden');
+        if (pillEl) pillEl.textContent = '📅 PARTNER EVENT RSVP';
+      }
+    }
+
+    function closeEventRsvpModal() {
+      const modal = document.getElementById('pwa-event-rsvp-modal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function adjustRsvpPartySize(delta) {
+      const el = document.getElementById('rsvp-party-size-val');
+      if (!el) return;
+      const cur = parseInt(el.textContent || '1', 10) || 1;
+      el.textContent = String(Math.min(10, Math.max(1, cur + delta)));
+    }
+
     function rsvpPartnerEvent(btn, eventTitle) {
-      btn.textContent = '✓ Registered (QR Pass Saved)';
-      btn.style.backgroundColor = '#120924';
-      showToast(`Registered for "${eventTitle}" via Decidim::Meetings! Added to your local schedule.`);
+      const card = btn ? btn.closest('.calendar-event-card') : null;
+      const eventId = card ? getEventCardId(card) : slugifyEventId(eventTitle);
+      const title = (card?.querySelector('.pantry-title')?.textContent || eventTitle || 'Partner Event').trim();
+      const when = (card?.querySelector('.olive-badge')?.textContent || '').trim();
+      const where = (card?.querySelector('.mono-sub')?.textContent || 'East Oakland Local Node').trim();
+
+      openEventRsvpModal({ eventId, title, when, where });
+    }
+
+    function openEventRsvpById(eventId) {
+      const rsvps = getStoredEventRsvps();
+      const rec = rsvps[eventId];
+      const card = Array.from(document.querySelectorAll('#member-calendar-events-list .calendar-event-card'))
+        .find(c => getEventCardId(c) === eventId);
+      openEventRsvpModal({
+        eventId,
+        title: rec?.eventTitle || card?.querySelector('.pantry-title')?.textContent?.trim() || 'Partner Event',
+        when: rec?.eventWhen || card?.querySelector('.olive-badge')?.textContent?.trim() || '',
+        where: rec?.eventWhere || card?.querySelector('.mono-sub')?.textContent?.trim() || ''
+      });
+    }
+
+    function submitEventRsvpForm() {
+      if (!activeRsvpModalContext || !activeRsvpModalContext.eventId) return;
+      const rsvps = getStoredEventRsvps();
+      const prev = rsvps[activeRsvpModalContext.eventId];
+
+      const attendeeName = (document.getElementById('rsvp-attendee-name')?.value || '').trim() || 'Community Member';
+      const partySize = Math.min(10, Math.max(1, parseInt(document.getElementById('rsvp-party-size-val')?.textContent || '1', 10) || 1));
+      const childcare = !!document.getElementById('rsvp-chk-childcare')?.checked;
+      const ada = !!document.getElementById('rsvp-chk-ada')?.checked;
+      const interp = !!document.getElementById('rsvp-chk-interp')?.checked;
+      const notes = (document.getElementById('rsvp-notes-input')?.value || '').trim();
+      const passCode = prev?.passCode || ('RSVP-OAK-' + String(1000 + Math.floor(Math.random() * 9000)));
+
+      const record = {
+        eventId: activeRsvpModalContext.eventId,
+        eventTitle: activeRsvpModalContext.title,
+        eventWhen: activeRsvpModalContext.when,
+        eventWhere: activeRsvpModalContext.where,
+        attendeeName,
+        partySize,
+        childcare,
+        ada,
+        interp,
+        notes,
+        passCode,
+        rsvpedAt: new Date().toISOString()
+      };
+
+      rsvps[record.eventId] = record;
+      saveStoredEventRsvps(rsvps);
+      renderRsvpModalPassState(record);
+      syncAllEventRsvpStates();
+      showToast(`RSVP confirmed for "${record.eventTitle}" (${partySize} ${partySize === 1 ? 'spot' : 'spots'}) — Pass ${passCode}!`);
+    }
+
+    function cancelEventRsvpById(eventId) {
+      const rsvps = getStoredEventRsvps();
+      const removed = rsvps[eventId];
+      if (!removed) return;
+      delete rsvps[eventId];
+      saveStoredEventRsvps(rsvps);
+      syncAllEventRsvpStates();
+      showToast(`Canceled RSVP for "${removed.eventTitle}".`);
+    }
+
+    function cancelActiveModalRsvp() {
+      if (!activeRsvpModalContext || !activeRsvpModalContext.eventId) return;
+      cancelEventRsvpById(activeRsvpModalContext.eventId);
+      closeEventRsvpModal();
+    }
+
+    function syncAllEventRsvpStates() {
+      const rsvps = getStoredEventRsvps();
+
+      document.querySelectorAll('#member-calendar-events-list .calendar-event-card').forEach(card => {
+        const eventId = getEventCardId(card);
+        const rsvpBtn = card.querySelector('button[onclick*="rsvpPartnerEvent"]');
+        const statusStrip = card.querySelector('.item-lime-card > div:last-child');
+
+        if (rsvpBtn && !rsvpBtn.dataset.origRsvpLabel) {
+          rsvpBtn.dataset.origRsvpLabel = rsvpBtn.textContent.trim();
+        }
+        if (statusStrip && !statusStrip.dataset.origStatusText) {
+          statusStrip.dataset.origStatusText = statusStrip.textContent.trim();
+        }
+
+        const rec = rsvps[eventId];
+        if (rsvpBtn) {
+          if (rec) {
+            rsvpBtn.textContent = `✓ RSVPed (${rec.partySize}) • Pass`;
+            rsvpBtn.style.backgroundColor = '#120924';
+            rsvpBtn.style.color = 'var(--lime-bright)';
+            rsvpBtn.style.borderColor = 'var(--lime-bright)';
+          } else {
+            rsvpBtn.textContent = rsvpBtn.dataset.origRsvpLabel || '+ RSVP on Local Node';
+            rsvpBtn.style.backgroundColor = '';
+            rsvpBtn.style.color = '';
+          }
+        }
+
+        if (statusStrip && statusStrip.dataset.origStatusText) {
+          const orig = statusStrip.dataset.origStatusText;
+          if (rec) {
+            if (/(\d+)\s*\/\s*(\d+)\s*Spots\s*Registered/i.test(orig)) {
+              statusStrip.textContent = orig.replace(/(\d+)(\s*\/\s*\d+\s*Spots\s*Registered)/i, (_m, n, rest) => `${parseInt(n, 10) + rec.partySize}${rest}`);
+            } else if (/(\d+)\s*\/\s*(\d+)\s*Slots\s*Open/i.test(orig)) {
+              statusStrip.textContent = orig.replace(/(\d+)(\s*\/\s*\d+\s*Slots\s*Open)/i, (_m, n, rest) => `${Math.max(0, parseInt(n, 10) - rec.partySize)}${rest}`);
+            } else {
+              statusStrip.textContent = `${orig} • ✓ ${rec.partySize} RSVPed`;
+            }
+          } else {
+            statusStrip.textContent = orig;
+          }
+        }
+      });
+
+      // Update Member "My Event RSVPs" summary card
+      const myCard = document.getElementById('member-my-rsvps-card');
+      const myCount = document.getElementById('member-my-rsvps-count');
+      const myList = document.getElementById('member-my-rsvps-list');
+      const rsvpRecords = Object.values(rsvps).sort((a, b) => String(b.rsvpedAt || '').localeCompare(String(a.rsvpedAt || '')));
+
+      if (myCard && myList) {
+        myCard.classList.toggle('hidden', rsvpRecords.length === 0);
+        if (myCount) myCount.textContent = String(rsvpRecords.length);
+        myList.innerHTML = rsvpRecords.map(rec => {
+          const jsId = escapeJsArg(rec.eventId);
+          const flags = [];
+          if (rec.childcare) flags.push('🧒 Childcare');
+          if (rec.ada) flags.push('♿ ADA');
+          if (rec.interp) flags.push('🗣️ Interp');
+          const flagSuffix = flags.length ? ` • ${flags.join(' ')}` : '';
+          return `
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.09); border-radius:12px; padding:9px 11px;">
+              <div style="min-width:0;">
+                <div style="font-size:12.5px; font-weight:700; color:var(--text-white); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeNavHtml(rec.eventTitle)}</div>
+                <div class="mono-sub" style="margin:2px 0 0; font-size:11px;">${escapeNavHtml(rec.eventWhen || 'Upcoming')} • ${rec.partySize} ${rec.partySize === 1 ? 'spot' : 'spots'} • <strong style="color:var(--lime-bright);">${escapeNavHtml(rec.passCode)}</strong>${flagSuffix}</div>
+              </div>
+              <div style="display:flex; align-items:center; gap:6px; flex-shrink:0;">
+                <button type="button" class="olive-badge" style="cursor:pointer; font-size:10.5px; padding:5px 9px; border-color:var(--lime-bright);" onclick="openEventRsvpById('${jsId}')">🎟️ Pass</button>
+                <button type="button" class="basket-remove-btn" title="Cancel RSVP" aria-label="Cancel RSVP" onclick="cancelEventRsvpById('${jsId}')">✕</button>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // Update Partner Non-Profit Portal Event & RSVP Roster
+      const partnerRosterCard = document.getElementById('partner-events-rsvp-roster');
+      const partnerRosterList = document.getElementById('partner-events-rsvp-list');
+      const partnerTotalBadge = document.getElementById('partner-total-rsvps-badge');
+      if (partnerRosterCard && partnerRosterList) {
+        const liveEvents = getStoredLivePartnerEvents();
+        const totalSpots = rsvpRecords.reduce((s, r) => s + (parseInt(r.partySize || 1, 10) || 1), 0);
+        if (partnerTotalBadge) partnerTotalBadge.textContent = `${totalSpots} ${totalSpots === 1 ? 'Spot' : 'Spots'} RSVPed`;
+
+        const eventBlocks = [];
+        const renderedEventIds = new Set();
+
+        liveEvents.forEach(ev => {
+          renderedEventIds.add(ev.id);
+          const rec = rsvps[ev.id];
+          const cap = Math.max(1, parseInt(ev.capacity || '40', 10) || 40);
+          const count = rec ? rec.partySize : 0;
+          const tags = [];
+          if (rec?.childcare) tags.push('🧒 Childcare');
+          if (rec?.ada) tags.push('♿ ADA');
+          if (rec?.interp) tags.push('🗣️ Interp');
+          if (rec?.notes) tags.push(`Note: "${escapeNavHtml(rec.notes)}"`);
+          eventBlocks.push(`
+            <div style="background:rgba(255,255,255,0.035); border:1px solid rgba(197,255,41,0.28); border-radius:12px; padding:9px 11px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+                <div style="font-size:12.5px; font-weight:700; color:var(--text-white);">${escapeNavHtml(ev.title)}</div>
+                <span class="olive-badge" style="font-size:10px; padding:3px 8px;">${count} / ${cap} RSVPed</span>
+              </div>
+              <div class="mono-sub" style="margin:2px 0 0; font-size:11px;">${escapeNavHtml(ev.dayLabel)} • 📍 ${escapeNavHtml(ev.location || '7800 MacArthur Blvd')}</div>
+              ${rec ? `<div style="margin-top:6px; padding-top:6px; border-top:1px solid rgba(255,255,255,0.08); font-size:11.5px; color:var(--lime-bright);">✓ <strong>${escapeNavHtml(rec.attendeeName)}</strong> (${rec.partySize} ${rec.partySize === 1 ? 'spot' : 'spots'}) • ${escapeNavHtml(rec.passCode)}${tags.length ? ' • ' + tags.join(' • ') : ''}</div>` : `<div style="margin-top:4px; font-size:11px; color:rgba(244,247,232,0.55);">Live on Member Calendar • Awaiting RSVPs</div>`}
+            </div>
+          `);
+        });
+
+        rsvpRecords.forEach(rec => {
+          if (renderedEventIds.has(rec.eventId)) return;
+          const tags = [];
+          if (rec.childcare) tags.push('🧒 Childcare');
+          if (rec.ada) tags.push('♿ ADA');
+          if (rec.interp) tags.push('🗣️ Interp');
+          if (rec.notes) tags.push(`Note: "${escapeNavHtml(rec.notes)}"`);
+          eventBlocks.push(`
+            <div style="background:rgba(255,255,255,0.035); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:9px 11px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+                <div style="font-size:12.5px; font-weight:700; color:var(--text-white);">${escapeNavHtml(rec.eventTitle)}</div>
+                <span class="olive-badge" style="font-size:10px; padding:3px 8px;">+${rec.partySize} RSVPed</span>
+              </div>
+              <div style="margin-top:4px; font-size:11.5px; color:var(--lime-bright);">✓ <strong>${escapeNavHtml(rec.attendeeName)}</strong> (${rec.partySize} ${rec.partySize === 1 ? 'spot' : 'spots'}) • ${escapeNavHtml(rec.passCode)}${tags.length ? ' • ' + tags.join(' • ') : ''}</div>
+            </div>
+          `);
+        });
+
+        partnerRosterCard.classList.toggle('hidden', eventBlocks.length === 0);
+        partnerRosterList.innerHTML = eventBlocks.join('');
+      }
     }
 
     function postPartnerCalendarEvent() {
       const titleInput = document.getElementById('partner-event-title');
       const daySelect = document.getElementById('partner-event-day');
       const catInput = document.getElementById('partner-event-cat');
+      const locInput = document.getElementById('partner-event-location');
+      const capInput = document.getElementById('partner-event-capacity');
+      const descInput = document.getElementById('partner-event-desc');
 
-      const title = (titleInput.value || '').trim() || 'Pop-Up Winter Coat & Hot Soup Distribution';
+      const title = (titleInput?.value || '').trim() || 'Pop-Up Winter Coat & Hot Soup Distribution';
       const dayVal = daySelect ? daySelect.value : 'Thu Nov 5';
       const dayLabel = daySelect ? daySelect.options[daySelect.selectedIndex].text : 'Thu Nov 5 • 5:00 PM';
-      const catLabel = (catInput.value || '').trim() || '🤝 MUTUAL AID • 🍎 FOOD';
+      const catLabel = (catInput?.value || '').trim() || '🤝 MUTUAL AID • 🍎 FOOD';
+      const location = (locInput?.value || '').trim() || '7800 MacArthur Blvd';
+      const capacity = Math.max(1, parseInt(capInput?.value || '40', 10) || 40);
+      const desc = (descInput?.value || '').trim() || 'Newly posted partner community event on the local node calendar. Open to all neighbors with zero means-testing.';
 
-      const listEl = document.getElementById('member-calendar-events-list');
-      if (listEl) {
-        const card = document.createElement('div');
-        card.className = 'dark-card calendar-event-card';
-        card.dataset.day = dayVal;
-        card.dataset.org = 'east_oakland';
-        card.dataset.lat = '37.7651';
-        card.dataset.lng = '-122.1755';
-        card.dataset.location = '7800 MacArthur Blvd';
-        card.dataset.keywords = `${title.toLowerCase()} ${catLabel.toLowerCase()} east oakland collective pantry`;
-        card.innerHTML = `
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
-            <span class="cat-tag-chip" style="margin:0;">${catLabel}</span>
-            <span class="olive-badge">${dayLabel}</span>
-          </div>
-          <div class="pantry-title" style="font-size:15px;">${title}</div>
-          <div class="mono-sub" style="margin:4px 0;">Hosted by: East Oakland Collective Pantry • 📍 7800 MacArthur Blvd (1.2 mi)</div>
-          <div class="item-lime-card" style="flex-direction:column; align-items:flex-start; font-size:12px; line-height:1.4; margin:6px 0;">
-            <div>Newly posted partner community event on the #OAK-01 local node calendar. Open to all neighbors with zero means-testing.</div>
-            <div style="font-family:monospace; font-size:10.5px; color:var(--bg-outer); background:var(--lime-bright); padding:2px 6px; border-radius:4px; font-weight:800; margin-top:4px;">
-              ✓ Just Published • ✓ Open Registration
-            </div>
-          </div>
-          <div style="display:flex; gap:6px; margin-top:6px;">
-            <button class="olive-badge" style="flex:1; cursor:pointer; padding:8px; text-align:center; border-color:var(--lime-bright);" onclick="rsvpPartnerEvent(this, '${title.replace(/'/g, "\\'")}')">
-              + RSVP on Local Node
-            </button>
-            <button class="olive-badge" style="flex:1; cursor:pointer; padding:8px; text-align:center; background:var(--bg-outer);" onclick="addItemToBasket(this, '${title.replace(/'/g, "\\'")} Care Pack', 'Calendar Event • East Oakland Hub')">
-              🚚 Request Event Kit Delivery
-            </button>
-          </div>
-        `;
-        listEl.prepend(card);
-        filterMemberCalendar();
-      }
+      const newEv = {
+        id: 'ev-' + Date.now(),
+        title,
+        dayVal,
+        dayLabel,
+        catLabel,
+        location,
+        capacity,
+        desc,
+        hostName: 'East Oakland Collective Pantry',
+        orgCode: 'east_oakland',
+        postedAt: new Date().toISOString()
+      };
+
+      try {
+        const existing = getStoredLivePartnerEvents();
+        existing.unshift(newEv);
+        localStorage.setItem('common_need_live_partner_events', JSON.stringify(existing.slice(0, 20)));
+      } catch (e) {}
+
+      renderPartnerEventCardDom(newEv);
+      filterMemberCalendar();
+      syncLiveSurplusAndEventsToMemberPwa();
       if (titleInput) titleInput.value = '';
-      showToast(`Published "${title}" to the centralized Member PWA Calendar!`);
+      if (locInput) locInput.value = '';
+      if (descInput) descInput.value = '';
+      showToast(`Published "${title}" to the Member Calendar — Members can now RSVP!`);
     }
 
     function toggleDeliveryUpdatesBanner(forceOpen) {
@@ -2007,6 +2508,12 @@
           `;
         }).join('');
       }
+
+      const partnerEvents = getStoredLivePartnerEvents();
+      partnerEvents.slice().reverse().forEach(ev => renderPartnerEventCardDom(ev));
+      syncAllEventRsvpStates();
+      if (typeof filterMemberCalendar === 'function') filterMemberCalendar();
+
       const allCatalogCards = document.querySelectorAll('#member-tab-1 .item-lime-card').length || (19 + surplusItems.length);
       const badgeEl = document.getElementById('navigator-live-catalog-badge');
       if (badgeEl) {
@@ -2456,6 +2963,12 @@
       leafletMap.fitBounds(stopCoords, { padding: [20, 20] });
     }
 
+    syncLiveSurplusAndEventsToMemberPwa();
+    window.addEventListener('storage', (ev) => {
+      if (!ev.key || ev.key.startsWith('common_need_live_')) {
+        syncLiveSurplusAndEventsToMemberPwa();
+      }
+    });
     switchRole('<%= @active_role %>');
   </script>
 </body>

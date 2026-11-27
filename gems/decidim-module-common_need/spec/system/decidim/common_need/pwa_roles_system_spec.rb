@@ -145,13 +145,16 @@ RSpec.describe "The Common Need 5-Role PWA Suite System Specs", type: :system do
       expect(page).to have_content("DISPATCH VOLUNTEER CARE COURIER →")
     end
 
-    it "renders Tab 4 (Partner Events Calendar) with 2-mode view switcher (List View, Calendar View) without Map View or .ics banner" do
+    it "renders Tab 4 (Partner Events Calendar) with interactive Event RSVP modal, My Event RSVPs card, and 2-mode view switcher without Map View or .ics banner" do
       expect(page).to have_content("📋 List View")
       expect(page).to have_content("🗓️ Calendar View")
       expect(page).not_to have_content("🗺️ Map View")
       expect(page).not_to have_css("#calendar-events-leaflet-map")
       expect(page).not_to have_content("⬇ iCal (.ics)")
       expect(page).not_to have_content("LOCAL AREA PARTNER CALENDAR")
+      expect(page).to have_css("#pwa-event-rsvp-modal")
+      expect(page).to have_css("#member-my-rsvps-card")
+      expect(page).to have_content("Confirm RSVP →")
       expect(page).to have_content("Community Harvest Dinner & Winter Seed/Compost Swap")
       expect(page).to have_content("Tenant Eviction Defense, CalFresh & Veterans VA Claim Clinic")
     end
@@ -188,13 +191,14 @@ RSpec.describe "The Common Need 5-Role PWA Suite System Specs", type: :system do
   describe "Role 3: Partner Non-Profit PWA Portal (Decidim::Services::PartnerPortal)" do
     before { visit "/?role=partner" }
 
-    it "renders Loading Ramp Handoff verification, Surplus Publisher, Event Publisher, and Accountability Ledger without the top role switcher" do
+    it "renders Loading Ramp Handoff verification, Surplus Publisher, Event Publisher with Member RSVP roster, and Accountability Ledger without the top role switcher" do
       expect(page).not_to have_css("#top-role-switcher")
       expect(page).to have_content("THE COMMON NEED • NON-PROFIT PROVIDER PORTAL")
       expect(page).to have_content("LOCAL NODE 501(c)(3)")
       expect(page).to have_content("✓ Crates Verified & Staged at Loading Ramp")
       expect(page).to have_content("+ POST SURPLUS GOODS TO LOCAL NODE")
       expect(page).to have_content("+ Publish Event to Member Calendar →")
+      expect(page).to have_css("#partner-events-rsvp-roster")
       expect(page).to have_content("★ 4.9 / 5.0")
     end
   end
