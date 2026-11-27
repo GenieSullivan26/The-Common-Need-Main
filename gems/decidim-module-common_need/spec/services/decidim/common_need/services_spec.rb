@@ -210,4 +210,40 @@ RSpec.describe "Decidim::CommonNeed Services" do
       expect(imm_res[:expert_guidance].join(" ")).to include("Public Charge")
     end
   end
+
+  describe Decidim::CommonNeed::CommunityOrganizingService do
+    let(:service) { Decidim::CommonNeed::CommunityOrganizingService.new(node_code: "#OAK-01") }
+
+    it "returns the 6-step collective launch & governance guides, 4 popular education curriculum tracks, and 4 leadership pipeline stages with 0 Bytes PII exposed" do
+      bundle = service.overview_bundle
+      expect(bundle[:node_code]).to eq("#OAK-01")
+      expect(bundle[:household_pii_bytes_exposed]).to eq(0)
+      expect(bundle[:launch_guides].size).to eq(6)
+      expect(bundle[:curriculum_tracks].size).to eq(4)
+      expect(bundle[:leadership_pipeline_stages].size).to eq(4)
+      expect(bundle[:charter_models]).to include("mutual_aid_hub", "tenant_union", "worker_coop", "care_pod")
+    end
+
+    it "generates democratic charter starter packets for mutual-aid collectives, tenant unions, worker co-ops, and care pods" do
+      charter = service.generate_charter_starter("tenant_union", collective_name: "Fruitvale Tenants Council")
+      expect(charter[:collective_name]).to eq("Fruitvale Tenants Council")
+      expect(charter[:model_label]).to eq("Building / Neighborhood Tenant Union")
+      expect(charter[:governance_principle]).to include("1 Member = 1 Vote")
+      expect(charter[:charter_markdown]).to include("0 Bytes PII Shared Upstream")
+    end
+
+    it "schedules popular education study circles & skill-share cohorts synced with the Member Calendar" do
+      cohort = service.schedule_popular_ed_cohort(
+        title: "Tenant Unions & Solidarity Economics Cohort",
+        session_type: "4-Week Cohort",
+        day: "Wed Nov 11",
+        location: "7800 MacArthur Blvd",
+        sync_to_member_calendar: true
+      )
+      expect(cohort[:cohort_id]).to start_with("cohort-")
+      expect(cohort[:title]).to eq("Tenant Unions & Solidarity Economics Cohort")
+      expect(cohort[:synced_to_member_calendar]).to eq(true)
+      expect(cohort[:zero_means_testing]).to eq(true)
+    end
+  end
 end

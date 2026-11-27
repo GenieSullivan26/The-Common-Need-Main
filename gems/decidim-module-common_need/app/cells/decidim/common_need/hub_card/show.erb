@@ -4,7 +4,7 @@
   </div>
   <div class="pantry-title"><%= title %></div>
   <div class="mono-sub"><%= subtitle_with_distance %></div>
-  <hr style="border-color: var(--lime-bright); margin: 6px 0;">
+  <hr>
 
   <% items.each do |item| %>
     <%= cell("decidim/common_need/item_card", item, hub_label: hub_label).call %>

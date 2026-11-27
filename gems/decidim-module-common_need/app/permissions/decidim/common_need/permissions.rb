@@ -28,6 +28,8 @@ module Decidim
         post_surplus
         verify_crates
         publish_partner_event
+        coordinate_organizing_hub
+        schedule_popular_education
       ).freeze
 
       NODE_AND_FEDERATION_ADMIN_ACTIONS = %i(

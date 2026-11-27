@@ -90,8 +90,12 @@ RSpec.describe "The Common Need 5-Role PWA Suite System Specs", type: :system do
   describe "Role 1: Member PWA Portal (Decidim::CommonNeed::MemberPortal)" do
     before { visit "/?role=member" }
 
-    it "hides the top 5-Role Switcher bar and renders the Member header with top-left dropdown menu, top-right profile/sign-out button, and Resource Navigator context box" do
+    it "hides the top 5-Role Switcher bar and renders the borderless edge-to-edge Member header with top-left dropdown menu, top-right profile/sign-out button, and Resource Navigator context box" do
       expect(page).not_to have_css("#top-role-switcher")
+      expect(page.body).not_to include('class="status-bar"')
+      expect(page).not_to have_content("9:41")
+      expect(page.body).not_to include("border-color: var(--lime-bright); margin: 6px 0;")
+      expect(page).to have_css("#member-pwa-header")
       expect(page).to have_css("#member-gemini-topbar")
       expect(page).to have_css("#member-top-menu-btn")
       expect(page).to have_css("#member-nav-dropdown")
@@ -191,15 +195,42 @@ RSpec.describe "The Common Need 5-Role PWA Suite System Specs", type: :system do
   describe "Role 3: Partner Non-Profit PWA Portal (Decidim::Services::PartnerPortal)" do
     before { visit "/?role=partner" }
 
-    it "renders Loading Ramp Handoff verification, Surplus Publisher, Event Publisher with Member RSVP roster, and Accountability Ledger without the top role switcher" do
+    it "renders the sleek Gemini-inspired Partner topbar with top-left dropdown navigation, top-right profile/sign-out button, Handoff, Surplus & Stock, and Accountability without the legacy header or role switcher" do
       expect(page).not_to have_css("#top-role-switcher")
-      expect(page).to have_content("THE COMMON NEED • NON-PROFIT PROVIDER PORTAL")
-      expect(page).to have_content("LOCAL NODE 501(c)(3)")
-      expect(page).to have_content("✓ Crates Verified & Staged at Loading Ramp")
-      expect(page).to have_content("+ POST SURPLUS GOODS TO LOCAL NODE")
-      expect(page).to have_content("+ Publish Event to Member Calendar →")
-      expect(page).to have_css("#partner-events-rsvp-roster")
+      expect(page).not_to have_content("THE COMMON NEED • NON-PROFIT PROVIDER PORTAL")
+      expect(page).to have_css("#partner-gemini-topbar")
+      expect(page).to have_css("#partner-top-menu-btn")
+      expect(page).to have_css("#partner-nav-dropdown")
+      expect(page).to have_css("#partner-top-profile-btn")
+      expect(page).to have_css("#partner-dropdown-signout-btn")
+      expect(page).to have_content("Staged at Loading Ramp")
+      expect(page).to have_content("+ Add to Local Node Catalog →")
       expect(page).to have_content("★ 4.9 / 5.0")
+    end
+
+    it "renders the dedicated Partner Calendar Publisher page (#nonprofit-tab-4) synced live with the Member PWA Calendar and RSVP roster" do
+      expect(page).to have_css("#nonprofit-tab-4")
+      expect(page).to have_css("#partner-calendar-publisher-card")
+      expect(page).to have_css("#partner-events-rsvp-roster")
+      expect(page).to have_content("Calendar Publisher")
+      expect(page).to have_content("Centralized Local Node Events • Live Member Sync")
+      expect(page).to have_content("Publish New Community Event")
+      expect(page).to have_content("+ Publish Event to Member Calendar →")
+    end
+
+    it "renders the dedicated 3-pillar Community Organizing Hub (#nonprofit-tab-5) with collective launch guides, coalition logistics, and class formation / popular education tools" do
+      expect(page).to have_css("#nonprofit-tab-5")
+      expect(page).to have_css("#org-pillar-guides")
+      expect(page).to have_css("#org-pillar-coalition")
+      expect(page).to have_css("#org-pillar-education")
+      expect(page).to have_content("Organizing Hub")
+      expect(page).to have_content("COLLECTIVE INCUBATOR")
+      expect(page).to have_content("Shared Coalition Action Timeline")
+      expect(page).to have_content("Mutual-Aid Resource Pool")
+      expect(page).to have_content("Cross-Hub Solidarity Dispatches")
+      expect(page).to have_content("POPULAR EDUCATION PRAXIS")
+      expect(page).to have_content("+ Schedule New Study Circle or Skill-Share Cohort")
+      expect(page).to have_content("Solidarity Leadership Pipeline")
     end
   end
 
@@ -235,19 +266,20 @@ RSpec.describe "The Common Need 5-Role PWA Suite System Specs", type: :system do
   end
 
   describe "PWA Manifest & Offline Workbox/IndexedDB Service Worker Endpoints" do
-    it "serves /manifest.json with standalone display and all 19 community categories" do
+    it "serves /manifest.json with standalone display, edge-to-edge #120924 theme_color, and all 19 community categories" do
       visit "/manifest.json"
       parsed = JSON.parse(page.body)
       expect(parsed["name"]).to eq("The Common Need • Federated Mutual Aid Network")
       expect(parsed["display"]).to eq("standalone")
-      expect(parsed["theme_color"]).to eq("#95C623")
+      expect(parsed["theme_color"]).to eq("#120924")
       expect(parsed["categories"].size).to eq(19)
     end
 
-    it "serves /service-worker.js with Workbox/IndexedDB caching for PWA shell, Leaflet tiles, and OSRM routes" do
+    it "serves /service-worker.js with Workbox/IndexedDB caching for PWA shell, stale-cache eviction, Leaflet tiles, and OSRM routes" do
       visit "/service-worker.js"
       expect(page.response_headers["Service-Worker-Allowed"]).to eq("/")
-      expect(page.body).to include("common-need-pwa-v1")
+      expect(page.body).to include("common-need-pwa-v5")
+      expect(page.body).to include("PURGE_STALE_CACHES")
       expect(page.body).to include("tile.openstreetmap.org")
       expect(page.body).to include("/offline_bundle")
     end

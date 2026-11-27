@@ -81,6 +81,8 @@ module Decidim
           end
           resources :surplus_items, only: [:index, :create]
           resources :partner_meetings, only: [:create]
+          get "organizing_hub", to: "organizing_hub#show"
+          post "organizing_hub/cohorts", to: "organizing_hub#create_cohort"
           get "accountability_ledger", to: "dashboard#accountability"
         end
 

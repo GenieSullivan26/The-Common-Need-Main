@@ -15,7 +15,7 @@ module Decidim
           start_url: "/courier",
           display: "standalone",
           background_color: "#120924",
-          theme_color: "#95C623"
+          theme_color: "#120924"
         }
       end
     end

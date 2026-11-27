@@ -1,4 +1,4 @@
-const CACHE_NAME = "common-need-pwa-v3";
+const CACHE_NAME = "common-need-pwa-v5";
 const OFFLINE_ASSETS = [
   "./",
   "./index.html",
@@ -7,9 +7,34 @@ const OFFLINE_ASSETS = [
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(OFFLINE_ASSETS))
+    (async () => {
+      const cache = await caches.open(CACHE_NAME);
+      await Promise.all(
+        OFFLINE_ASSETS.map(async (assetUrl) => {
+          try {
+            const freshRes = await fetch(assetUrl, { cache: "no-store" });
+            if (freshRes && freshRes.ok) {
+              await cache.put(assetUrl, freshRes.clone());
+            }
+          } catch (_err) {}
+        })
+      );
+      await self.skipWaiting();
+    })()
   );
-  self.skipWaiting();
+});
+
+self.addEventListener("message", (event) => {
+  if (!event.data) return;
+  if (event.data.type === "SKIP_WAITING") {
+    self.skipWaiting();
+  } else if (event.data.type === "PURGE_STALE_CACHES") {
+    event.waitUntil(
+      caches.keys().then((keys) =>
+        Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k)))
+      )
+    );
+  }
 });
 
 self.addEventListener("activate", (event) => {
@@ -38,11 +63,20 @@ self.addEventListener("fetch", (event) => {
   const req = event.request;
   if (req.method !== "GET") return;
 
+  let pathname = "";
+  try {
+    pathname = new URL(req.url).pathname;
+  } catch (_err) {}
+
+  const lastSegment = pathname.split("/").pop() || "";
+  const acceptHeader = req.headers.get("accept") || "";
   const isHtmlNavigation =
     req.mode === "navigate" ||
     req.destination === "document" ||
-    req.url.endsWith("/") ||
-    req.url.endsWith(".html");
+    acceptHeader.includes("text/html") ||
+    pathname.endsWith("/") ||
+    pathname.endsWith(".html") ||
+    !lastSegment.includes(".");
 
   if (isHtmlNavigation) {
     event.respondWith(
@@ -54,12 +88,26 @@ self.addEventListener("fetch", (event) => {
           }
           return networkRes;
         })
-        .catch(() => caches.match(req))
+        .catch(async () => {
+          return (
+            (await caches.match(req)) ||
+            (await caches.match(req, { ignoreSearch: true })) ||
+            (await caches.match("./index.html"))
+          );
+        })
     );
     return;
   }
 
   event.respondWith(
-    caches.match(req).then((cached) => cached || fetch(req))
+    fetch(req, { cache: "no-cache" })
+      .then(async (res) => {
+        if (res && res.ok) {
+          const cache = await caches.open(CACHE_NAME);
+          cache.put(req, res.clone());
+        }
+        return res;
+      })
+      .catch(() => caches.match(req, { ignoreSearch: true }))
   );
 });

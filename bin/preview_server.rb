@@ -64,12 +64,12 @@ MANIFEST_JSON = JSON.pretty_generate(
   start_url: "/",
   display: "standalone",
   background_color: "#120924",
-  theme_color: "#95C623",
+  theme_color: "#120924",
   orientation: "portrait-primary"
 )
 
 SERVICE_WORKER_JS = <<~JS
-  const CACHE_NAME = "common-need-pwa-v4";
+  const CACHE_NAME = "common-need-pwa-v5";
   const OFFLINE_URLS = ["/", "/manifest.json", "/volunteer/routes/OAK-409/offline_bundle.json"];
 
   self.addEventListener("install", (event) => {

@@ -16,7 +16,7 @@ module Decidim
           scope: "/",
           display: "standalone",
           orientation: "portrait",
-          theme_color: "#95C623",
+          theme_color: "#120924",
           background_color: "#120924",
           categories: Decidim::CommonNeed::COMMUNITY_TAXONOMY_CATEGORIES,
           icons: [
@@ -50,7 +50,7 @@ module Decidim
           // The Common Need • Offline-First Workbox/IndexedDB Service Worker
           // Caches PWA Shell, OSRM Route Polylines/Maneuvers, and Leaflet Map Tiles
           // ============================================================================
-          const CACHE_VERSION = "common-need-pwa-v1";
+          const CACHE_VERSION = "common-need-pwa-v5";
           const SHELL_CACHE = `${CACHE_VERSION}-shell`;
           const TILE_CACHE = `${CACHE_VERSION}-leaflet-tiles`;
           const OSRM_CACHE = `${CACHE_VERSION}-osrm-routes`;
@@ -63,7 +63,16 @@ module Decidim
 
           self.addEventListener("install", (event) => {
             event.waitUntil(
-              caches.open(SHELL_CACHE).then((cache) => cache.addAll(PRECACHE_URLS)).then(() => self.skipWaiting())
+              caches.open(SHELL_CACHE).then(async (cache) => {
+                await Promise.all(
+                  PRECACHE_URLS.map(async (url) => {
+                    try {
+                      const res = await fetch(url, { cache: "no-store" });
+                      if (res && res.ok) await cache.put(url, res);
+                    } catch (_err) {}
+                  })
+                );
+              }).then(() => self.skipWaiting())
             );
           });
 
@@ -77,6 +86,23 @@ module Decidim
                 )
               ).then(() => self.clients.claim())
             );
+          });
+
+          self.addEventListener("message", (event) => {
+            if (!event.data) return;
+            if (event.data.type === "SKIP_WAITING") {
+              self.skipWaiting();
+            } else if (event.data.type === "PURGE_STALE_CACHES") {
+              event.waitUntil(
+                caches.keys().then((keys) =>
+                  Promise.all(
+                    keys
+                      .filter((key) => !key.startsWith(CACHE_VERSION))
+                      .map((key) => caches.delete(key))
+                  )
+                )
+              );
+            }
           });
 
           self.addEventListener("fetch", (event) => {
@@ -122,7 +148,31 @@ module Decidim
               return;
             }
 
-            // Stale-While-Revalidate for PWA Shell
+            // Network-First for HTML navigation (prevents stale cached /member/ or /partner/ shells)
+            const acceptHeader = request.headers.get("accept") || "";
+            const isHtmlDoc =
+              request.mode === "navigate" ||
+              request.destination === "document" ||
+              acceptHeader.includes("text/html") ||
+              url.pathname.endsWith("/") ||
+              url.pathname.endsWith(".html");
+
+            if (isHtmlDoc) {
+              event.respondWith(
+                fetch(request, { cache: "no-cache" })
+                  .then(async (response) => {
+                    if (response && response.status === 200) {
+                      const cache = await caches.open(SHELL_CACHE);
+                      cache.put(request, response.clone());
+                    }
+                    return response;
+                  })
+                  .catch(() => caches.match(request))
+              );
+              return;
+            }
+
+            // Stale-While-Revalidate for non-HTML static assets
             event.respondWith(
               caches.match(request).then((cached) => {
                 const networkFetch = fetch(request)

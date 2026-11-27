@@ -18,7 +18,7 @@
     :root {
       --bg-outer: #120924;
       --bg-phone: #160B2B;
-      --bg-card-dark: #190D30;
+      --bg-card-dark: #1B0F33;
       --lime-primary: #95C623;
       --lime-bright: #C5FF29;
       --lime-card: #88B822;
@@ -32,12 +32,16 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     html, body {
+      background: linear-gradient(180deg, #160B2B 0%, #120924 100%) fixed;
       background-color: var(--bg-outer);
       color: var(--text-white);
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       min-height: 100vh;
       min-height: 100dvh;
       width: 100%;
+      overflow-x: hidden;
+      border: none;
+      outline: none;
     }
 
     body {
@@ -51,7 +55,7 @@
       width: calc(100% - 20px);
       max-width: 460px;
       background: rgba(27, 15, 51, 0.92);
-      border: 1px solid rgba(197, 255, 41, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.12);
       border-radius: 999px;
       padding: 6px;
       margin: 10px 10px 4px;
@@ -87,29 +91,37 @@
 
     .phone-frame {
       width: 100%;
-      max-width: 480px;
-      background: linear-gradient(180deg, #160B2B 0%, #120924 100%);
-      border: none;
-      border-radius: 0;
-      overflow: hidden;
+      max-width: 520px;
+      background: transparent;
+      border: none !important;
+      outline: none !important;
+      border-radius: 0 !important;
+      overflow-x: hidden;
       display: flex;
       flex-direction: column;
       flex: 1;
       min-height: 100dvh;
       position: relative;
-      box-shadow: none;
+      box-shadow: none !important;
     }
 
-    @media (max-width: 600px) {
+    @media (max-width: 768px) {
       .phone-frame {
         max-width: 100%;
       }
     }
 
     .pwa-header {
-      background: rgba(22, 11, 43, 0.96);
-      padding: 14px 16px 12px;
-      border-bottom: 1px solid rgba(197, 255, 41, 0.16);
+      background: transparent;
+      padding: 12px 18px 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    #member-pwa-header {
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      padding: 2px 18px 8px;
     }
 
     .header-top-row {
@@ -559,6 +571,79 @@
       color: #ff9b9b;
     }
 
+    .org-pillar-switcher {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 5px;
+      background: rgba(255, 255, 255, 0.04);
+      padding: 5px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .org-pillar-btn {
+      background: transparent;
+      color: rgba(244, 247, 232, 0.78);
+      border: 1px solid transparent;
+      border-radius: 10px;
+      padding: 8px 6px;
+      font-size: 11.5px;
+      font-weight: 650;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.15s ease;
+    }
+
+    .org-pillar-btn.active {
+      background: var(--lime-bright);
+      color: #120924;
+      border-color: var(--lime-bright);
+      font-weight: 800;
+      box-shadow: 0 2px 10px rgba(197, 255, 41, 0.22);
+    }
+
+    .partner-toggle-chip {
+      background: rgba(255, 255, 255, 0.045);
+      color: rgba(244, 247, 232, 0.78);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 999px;
+      padding: 6px 11px;
+      font-size: 11px;
+      font-weight: 650;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      user-select: none;
+      transition: all 0.15s ease;
+    }
+
+    .partner-toggle-chip.active {
+      background: rgba(197, 255, 41, 0.14);
+      color: var(--lime-bright);
+      border-color: rgba(197, 255, 41, 0.45);
+      font-weight: 700;
+    }
+
+    .org-step-row {
+      background: rgba(255, 255, 255, 0.035);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 11px 13px;
+      transition: border-color 0.15s ease, background 0.15s ease;
+    }
+
+    .org-step-row.completed {
+      border-color: rgba(197, 255, 41, 0.35);
+      background: rgba(197, 255, 41, 0.05);
+    }
+
+    .org-pipeline-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
     .hidden { display: none !important; }
   </style>
 </head>
@@ -814,6 +899,11 @@
           <span>🗳️</span>
           <span>Vote</span>
         </button>
+        <div style="border-top:1px solid rgba(255,255,255,0.08); margin:4px 6px 2px;"></div>
+        <button type="button" id="member-dropdown-signout-btn" class="nav-tab" onclick="signOutDecidim()" style="flex-direction:row; justify-content:flex-start; gap:10px; padding:9px 12px; font-size:12.5px; border-radius:12px; width:100%; color:rgba(244,247,232,0.75);">
+          <span>↪</span>
+          <span>Sign Out</span>
+        </button>
       </div>
 
       <div class="pwa-header hidden" id="member-pwa-header">
@@ -855,7 +945,7 @@
       </div>
 
       <!-- MEMBER TAB 1: Expanded Goods & Community Services Catalog (All 19 Categories) -->
-      <div class="pwa-body" id="member-tab-1">
+      <div class="pwa-body hidden" id="member-tab-1">
         <turbo-frame id="member-catalog-frame" data-catalog-filter-target="turboFrame">
           <div id="member-live-surplus-feed" class="member-hub-card"></div>
           <% @hubs.each do |hub| %>
@@ -1345,140 +1435,515 @@
     </div>
 
     <!-- =========================================================
-         3. PARTNER PWA (Decidim::Services::PartnerPortal)
+         3. PARTNER PWA (Sleek Minimal Gemini-Inspired UI • Decidim::Services::PartnerPortal)
          ========================================================= -->
-    <div id="role-view-nonprofit" class="hidden" style="display:flex; flex-direction:column; flex:1;">
-      <div class="pwa-header">
-        <div class="header-top-row">
-          <div>
-            <span class="app-tag-pill">THE COMMON NEED • NON-PROFIT PROVIDER PORTAL</span>
-            <div class="header-subtitle" style="margin-top:6px;">East Oakland Collective Pantry Hub</div>
-          </div>
-          <span class="olive-badge">LOCAL NODE 501(c)(3)</span>
-        </div>
-        <div class="kpi-grid">
-          <div class="kpi-box">
-            <div class="kpi-label">SURPLUS NOURISHMENT:</div>
-            <div class="kpi-val">1,840 lbs / mo</div>
-          </div>
-          <div class="kpi-box">
-            <div class="kpi-label">STAFF HOURS RECLAIMED:</div>
-            <div class="kpi-val">18.5 hrs / wk</div>
-          </div>
+    <div id="role-view-nonprofit" class="hidden" style="display:flex; flex-direction:column; flex:1; position:relative;">
+      <!-- TOP BAR (Top-Left Navigation Dropdown + Top-Right Profile & Sign Out) -->
+      <div id="partner-gemini-topbar" style="display:flex; justify-content:space-between; align-items:center; padding:12px 18px 8px; position:relative; z-index:820;">
+        <button type="button" id="partner-top-menu-btn" onclick="togglePartnerNavDropdown()" style="background:transparent; border:none; color:var(--text-white); display:inline-flex; align-items:center; gap:12px; cursor:pointer; padding:6px 4px; font-family:inherit;">
+          <span style="display:inline-flex; flex-direction:column; gap:5px; width:18px;">
+            <span style="display:block; height:2px; width:18px; background:rgba(244,247,232,0.85); border-radius:2px;"></span>
+            <span style="display:block; height:2px; width:13px; background:rgba(244,247,232,0.85); border-radius:2px;"></span>
+          </span>
+          <span style="font-size:17px; font-weight:600; letter-spacing:-0.2px; display:inline-flex; align-items:center; gap:6px;">
+            <span>Common Need</span>
+            <span id="partner-top-page-indicator" style="color:rgba(244,247,232,0.52); font-weight:400;">Handoff</span>
+            <span style="font-size:12px; color:rgba(244,247,232,0.52);">⌄</span>
+          </span>
+        </button>
+
+        <div style="display:inline-flex; align-items:center; gap:10px;">
+          <button type="button" id="partner-top-publish-shortcut" title="Publish Event to Member Calendar" onclick="switchNonProfitTab(4)" style="width:34px; height:34px; border-radius:50%; background:transparent; border:1.5px dashed rgba(244,247,232,0.35); color:var(--text-cream); display:inline-flex; align-items:center; justify-content:center; font-size:16px; cursor:pointer;">
+            +
+          </button>
+          <button type="button" id="partner-top-profile-btn" onclick="openProfileModal()" style="background:linear-gradient(135deg, #C5FF29 0%, #6B5B1E 100%); padding:2px; border:none; border-radius:999px; cursor:pointer; display:inline-flex; align-items:center; gap:6px; box-shadow:0 4px 12px rgba(197,255,41,0.2);">
+            <span id="partner-top-avatar-initial" style="width:30px; height:30px; border-radius:50%; background:#160B2B; color:var(--lime-bright); font-size:13px; font-weight:800; display:inline-flex; align-items:center; justify-content:center;">
+              E
+            </span>
+          </button>
         </div>
       </div>
 
-      <!-- PARTNER TAB 1: Handoff & Crate Staging -->
-      <div class="pwa-body" id="nonprofit-tab-1">
-        <div class="lime-dashed-banner">
-          <strong>Shared Volunteer Fleet:</strong> Pre-pack member choice crates below for incoming volunteer couriers. Data hosted locally on East Oakland node.
+      <!-- TOP-LEFT PARTNER NAVIGATION DROPDOWN -->
+      <div id="partner-nav-dropdown" class="hidden" style="position:absolute; top:56px; left:16px; width:252px; background:rgba(24,13,46,0.98); backdrop-filter:blur(16px); border:1px solid rgba(197,255,41,0.32); border-radius:20px; padding:8px; box-shadow:0 20px 48px rgba(0,0,0,0.8); z-index:860; display:flex; flex-direction:column; gap:4px;">
+        <div style="font-size:10px; font-weight:700; letter-spacing:0.6px; color:rgba(244,247,232,0.45); padding:6px 12px 2px;">
+          DECIDIM PARTNER PORTAL
         </div>
+        <button type="button" class="nav-tab active" id="np-nav-1" onclick="switchNonProfitTab(1)" style="flex-direction:row; justify-content:flex-start; gap:10px; padding:10px 12px; font-size:13px; border-radius:12px; width:100%;">
+          <span>🚚</span>
+          <span>Handoff</span>
+        </button>
+        <button type="button" class="nav-tab" id="np-nav-2" onclick="switchNonProfitTab(2)" style="flex-direction:row; justify-content:flex-start; gap:10px; padding:10px 12px; font-size:13px; border-radius:12px; width:100%;">
+          <span>📦</span>
+          <span>Surplus &amp; Stock</span>
+        </button>
+        <button type="button" class="nav-tab" id="np-nav-4" onclick="switchNonProfitTab(4)" style="flex-direction:row; justify-content:flex-start; gap:10px; padding:10px 12px; font-size:13px; border-radius:12px; width:100%;">
+          <span>📅</span>
+          <span>Calendar Publisher</span>
+        </button>
+        <button type="button" class="nav-tab" id="np-nav-5" onclick="switchNonProfitTab(5)" style="flex-direction:row; justify-content:flex-start; gap:10px; padding:10px 12px; font-size:13px; border-radius:12px; width:100%;">
+          <span>✊</span>
+          <span>Organizing Hub</span>
+        </button>
+        <button type="button" class="nav-tab" id="np-nav-3" onclick="switchNonProfitTab(3)" style="flex-direction:row; justify-content:flex-start; gap:10px; padding:10px 12px; font-size:13px; border-radius:12px; width:100%;">
+          <span>📊</span>
+          <span>Accountability</span>
+        </button>
+        <div style="border-top:1px solid rgba(255,255,255,0.08); margin:4px 6px 2px;"></div>
+        <button type="button" id="partner-dropdown-signout-btn" class="nav-tab" onclick="signOutDecidim()" style="flex-direction:row; justify-content:flex-start; gap:10px; padding:9px 12px; font-size:12.5px; border-radius:12px; width:100%; color:rgba(244,247,232,0.75);">
+          <span>↪</span>
+          <span>Sign Out</span>
+        </button>
+      </div>
+
+      <!-- PARTNER PAGE 1: Handoff & Hub Operations -->
+      <div class="pwa-body" id="nonprofit-tab-1" style="padding-top:8px;">
+        <div style="padding:4px 2px 2px;">
+          <div id="partner-hub-org-subtitle" style="font-size:11.5px; color:rgba(244,247,232,0.56); font-weight:500;">
+            East Oakland Collective Pantry • <%= current_local_node_code %>
+          </div>
+          <h1 style="font-size:24px; font-weight:500; color:var(--text-white); letter-spacing:-0.4px; margin:3px 0 10px;">
+            Hub Operations &amp; <span style="color:var(--lime-bright); font-weight:600;">Handoff</span>
+          </h1>
+          <div class="category-bar" style="padding:2px 0 4px;">
+            <button type="button" class="cat-pill" onclick="switchNonProfitTab(4)">📅 Calendar Publisher</button>
+            <button type="button" class="cat-pill" onclick="switchNonProfitTab(5)">✊ Organizing Hub</button>
+            <button type="button" class="cat-pill" onclick="switchNonProfitTab(2)">📦 Surplus &amp; Stock</button>
+            <button type="button" class="cat-pill" onclick="switchNonProfitTab(3)">📊 Accountability</button>
+          </div>
+          <div class="kpi-grid" style="margin-top:8px;">
+            <div class="kpi-box">
+              <div class="kpi-label">SURPLUS NOURISHMENT</div>
+              <div class="kpi-val">1,840 lbs / mo</div>
+            </div>
+            <div class="kpi-box">
+              <div class="kpi-label">STAFF HOURS RECLAIMED</div>
+              <div class="kpi-val">18.5 hrs / wk</div>
+            </div>
+          </div>
+        </div>
+
         <div class="dark-card">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-            <span class="mono-sub" style="margin:0; border:1px solid var(--olive-border);">BATCH-OAK-409</span>
-            <span class="mono-sub" style="margin:0;">Arriving in 4 mins</span>
+            <span class="cat-tag-chip" style="margin:0;">BATCH-OAK-409</span>
+            <span style="font-size:11px; color:var(--lime-bright); font-weight:600;">Arriving in 4 mins</span>
           </div>
-          <div style="font-size:14px; font-weight:800;">Marcus T. (Volunteer Courier Route)</div>
-          <div style="font-size:12px; margin:4px 0 8px;">Serving 4 neighborhood households in this loop</div>
-          <div class="item-lime-card" style="margin-bottom:10px;">
-            <div style="font-size:12px;"><strong>Pull from Shelf:</strong> 4x Produce Bundles, 2x Staple Grain Boxes</div>
+          <div class="item-title" style="font-size:15px;">Marcus T. • Volunteer Courier Route</div>
+          <div class="mono-sub">Serving 4 neighborhood households in this loop</div>
+          <div class="item-lime-card" style="margin-bottom:12px;">
+            <div style="font-size:12.5px;"><strong>Pull from Shelf:</strong> 4x Produce Bundles, 2x Staple Grain Boxes</div>
           </div>
-          <button class="cta-olive-btn" style="background-color:var(--bg-outer); padding:10px; margin-top:4px;" onclick="this.textContent='✓ Crates Verified & Staged'; showToast('Batch #OAK-409 crates marked as staged at loading ramp!')">
-            ✓ Crates Verified & Staged at Loading Ramp
+          <button class="cta-olive-btn" style="padding:11px;" onclick="this.textContent='✓ Crates Verified & Staged'; showToast('Batch #OAK-409 crates marked as staged at loading ramp!')">
+            ✓ Crates Verified &amp; Staged at Loading Ramp
           </button>
         </div>
 
         <div class="dark-card">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-            <span class="mono-sub" style="margin:0; border:1px solid var(--olive-border);">BATCH-OAK-412</span>
+            <span class="cat-tag-chip" style="margin:0;">BATCH-OAK-412</span>
             <span class="mono-sub" style="margin:0;">Pickup at 3:15 PM</span>
           </div>
-          <div style="font-size:14px; font-weight:800;">Elena R. (Volunteer Courier Route)</div>
-          <div style="font-size:12px; margin:4px 0 8px;">Serving 7 neighborhood households in this loop</div>
-          <div class="item-lime-card">
-            <div style="font-size:12px;"><strong>Pull from Shelf:</strong> 6x Produce Bundles, 5x Sourdough Loaves, 3x Grain Boxes</div>
+          <div class="item-title" style="font-size:15px;">Elena R. • Volunteer Courier Route</div>
+          <div class="mono-sub">Serving 7 neighborhood households in this loop</div>
+          <div class="item-lime-card" style="margin-bottom:10px;">
+            <div style="font-size:12.5px;"><strong>Pull from Shelf:</strong> 6x Produce Bundles, 5x Sourdough Loaves, 3x Grain Boxes</div>
           </div>
+          <button type="button" class="olive-badge" style="width:100%; padding:10px; cursor:pointer; text-align:center;" onclick="this.textContent='✓ Crates Staged Early'; showToast('Batch #OAK-412 pre-staged for 3:15 PM courier pickup!')">
+            + Pre-Stage Crates for 3:15 PM Loop
+          </button>
         </div>
       </div>
 
-      <!-- PARTNER TAB 2: Live Surplus Stock & Partner Calendar Publisher -->
-      <div class="pwa-body hidden" id="nonprofit-tab-2">
-        <div class="dark-card">
-          <div style="font-family:monospace; font-size:12px; font-weight:700;">+ POST SURPLUS GOODS TO LOCAL NODE</div>
-          <input type="text" id="surplus-name-input" class="dark-input" placeholder="Item name (e.g., Fresh Bok Choy & Ginger)">
-          <div style="display:flex; gap:8px; margin-top:8px;">
-            <input type="number" id="surplus-qty-input" class="dark-input" value="20" style="width:90px; margin:0;">
-            <button class="cta-olive-btn" style="padding:10px; flex:1;" onclick="postSurplusItem()">+ Add to Local Node</button>
-          </div>
+      <!-- PARTNER PAGE 2: Surplus & Stock Publisher -->
+      <div class="pwa-body hidden" id="nonprofit-tab-2" style="padding-top:8px;">
+        <div style="padding:4px 2px 0;">
+          <div style="font-size:11.5px; color:rgba(244,247,232,0.56);">Zero-Means-Testing Hub Catalog</div>
+          <h2 style="font-size:22px; font-weight:500; letter-spacing:-0.3px; margin:2px 0 4px;">
+            Surplus &amp; <span style="color:var(--lime-bright); font-weight:600;">Live Stock</span>
+          </h2>
         </div>
 
         <div class="dark-card">
-          <div style="font-family:monospace; font-size:12px; font-weight:700;">📅 POST EVENT TO MEMBER LOCAL AREA CALENDAR</div>
-          <input type="text" id="partner-event-title" class="dark-input" placeholder="Event title (e.g., Pop-Up Winter Coat & Hot Soup Share)">
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-top:8px;">
-            <select id="partner-event-day" class="dark-input" style="margin:0; font-size:11.5px;">
-              <option value="Tue Nov 3">Tue Nov 3 • 5:00 PM</option>
-              <option value="Thu Nov 5">Thu Nov 5 • 4:00 PM</option>
-              <option value="Sat Nov 7">Sat Nov 7 • 11:00 AM</option>
-              <option value="Sun Nov 8">Sun Nov 8 • 2:00 PM</option>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+            <span style="font-size:13.5px; font-weight:700; color:var(--text-white);">+ Post Surplus Goods to Local Node</span>
+            <span class="cat-tag-chip" style="margin:0;">LIVE SYNC</span>
+          </div>
+          <div class="mono-sub" style="margin-bottom:6px;">Appears immediately on Member Browse &amp; Resource Navigator</div>
+          <input type="text" id="surplus-name-input" class="dark-input" placeholder="Item name (e.g., Fresh Bok Choy, Infant Diapers, N95s)">
+          <div style="display:grid; grid-template-columns:88px 1fr; gap:8px; margin-top:8px;">
+            <input type="number" id="surplus-qty-input" class="dark-input" value="20" min="1" style="margin:0;">
+            <select id="surplus-cat-select" class="dark-input" style="margin:0; font-size:12px;">
+              <option value="auto">Auto-Detect Category</option>
+              <option value="food">🍎 Food &amp; Produce</option>
+              <option value="mutual_aid">🤝 Mutual Aid Kit</option>
+              <option value="health">😷 Health &amp; Clean Air</option>
+              <option value="medical">🩺 Medical Equipment</option>
+              <option value="housing">🏠 Housing &amp; Warmth</option>
+              <option value="youth_services">🎒 Youth &amp; Infant Care</option>
+              <option value="garden">🌱 Seeds &amp; Compost</option>
+              <option value="pets">🐾 Companion Animal Care</option>
             </select>
-            <input type="text" id="partner-event-cat" class="dark-input" style="margin:0; font-size:11.5px;" value="🤝 MUTUAL AID • 🍎 FOOD">
           </div>
-          <div style="display:grid; grid-template-columns:1fr 96px; gap:6px; margin-top:6px;">
-            <input type="text" id="partner-event-location" class="dark-input" style="margin:0; font-size:11.5px;" placeholder="📍 Location (e.g., 7800 MacArthur Blvd)">
-            <input type="number" id="partner-event-capacity" class="dark-input" style="margin:0; font-size:11.5px;" value="40" min="1" placeholder="Spots">
-          </div>
-          <input type="text" id="partner-event-desc" class="dark-input" style="margin-top:6px; font-size:11.5px;" placeholder="Event details, accessibility, or what to bring (optional)">
-          <button class="cta-olive-btn" style="padding:10px; margin-top:8px;" onclick="postPartnerCalendarEvent()">
-            + Publish Event to Member Calendar →
+          <button class="cta-olive-btn" style="padding:11px; margin-top:10px;" onclick="postSurplusItem()">
+            + Add to Local Node Catalog →
           </button>
-        </div>
-
-        <div class="dark-card hidden" id="partner-events-rsvp-roster" style="padding:12px;">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-            <span style="font-size:13px; font-weight:700; color:var(--lime-bright);">🎟️ PUBLISHED EVENTS &amp; MEMBER RSVPs</span>
-            <span class="olive-badge" id="partner-total-rsvps-badge">0 RSVPed</span>
-          </div>
-          <div id="partner-events-rsvp-list" style="display:flex; flex-direction:column; gap:8px;"></div>
         </div>
 
         <div id="live-inventory-list" style="display:flex; flex-direction:column; gap:10px;">
           <div class="dark-card" style="display:flex; justify-content:space-between; align-items:center;">
             <div>
-              <div style="font-size:13.5px; font-weight:700;">Organic Collard Greens & Kale Bundle</div>
-              <div class="mono-sub" style="margin:6px 0 0;">Vegan / GF • Local Node #1</div>
+              <div class="item-title">Organic Collard Greens &amp; Kale Bundle</div>
+              <div class="mono-sub" style="margin:2px 0 0;">Vegan / GF • Local Node <%= current_local_node_code %></div>
             </div>
-            <span class="olive-badge">24<br>left</span>
+            <span class="olive-badge">24 left</span>
           </div>
           <div class="dark-card" style="display:flex; justify-content:space-between; align-items:center;">
             <div>
-              <div style="font-size:13.5px; font-weight:700;">25lb Staple Grain Box (Rice, Pinto Beans)</div>
-              <div class="mono-sub" style="margin:6px 0 0;">Halal / Kosher • Local Node #1</div>
+              <div class="item-title">25lb Staple Grain Box (Rice, Pinto Beans)</div>
+              <div class="mono-sub" style="margin:2px 0 0;">Halal / Kosher • Local Node <%= current_local_node_code %></div>
             </div>
-            <span class="olive-badge">15<br>left</span>
+            <span class="olive-badge">15 left</span>
           </div>
         </div>
       </div>
 
-      <!-- PARTNER TAB 3: Local Node Accountability Ledger -->
-      <div class="pwa-body hidden" id="nonprofit-tab-3">
+      <!-- PARTNER PAGE 4: Dedicated Partner Calendar Publisher -->
+      <div class="pwa-body hidden" id="nonprofit-tab-4" style="padding-top:8px;">
+        <div style="padding:4px 2px 0;">
+          <div style="font-size:11.5px; color:rgba(244,247,232,0.56);">Centralized Local Node Events • Live Member Sync</div>
+          <h2 style="font-size:22px; font-weight:500; letter-spacing:-0.3px; margin:2px 0 4px;">
+            Partner <span style="color:var(--lime-bright); font-weight:600;">Calendar Publisher</span>
+          </h2>
+          <div class="mono-sub" style="margin:0;">Post clinics, distributions, assemblies, and study circles directly to the Member PWA Calendar.</div>
+        </div>
+
+        <div class="category-bar" style="padding:0;">
+          <button type="button" class="cat-pill" onclick="applyPartnerEventPreset('meal')">🍲 Community Meal</button>
+          <button type="button" class="cat-pill" onclick="applyPartnerEventPreset('legal')">⚖️ Tenant &amp; Legal Clinic</button>
+          <button type="button" class="cat-pill" onclick="applyPartnerEventPreset('health')">🩺 Street Medicine</button>
+          <button type="button" class="cat-pill" onclick="applyPartnerEventPreset('study')">📚 Popular Ed Circle</button>
+          <button type="button" class="cat-pill" onclick="applyPartnerEventPreset('workday')">🛠️ Mutual-Aid Workday</button>
+        </div>
+
+        <div class="dark-card" id="partner-calendar-publisher-card">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+            <span style="font-size:14px; font-weight:700; color:var(--text-white);">Publish New Community Event</span>
+            <span class="cat-tag-chip" style="margin:0;">$0 • OPEN TO ALL</span>
+          </div>
+
+          <input type="text" id="partner-event-title" class="dark-input" placeholder="Event title (e.g., Winter Coat, Hot Soup &amp; Tenant Intake)">
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:8px;">
+            <div>
+              <label style="font-size:10.5px; color:rgba(244,247,232,0.65); font-weight:600;">Date</label>
+              <select id="partner-event-day" class="dark-input" style="margin-top:3px; font-size:12px; padding:9px 10px;">
+                <option value="Tue Nov 3">Tue Nov 3</option>
+                <option value="Thu Nov 5" selected>Thu Nov 5</option>
+                <option value="Sat Nov 7">Sat Nov 7</option>
+                <option value="Sun Nov 8">Sun Nov 8</option>
+                <option value="Wed Nov 11">Wed Nov 11</option>
+                <option value="Sat Nov 14">Sat Nov 14</option>
+                <option value="Sun Nov 15">Sun Nov 15</option>
+                <option value="Thu Nov 19">Thu Nov 19</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size:10.5px; color:rgba(244,247,232,0.65); font-weight:600;">Time Window</label>
+              <input type="text" id="partner-event-time" class="dark-input" value="5:00 PM – 7:30 PM" placeholder="e.g. 5:00 PM – 7:30 PM" style="margin-top:3px; font-size:12px; padding:9px 10px;">
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 92px; gap:8px; margin-top:8px;">
+            <div>
+              <label style="font-size:10.5px; color:rgba(244,247,232,0.65); font-weight:600;">Category Tags</label>
+              <select id="partner-event-cat" class="dark-input" style="margin-top:3px; font-size:12px; padding:9px 10px;">
+                <option value="🤝 MUTUAL AID • 🍎 FOOD">🤝 Mutual Aid &amp; Food</option>
+                <option value="⚖️ LEGAL AID • 🏠 HOUSING">⚖️ Legal Aid &amp; Housing</option>
+                <option value="🩺 MEDICAL • 🧠 MENTAL HEALTH">🩺 Medical &amp; Mental Health</option>
+                <option value="📚 POPULAR ED • ✊ ORGANIZING">📚 Popular Ed &amp; Organizing</option>
+                <option value="🎒 YOUTH • 🎨 ARTS • 🛠️ JOBS">🎒 Youth, Arts &amp; Employment</option>
+                <option value="🌱 GARDEN • 🌻 CO-OPS">🌱 Urban Garden &amp; Co-ops</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size:10.5px; color:rgba(244,247,232,0.65); font-weight:600;">Capacity</label>
+              <input type="number" id="partner-event-capacity" class="dark-input" value="50" min="1" placeholder="Spots" style="margin-top:3px; font-size:12px; padding:9px 10px;">
+            </div>
+          </div>
+
+          <input type="text" id="partner-event-location" class="dark-input" placeholder="📍 Street address or park (e.g., 7800 MacArthur Blvd)" style="margin-top:8px; font-size:12.5px;">
+
+          <textarea id="partner-event-desc" class="dark-input" rows="2" placeholder="What neighbors can expect, languages spoken, or take-home kits available..." style="margin-top:8px; font-size:12.5px; font-family:inherit; resize:vertical;"></textarea>
+
+          <div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:10px;">
+            <button type="button" class="partner-toggle-chip active" id="partner-ev-opt-childcare" onclick="this.classList.toggle('active')">🧒 Childcare Space</button>
+            <button type="button" class="partner-toggle-chip active" id="partner-ev-opt-ada" onclick="this.classList.toggle('active')">♿ Wheelchair / ADA</button>
+            <button type="button" class="partner-toggle-chip active" id="partner-ev-opt-interp" onclick="this.classList.toggle('active')">🗣️ Bilingual Interp</button>
+            <button type="button" class="partner-toggle-chip" id="partner-ev-opt-delivery" onclick="this.classList.toggle('active')">🚚 Home Kit Delivery</button>
+          </div>
+
+          <button type="button" class="cta-olive-btn" style="padding:12px; margin-top:12px;" onclick="postPartnerCalendarEvent()">
+            + Publish Event to Member Calendar →
+          </button>
+        </div>
+
+        <div class="dark-card" id="partner-events-rsvp-roster" style="padding:15px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:8px;">
+            <div>
+              <div style="font-size:14px; font-weight:700; color:var(--text-white);">Published Events &amp; Member RSVPs</div>
+              <div class="mono-sub" style="margin:1px 0 0; font-size:11px;">Synced live with QR check-in passes on Member PWA</div>
+            </div>
+            <span class="olive-badge" id="partner-total-rsvps-badge">0 Spots RSVPed</span>
+          </div>
+          <div id="partner-events-rsvp-list" style="display:flex; flex-direction:column; gap:8px;"></div>
+        </div>
+      </div>
+
+      <!-- PARTNER PAGE 5: Dedicated Community Organizing Hub -->
+      <div class="pwa-body hidden" id="nonprofit-tab-5" style="padding-top:8px;">
+        <div style="padding:4px 2px 0;">
+          <div style="font-size:11.5px; color:rgba(244,247,232,0.56);">Base-Building • Solidarity Logistics • Popular Education</div>
+          <h2 style="font-size:22px; font-weight:500; letter-spacing:-0.3px; margin:2px 0 4px;">
+            Community <span style="color:var(--lime-bright); font-weight:600;">Organizing Hub</span>
+          </h2>
+        </div>
+
+        <div class="org-pillar-switcher" id="org-hub-pillar-switcher">
+          <button type="button" class="org-pillar-btn active" id="org-pillar-btn-guides" onclick="switchOrganizingPillar('guides')">Guides &amp; Launch</button>
+          <button type="button" class="org-pillar-btn" id="org-pillar-btn-coalition" onclick="switchOrganizingPillar('coalition')">Coalition &amp; Logistics</button>
+          <button type="button" class="org-pillar-btn" id="org-pillar-btn-education" onclick="switchOrganizingPillar('education')">Popular Education</button>
+        </div>
+
+        <!-- PILLAR A: Step-by-Step Launch & Governance Guides -->
+        <div id="org-pillar-guides" style="display:flex; flex-direction:column; gap:12px;">
+          <div class="dark-card">
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+              <div>
+                <span class="cat-tag-chip" style="margin:0;">COLLECTIVE INCUBATOR</span>
+                <div class="pantry-title" style="margin-top:4px;">Step-by-Step Collective Launch &amp; Governance Guide</div>
+              </div>
+              <span class="olive-badge" id="org-playbook-progress-label" style="font-size:10.5px;">2 / 6 Done</span>
+            </div>
+            <div class="mono-sub" style="margin:2px 0 6px;">Tap any step to read the field guide or check off completed milestones for your collective.</div>
+            <div class="progress-track">
+              <div class="progress-fill" id="org-playbook-progress-fill" style="width:33%;"></div>
+            </div>
+            <div id="org-playbook-steps-list" style="display:flex; flex-direction:column; gap:8px; margin-top:10px;"></div>
+          </div>
+
+          <div class="dark-card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+              <span class="pantry-title" style="margin:0; font-size:15px;">Democratic Charter &amp; Assembly Starter</span>
+              <span class="cat-tag-chip" style="margin:0;">1 MEMBER = 1 VOTE</span>
+            </div>
+            <div class="mono-sub" style="margin-bottom:6px;">Generate ready-to-ratify points of unity, quorum rules, and working-group mandates.</div>
+            <input type="text" id="org-charter-collective-name" class="dark-input" value="East Oakland Neighborhood Solidarity Collective" placeholder="Collective or union name" oninput="renderCollectiveCharterPreview()" style="margin-top:4px; font-size:12.5px;">
+            <select id="org-charter-model-select" class="dark-input" onchange="renderCollectiveCharterPreview()" style="margin-top:8px; font-size:12.5px;">
+              <option value="mutual_aid_hub">Mutual-Aid Pantry &amp; Care Collective</option>
+              <option value="tenant_union">Building / Neighborhood Tenant Union</option>
+              <option value="worker_coop">Democratic Worker Cooperative</option>
+              <option value="care_pod">Block-Level Resilience &amp; Care Pod</option>
+            </select>
+            <div id="org-charter-preview" class="item-lime-card" style="flex-direction:column; align-items:flex-start; font-size:11.5px; line-height:1.5; margin-top:10px; gap:4px;"></div>
+            <button type="button" class="olive-badge" style="width:100%; margin-top:10px; padding:10px; cursor:pointer; text-align:center; border-color:var(--lime-bright);" onclick="copyCollectiveCharter()">
+              📋 Copy Charter &amp; First Assembly Agenda
+            </button>
+          </div>
+        </div>
+
+        <!-- PILLAR B: Coalition & Campaign-Building Logistics -->
+        <div id="org-pillar-coalition" class="hidden" style="display:flex; flex-direction:column; gap:12px;">
+          <div class="dark-card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+              <div>
+                <span class="cat-tag-chip" style="margin:0;">CAMPAIGN ARC</span>
+                <div class="pantry-title" style="margin-top:3px;">Shared Coalition Action Timeline</div>
+              </div>
+              <span class="olive-badge" style="font-size:10px;">4 HUBS SYNCED</span>
+            </div>
+            <div class="mono-sub" style="margin-bottom:8px;">Coordinate multi-org campaign phases and sync public mobilization dates directly to the Member Calendar.</div>
+            <div id="org-timeline-list" style="display:flex; flex-direction:column; gap:8px;"></div>
+            <div style="display:grid; grid-template-columns:1fr 112px; gap:6px; margin-top:10px;">
+              <input type="text" id="org-milestone-title-input" class="dark-input" placeholder="New campaign milestone or action..." style="margin:0; font-size:12px;">
+              <select id="org-milestone-day-input" class="dark-input" style="margin:0; font-size:11.5px; padding:8px;">
+                <option value="Thu Nov 5">Thu Nov 5</option>
+                <option value="Sat Nov 7">Sat Nov 7</option>
+                <option value="Sun Nov 8">Sun Nov 8</option>
+                <option value="Sat Nov 14">Sat Nov 14</option>
+                <option value="Thu Nov 19">Thu Nov 19</option>
+              </select>
+            </div>
+            <button type="button" class="cta-olive-btn" style="padding:10px; margin-top:8px; font-size:12.5px;" onclick="addCoalitionMilestone()">
+              + Add Shared Action Milestone →
+            </button>
+          </div>
+
+          <div class="dark-card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+              <div class="pantry-title" style="margin:0;">Role &amp; Turnout Coordination</div>
+              <span class="olive-badge" id="org-turnout-badge" style="font-size:10.5px;">0 / 0 Stewards</span>
+            </div>
+            <div class="mono-sub" style="margin-bottom:6px;">Ensure every coalition action has bilingual intake, safety marshals, childcare, and legal observers covered.</div>
+            <div class="progress-track">
+              <div class="progress-fill" id="org-turnout-progress-fill" style="width:72%;"></div>
+            </div>
+            <div id="org-roles-list" style="display:flex; flex-direction:column; gap:8px; margin-top:8px;"></div>
+          </div>
+
+          <div class="dark-card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+              <div class="pantry-title" style="margin:0;">Mutual-Aid Resource Pool</div>
+              <span class="cat-tag-chip" style="margin:0;">INTER-ORG COMMONS</span>
+            </div>
+            <div class="mono-sub" style="margin-bottom:8px;">Borrow or pledge shared sound gear, interpretation headsets, kitchen cambros, canopies, and cargo vans.</div>
+            <div id="org-resource-pool-list" style="display:flex; flex-direction:column; gap:8px;"></div>
+            <div style="display:grid; grid-template-columns:1fr 120px; gap:6px; margin-top:10px;">
+              <input type="text" id="org-pool-item-input" class="dark-input" placeholder="Pledge shared equipment or supply..." style="margin:0; font-size:12px;">
+              <input type="text" id="org-pool-hub-input" class="dark-input" placeholder="Hub (e.g. #OAK-01)" value="East Oakland Hub" style="margin:0; font-size:12px;">
+            </div>
+            <button type="button" class="olive-badge" style="width:100%; margin-top:8px; padding:9px; cursor:pointer; text-align:center; border-color:var(--lime-bright);" onclick="addPooledResource()">
+              + Pledge Equipment to Coalition Pool
+            </button>
+          </div>
+
+          <div class="dark-card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+              <div class="pantry-title" style="margin:0;">Cross-Hub Solidarity Dispatches</div>
+              <span class="cat-tag-chip" style="margin:0;">LIVE WIRE</span>
+            </div>
+            <div class="mono-sub" style="margin-bottom:8px;">Coordinate rapid-response court support, cold-storage overflow, or urgent supply surges across hubs.</div>
+            <div id="org-dispatches-list" style="display:flex; flex-direction:column; gap:8px;"></div>
+            <div style="display:grid; grid-template-columns:116px 1fr; gap:6px; margin-top:10px;">
+              <select id="org-dispatch-urgency" class="dark-input" style="margin:0; font-size:11.5px; padding:8px;">
+                <option value="RAPID RESPONSE">⚡ Rapid Response</option>
+                <option value="RESOURCE ASK">📦 Resource Ask</option>
+                <option value="SOLIDARITY CALL">✊ Solidarity Call</option>
+              </select>
+              <input type="text" id="org-dispatch-msg-input" class="dark-input" placeholder="Broadcast coordination note across hubs..." style="margin:0; font-size:12px;">
+            </div>
+            <button type="button" class="cta-olive-btn" style="padding:10px; margin-top:8px; font-size:12.5px;" onclick="postCrossHubDispatch()">
+              Broadcast Cross-Hub Dispatch →
+            </button>
+          </div>
+        </div>
+
+        <!-- PILLAR C: Class Formation & Political / Popular Education -->
+        <div id="org-pillar-education" class="hidden" style="display:flex; flex-direction:column; gap:12px;">
+          <div class="dark-card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+              <div>
+                <span class="cat-tag-chip" style="margin:0;">POPULAR EDUCATION PRAXIS</span>
+                <div class="pantry-title" style="margin-top:3px;">Class Formation &amp; Curriculum Tracks</div>
+              </div>
+              <span class="olive-badge" style="font-size:10px;">4 TRACKS</span>
+            </div>
+            <div class="mono-sub" style="margin-bottom:8px;">Facilitator-ready political &amp; popular education syllabi turning everyday survival needs into collective analysis and power.</div>
+            <div id="org-curriculum-list" style="display:flex; flex-direction:column; gap:8px;"></div>
+          </div>
+
+          <div class="dark-card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+              <div class="pantry-title" style="margin:0;">Study Circles, Skill-Shares &amp; Cohorts</div>
+              <span class="cat-tag-chip" style="margin:0;">CALENDAR SYNC</span>
+            </div>
+            <div class="mono-sub" style="margin-bottom:8px;">Launch neighborhood study circles or hands-on skill-shares and publish them straight to the Member Calendar.</div>
+            <div id="org-cohorts-list" style="display:flex; flex-direction:column; gap:8px; margin-bottom:10px;"></div>
+            <div style="border-top:1px solid rgba(255,255,255,0.08); padding-top:10px;">
+              <div style="font-size:12.5px; font-weight:700; color:var(--lime-bright); margin-bottom:6px;">+ Schedule New Study Circle or Skill-Share Cohort</div>
+              <input type="text" id="org-cohort-title-input" class="dark-input" placeholder="Topic (e.g., Tenant Rights &amp; Corporate Landlord Research Circle)" style="margin-top:0; font-size:12.5px;">
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-top:6px;">
+                <select id="org-cohort-type-select" class="dark-input" style="margin:0; font-size:11.5px; padding:8px;">
+                  <option value="Study Circle">📖 Study Circle</option>
+                  <option value="Skill-Share">🛠️ Practical Skill-Share</option>
+                  <option value="4-Week Cohort">🎓 4-Week Curriculum Cohort</option>
+                </select>
+                <select id="org-cohort-day-select" class="dark-input" style="margin:0; font-size:11.5px; padding:8px;">
+                  <option value="Tue Nov 3">Tue Nov 3 • 6:00 PM</option>
+                  <option value="Thu Nov 5">Thu Nov 5 • 6:00 PM</option>
+                  <option value="Sat Nov 7" selected>Sat Nov 7 • 2:00 PM</option>
+                  <option value="Sun Nov 8">Sun Nov 8 • 3:00 PM</option>
+                  <option value="Wed Nov 11">Wed Nov 11 • 6:00 PM</option>
+                  <option value="Sat Nov 14">Sat Nov 14 • 2:00 PM</option>
+                </select>
+              </div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-top:6px;">
+                <input type="text" id="org-cohort-facilitator-input" class="dark-input" placeholder="Facilitator / Co-Anchors" value="Popular Ed Working Group" style="margin:0; font-size:12px;">
+                <input type="text" id="org-cohort-location-input" class="dark-input" placeholder="Location" value="7800 MacArthur Blvd" style="margin:0; font-size:12px;">
+              </div>
+              <label class="check-row" style="padding:8px 2px 4px; font-size:12px;">
+                <span>📅 Sync &amp; open RSVPs on Member PWA Calendar</span>
+                <input type="checkbox" id="org-cohort-sync-cal" checked>
+              </label>
+              <button type="button" class="cta-olive-btn" style="padding:11px; margin-top:6px; font-size:12.5px;" onclick="schedulePopularEdCohort()">
+                + Launch Cohort &amp; Sync to Calendar →
+              </button>
+            </div>
+          </div>
+
+          <div class="dark-card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+              <div>
+                <span class="cat-tag-chip" style="margin:0;">ORGANIZER DEVELOPMENT</span>
+                <div class="pantry-title" style="margin-top:3px;">Solidarity Leadership Pipeline</div>
+              </div>
+              <span class="olive-badge" id="org-pipeline-count-badge" style="font-size:10px;">4 STAGES</span>
+            </div>
+            <div class="mono-sub" style="margin-bottom:8px;">Support neighbors moving from mutual-aid recipients into study-circle stewards, working-group facilitators, and recallable hub delegates.</div>
+            <div class="org-pipeline-grid" id="org-pipeline-stages">
+              <div class="kpi-box">
+                <div class="kpi-label">1. NEIGHBOR PARTICIPANTS</div>
+                <div class="kpi-val" id="pipe-stage-count-1">84 Active</div>
+                <div style="font-size:10.5px; color:rgba(244,247,232,0.6); margin-top:2px;">Shared meals &amp; open assemblies</div>
+              </div>
+              <div class="kpi-box">
+                <div class="kpi-label">2. CIRCLE &amp; SHIFT STEWARDS</div>
+                <div class="kpi-val" id="pipe-stage-count-2">29 Stewards</div>
+                <div style="font-size:10.5px; color:rgba(244,247,232,0.6); margin-top:2px;">Study circles &amp; route co-leads</div>
+              </div>
+              <div class="kpi-box">
+                <div class="kpi-label">3. WORKING-GROUP ANCHORS</div>
+                <div class="kpi-val" id="pipe-stage-count-3">14 Anchors</div>
+                <div style="font-size:10.5px; color:rgba(244,247,232,0.6); margin-top:2px;">Facilitate clinics &amp; campaigns</div>
+              </div>
+              <div class="kpi-box">
+                <div class="kpi-label">4. RECALLABLE DELEGATES</div>
+                <div class="kpi-val" id="pipe-stage-count-4">7 Mentors</div>
+                <div style="font-size:10.5px; color:rgba(244,247,232,0.6); margin-top:2px;">Inter-hub council &amp; mentorship</div>
+              </div>
+            </div>
+            <div id="org-pipeline-roster" style="display:flex; flex-direction:column; gap:8px; margin-top:10px;"></div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-top:10px;">
+              <input type="text" id="org-pipe-name-input" class="dark-input" placeholder="Neighbor / steward name" style="margin:0; font-size:12px;">
+              <input type="text" id="org-pipe-focus-input" class="dark-input" placeholder="Next skill-share or anchor role" style="margin:0; font-size:12px;">
+            </div>
+            <button type="button" class="olive-badge" style="width:100%; margin-top:8px; padding:9px; cursor:pointer; text-align:center; border-color:var(--lime-bright);" onclick="addPipelineMember()">
+              + Add Emerging Organizer to Mentorship Pipeline
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- PARTNER PAGE 3: Accountability & Sovereign Impact Ledger -->
+      <div class="pwa-body hidden" id="nonprofit-tab-3" style="padding-top:8px;">
+        <div style="padding:4px 2px 0;">
+          <div style="font-size:11.5px; color:rgba(244,247,232,0.56);">Transparent Community Verification</div>
+          <h2 style="font-size:22px; font-weight:500; letter-spacing:-0.3px; margin:2px 0 4px;">
+            Node <span style="color:var(--lime-bright); font-weight:600;">Accountability</span>
+          </h2>
+        </div>
+
         <div class="dark-card">
-          <span class="mono-sub" style="border:1px solid var(--olive-border);">DECIDIM-ACCOUNTABILITY • LOCAL NODE</span>
-          <div class="pantry-title" style="font-size:15px; margin-top:4px;">Local Node Accountability Ledger</div>
-          <div class="item-lime-card" style="font-size:12px; line-height:1.45; margin:8px 0; flex-direction:column; align-items:flex-start;">
-            <p>Data stored securely on East Oakland local node server, federating transparent impact metrics to the central network.</p>
-            <hr style="border-color:rgba(255,255,255,0.2); width:100%; margin:8px 0;">
-            <div>✓ Member Audit Score: <strong>★ 4.9 / 5.0</strong></div>
-            <div>✓ Data Sovereignty: <strong>Local Postgres Instance</strong></div>
+          <span class="cat-tag-chip">DECIDIM-ACCOUNTABILITY • LOCAL NODE</span>
+          <div class="pantry-title" style="font-size:16px; margin-top:4px;">Local Node Accountability Ledger</div>
+          <div class="item-lime-card" style="font-size:12.5px; line-height:1.5; margin:8px 0 0; flex-direction:column; align-items:flex-start;">
+            <p style="color:rgba(244,247,232,0.82);">All operational records remain on the sovereign East Oakland local node server, federating only aggregate nourishment and solidarity metrics to the network.</p>
+            <div style="width:100%; border-top:1px solid rgba(255,255,255,0.08); padding-top:8px; margin-top:6px; display:flex; flex-direction:column; gap:5px;">
+              <div>✓ Member Audit Score: <strong style="color:var(--lime-bright);">★ 4.9 / 5.0</strong></div>
+              <div>✓ Data Sovereignty: <strong>Local Postgres Instance (0 Bytes PII Upstream)</strong></div>
+              <div>✓ Verification Workflow: <strong>Decidim::Verifications::NonProfitHandler</strong></div>
+            </div>
           </div>
         </div>
-      </div>
-
-      <!-- PARTNER BOTTOM NAV -->
-      <div class="bottom-nav three-cols">
-        <button class="nav-tab active" id="np-nav-1" onclick="switchNonProfitTab(1)"><span>🚚</span><span>1. Handoff</span></button>
-        <button class="nav-tab" id="np-nav-2" onclick="switchNonProfitTab(2)"><span>📦</span><span>2. Stock</span></button>
-        <button class="nav-tab" id="np-nav-3" onclick="switchNonProfitTab(3)"><span>📊</span><span>3. Audit</span></button>
       </div>
     </div>
 
@@ -1812,24 +2277,116 @@
     }
 
     function switchRole(role) {
+      const ssoGate = document.getElementById('decidim-sso-gate');
+      if (ssoGate) ssoGate.classList.add('hidden');
+      const profileModal = document.getElementById('pwa-profile-modal');
+      if (profileModal) profileModal.classList.add('hidden');
+      toggleMemberNavDropdown(false);
+      togglePartnerNavDropdown(false);
       ['member', 'volunteer', 'nonprofit', 'localnode', 'network'].forEach(r => {
         const viewEl = document.getElementById('role-view-' + r);
         const btnEl = document.getElementById('role-btn-' + r);
         if (viewEl) viewEl.classList.toggle('hidden', r !== role);
         if (btnEl) btnEl.classList.toggle('active', r === role);
       });
+      if (['member', 'volunteer', 'nonprofit'].includes(role) && typeof syncActiveSessionForRole === 'function') {
+        syncActiveSessionForRole(role);
+      } else {
+        const instBarEl = document.getElementById('pwa-active-instance-bar');
+        if (instBarEl) instBarEl.classList.add('hidden');
+      }
       if (role === 'volunteer' && !leafletMap) {
         setTimeout(initLeafletMap, 200);
       }
     }
 
+    function toggleMemberNavDropdown(forceOpen) {
+      const dropdownEl = document.getElementById('member-nav-dropdown');
+      if (!dropdownEl) return;
+      const isHidden = dropdownEl.classList.contains('hidden');
+      const shouldOpen = typeof forceOpen === 'boolean' ? forceOpen : isHidden;
+      dropdownEl.classList.toggle('hidden', !shouldOpen);
+      if (shouldOpen) togglePartnerNavDropdown(false);
+    }
+
+    function togglePartnerNavDropdown(forceOpen) {
+      const dropdownEl = document.getElementById('partner-nav-dropdown');
+      if (!dropdownEl) return;
+      const isHidden = dropdownEl.classList.contains('hidden');
+      const shouldOpen = typeof forceOpen === 'boolean' ? forceOpen : isHidden;
+      dropdownEl.classList.toggle('hidden', !shouldOpen);
+      if (shouldOpen) toggleMemberNavDropdown(false);
+    }
+
+    document.addEventListener('click', (ev) => {
+      const memberDrop = document.getElementById('member-nav-dropdown');
+      const memberBtn = document.getElementById('member-top-menu-btn');
+      if (memberDrop && !memberDrop.classList.contains('hidden')) {
+        if (!memberDrop.contains(ev.target) && (!memberBtn || !memberBtn.contains(ev.target))) {
+          memberDrop.classList.add('hidden');
+        }
+      }
+      const partnerDrop = document.getElementById('partner-nav-dropdown');
+      const partnerBtn = document.getElementById('partner-top-menu-btn');
+      if (partnerDrop && !partnerDrop.classList.contains('hidden')) {
+        if (!partnerDrop.contains(ev.target) && (!partnerBtn || !partnerBtn.contains(ev.target))) {
+          partnerDrop.classList.add('hidden');
+        }
+      }
+    });
+
+    function toggleMemberGeminiMode(mode) {
+      const taskPanel = document.getElementById('member-paperwork-task-panel');
+      if (!taskPanel) return;
+      const shouldShow = mode === 'task'
+        ? true
+        : (mode === 'chat' ? false : taskPanel.classList.contains('hidden'));
+      taskPanel.classList.toggle('hidden', !shouldShow);
+    }
+
+    function resetMemberGeminiChat() {
+      switchMemberTab(5);
+      toggleMemberGeminiMode('chat');
+      const heroEl = document.getElementById('member-gemini-hero');
+      if (heroEl) heroEl.classList.remove('hidden');
+      const viewportEl = document.getElementById('member-navigator-viewport');
+      if (viewportEl) viewportEl.style.justifyContent = 'center';
+      const chatLog = document.getElementById('local-ai-chat-log');
+      if (chatLog) {
+        chatLog.innerHTML = '';
+        chatLog.classList.add('hidden');
+      }
+      const inputEl = document.getElementById('local-ai-user-input');
+      if (inputEl) inputEl.value = '';
+    }
+
+    function triggerMemberVoicePrompt() {
+      const inputEl = document.getElementById('local-ai-user-input');
+      if (inputEl) {
+        inputEl.value = 'Find fresh produce, garden seeds & CalFresh assistance';
+        inputEl.focus();
+      }
+      showToast('🎙️ Listening on Local Node <%= current_local_node_code %> (Zero Cloud Voice)...');
+    }
+
     function switchMemberTab(tabIndex) {
+      toggleMemberNavDropdown(false);
       [1, 2, 4, 5, 6].forEach(i => {
         const tabEl = document.getElementById('member-tab-' + i);
         const navEl = document.getElementById('m-nav-' + i);
         if (tabEl) tabEl.classList.toggle('hidden', i !== tabIndex);
         if (navEl) navEl.classList.toggle('active', i === tabIndex);
       });
+      const pageNames = {
+        5: 'Resource Navigator',
+        1: 'Browse',
+        2: 'Basket',
+        6: 'Calendar',
+        4: 'Vote'
+      };
+      const indicatorEl = document.getElementById('member-top-page-indicator');
+      if (indicatorEl) indicatorEl.textContent = pageNames[tabIndex] || 'Resource Navigator';
+
       const showCatalogControls = (tabIndex === 1);
       const headerEl = document.getElementById('member-pwa-header');
       if (headerEl) headerEl.classList.toggle('hidden', !showCatalogControls);
@@ -2016,6 +2573,16 @@
       return 'food';
     }
 
+    function buildEventCareSummaryStrip(ev, capacity) {
+      const parts = [];
+      if (ev.childcare !== false) parts.push('✓ Childcare Space');
+      if (ev.ada !== false) parts.push('✓ ADA Accessible');
+      if (ev.interp) parts.push('✓ Bilingual Interp');
+      if (parts.length === 0) parts.push('✓ Live Partner Event');
+      parts.push(`0 / ${capacity} Spots Registered`);
+      return parts.join(' • ');
+    }
+
     function renderPartnerEventCardDom(ev) {
       const listEl = document.getElementById('member-calendar-events-list');
       if (!listEl || !ev || !ev.id) return;
@@ -2027,6 +2594,7 @@
       const capacity = Math.max(1, parseInt(ev.capacity || '40', 10) || 40);
       const desc = ev.desc || 'Newly posted partner community event on the local node calendar. Open to all neighbors with zero means-testing.';
       const hostName = ev.hostName || 'East Oakland Collective Pantry';
+      const stripText = buildEventCareSummaryStrip(ev, capacity);
       const card = document.createElement('div');
       card.className = 'dark-card calendar-event-card';
       card.dataset.liveEventId = ev.id;
@@ -2037,7 +2605,7 @@
       card.dataset.location = loc;
       card.dataset.keywords = `${String(ev.title).toLowerCase()} ${String(ev.catLabel).toLowerCase()} ${String(loc).toLowerCase()} ${String(hostName).toLowerCase()} live partner event`;
       card.innerHTML = `
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px; gap:6px; flex-wrap:wrap;">
           <span class="cat-tag-chip" style="margin:0;">${escapeNavHtml(ev.catLabel)}</span>
           <span class="olive-badge">${escapeNavHtml(ev.dayLabel)}</span>
         </div>
@@ -2046,14 +2614,14 @@
         <div class="item-lime-card" style="flex-direction:column; align-items:flex-start; font-size:12px; line-height:1.4; margin:6px 0;">
           <div>${escapeNavHtml(desc)}</div>
           <div style="font-family:monospace; font-size:10.5px; color:var(--bg-outer); background:var(--lime-bright); padding:2px 6px; border-radius:4px; font-weight:800; margin-top:4px;">
-            ✓ Live Partner Event • 0 / ${capacity} Spots Registered
+            ${escapeNavHtml(stripText)}
           </div>
         </div>
         <div style="display:flex; gap:6px; margin-top:6px;">
           <button class="olive-badge" style="flex:1; cursor:pointer; padding:8px; text-align:center; border-color:var(--lime-bright);" onclick="rsvpPartnerEvent(this, '${jsTitle}')">
             + RSVP on Local Node
           </button>
-          <button class="olive-badge" style="flex:1; cursor:pointer; padding:8px; text-align:center; background:var(--bg-outer);" onclick="addItemToBasket(this, '${jsTitle} Care Pack', 'Calendar Event • East Oakland Hub')">
+          <button class="olive-badge" style="flex:1; cursor:pointer; padding:8px; text-align:center; background:var(--bg-outer);" onclick="addItemToBasket(this, '${jsTitle} Care Pack', 'Calendar Event • ${escapeJsArg(hostName)}')">
             🚚 Request Event Kit Delivery
           </button>
         </div>
@@ -2291,7 +2859,7 @@
         }).join('');
       }
 
-      // Update Partner Non-Profit Portal Event & RSVP Roster
+      // Update Partner Non-Profit Portal Event & RSVP Roster (Always visible on Calendar Publisher page)
       const partnerRosterCard = document.getElementById('partner-events-rsvp-roster');
       const partnerRosterList = document.getElementById('partner-events-rsvp-list');
       const partnerTotalBadge = document.getElementById('partner-total-rsvps-badge');
@@ -2305,6 +2873,7 @@
 
         liveEvents.forEach(ev => {
           renderedEventIds.add(ev.id);
+          const jsEvId = escapeJsArg(ev.id);
           const rec = rsvps[ev.id];
           const cap = Math.max(1, parseInt(ev.capacity || '40', 10) || 40);
           const count = rec ? rec.partySize : 0;
@@ -2314,13 +2883,18 @@
           if (rec?.interp) tags.push('🗣️ Interp');
           if (rec?.notes) tags.push(`Note: "${escapeNavHtml(rec.notes)}"`);
           eventBlocks.push(`
-            <div style="background:rgba(255,255,255,0.035); border:1px solid rgba(197,255,41,0.28); border-radius:12px; padding:9px 11px;">
-              <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
-                <div style="font-size:12.5px; font-weight:700; color:var(--text-white);">${escapeNavHtml(ev.title)}</div>
-                <span class="olive-badge" style="font-size:10px; padding:3px 8px;">${count} / ${cap} RSVPed</span>
+            <div style="background:rgba(255,255,255,0.035); border:1px solid rgba(197,255,41,0.3); border-radius:14px; padding:10px 12px;">
+              <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px;">
+                <div style="min-width:0;">
+                  <div style="font-size:13px; font-weight:700; color:var(--text-white);">${escapeNavHtml(ev.title)}</div>
+                  <div class="mono-sub" style="margin:2px 0 0; font-size:11px;">${escapeNavHtml(ev.dayLabel)} • 📍 ${escapeNavHtml(ev.location || '7800 MacArthur Blvd')}</div>
+                </div>
+                <div style="display:inline-flex; align-items:center; gap:6px; flex-shrink:0;">
+                  <span class="olive-badge" style="font-size:10px; padding:3px 8px;">${count} / ${cap} RSVPed</span>
+                  <button type="button" class="basket-remove-btn" title="Unpublish event" aria-label="Unpublish event" onclick="deleteLivePartnerEvent('${jsEvId}')">✕</button>
+                </div>
               </div>
-              <div class="mono-sub" style="margin:2px 0 0; font-size:11px;">${escapeNavHtml(ev.dayLabel)} • 📍 ${escapeNavHtml(ev.location || '7800 MacArthur Blvd')}</div>
-              ${rec ? `<div style="margin-top:6px; padding-top:6px; border-top:1px solid rgba(255,255,255,0.08); font-size:11.5px; color:var(--lime-bright);">✓ <strong>${escapeNavHtml(rec.attendeeName)}</strong> (${rec.partySize} ${rec.partySize === 1 ? 'spot' : 'spots'}) • ${escapeNavHtml(rec.passCode)}${tags.length ? ' • ' + tags.join(' • ') : ''}</div>` : `<div style="margin-top:4px; font-size:11px; color:rgba(244,247,232,0.55);">Live on Member Calendar • Awaiting RSVPs</div>`}
+              ${rec ? `<div style="margin-top:6px; padding-top:6px; border-top:1px solid rgba(255,255,255,0.08); font-size:11.5px; color:var(--lime-bright);">✓ <strong>${escapeNavHtml(rec.attendeeName)}</strong> (${rec.partySize} ${rec.partySize === 1 ? 'spot' : 'spots'}) • ${escapeNavHtml(rec.passCode)}${tags.length ? ' • ' + tags.join(' • ') : ''}</div>` : `<div style="margin-top:5px; font-size:11px; color:rgba(244,247,232,0.58);">● Live on Member Calendar • Open for neighbor RSVPs</div>`}
             </div>
           `);
         });
@@ -2333,7 +2907,7 @@
           if (rec.interp) tags.push('🗣️ Interp');
           if (rec.notes) tags.push(`Note: "${escapeNavHtml(rec.notes)}"`);
           eventBlocks.push(`
-            <div style="background:rgba(255,255,255,0.035); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:9px 11px;">
+            <div style="background:rgba(255,255,255,0.035); border:1px solid rgba(255,255,255,0.1); border-radius:14px; padding:10px 12px;">
               <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
                 <div style="font-size:12.5px; font-weight:700; color:var(--text-white);">${escapeNavHtml(rec.eventTitle)}</div>
                 <span class="olive-badge" style="font-size:10px; padding:3px 8px;">+${rec.partySize} RSVPed</span>
@@ -2343,14 +2917,104 @@
           `);
         });
 
-        partnerRosterCard.classList.toggle('hidden', eventBlocks.length === 0);
-        partnerRosterList.innerHTML = eventBlocks.join('');
+        partnerRosterCard.classList.remove('hidden');
+        if (eventBlocks.length === 0) {
+          partnerRosterList.innerHTML = `
+            <div style="background:rgba(255,255,255,0.03); border:1px dashed rgba(255,255,255,0.14); border-radius:12px; padding:11px 12px; font-size:12px; color:rgba(244,247,232,0.68);">
+              6 core partner clinics &amp; distributions are active on the Member Calendar. Publish an event above or tap a quick preset to broadcast a new date immediately.
+            </div>
+          `;
+        } else {
+          partnerRosterList.innerHTML = eventBlocks.join('');
+        }
       }
+    }
+
+    const PARTNER_EVENT_PRESETS = {
+      meal: {
+        title: 'Community Hot Harvest Meal & Produce Box Share',
+        day: 'Thu Nov 5',
+        time: '5:00 PM – 7:30 PM',
+        cat: '🤝 MUTUAL AID • 🍎 FOOD',
+        capacity: '75',
+        location: '7800 MacArthur Blvd',
+        desc: 'Warm plant-based & halal community dinner, no-cost staple produce boxes, and neighbor solidarity check-in table.'
+      },
+      legal: {
+        title: 'Eviction Defense, Rent Relief & Tenant Union Clinic',
+        day: 'Sat Nov 7',
+        time: '1:00 PM – 4:30 PM',
+        cat: '⚖️ LEGAL AID • 🏠 HOUSING',
+        capacity: '40',
+        location: '3301 E 12th St',
+        desc: '1-on-1 unlawful detainer intake, habitability demand letters, CalFresh/LIHEAP filing, and building-level tenant council support.'
+      },
+      health: {
+        title: 'Street Medicine, Clean Air N95 & Harm-Reduction Pop-Up',
+        day: 'Sun Nov 8',
+        time: '11:00 AM – 2:30 PM',
+        cat: '🩺 MEDICAL • 🧠 MENTAL HEALTH',
+        capacity: '60',
+        location: '3115 San Pablo Ave',
+        desc: 'No-cost vitals & glucose checks, ADA mobility walker fitting, Narcan kits, MERV-13 air filters, and bilingual peer support.'
+      },
+      study: {
+        title: 'Neighborhood Popular Education & Solidarity Economics Circle',
+        day: 'Wed Nov 11',
+        time: '6:00 PM – 8:00 PM',
+        cat: '📚 POPULAR ED • ✊ ORGANIZING',
+        capacity: '35',
+        location: '7800 MacArthur Blvd',
+        desc: 'Facilitated community study circle with dinner & childcare: how mutual aid, tenant unions, and worker co-ops build lasting collective power.'
+      },
+      workday: {
+        title: 'Community Garden Build, Seed Swap & Pantry Pack-Out',
+        day: 'Sat Nov 14',
+        time: '10:00 AM – 1:30 PM',
+        cat: '🌱 GARDEN • 🌻 CO-OPS',
+        capacity: '50',
+        location: 'Arroyo Viejo Commons',
+        desc: 'All-ages raised-bed winter planting, compost sifting, heirloom seed share, and collective assembly of 120 neighbor care crates.'
+      }
+    };
+
+    function applyPartnerEventPreset(presetKey) {
+      const preset = PARTNER_EVENT_PRESETS[presetKey];
+      if (!preset) return;
+      const titleInput = document.getElementById('partner-event-title');
+      const daySelect = document.getElementById('partner-event-day');
+      const timeInput = document.getElementById('partner-event-time');
+      const catSelect = document.getElementById('partner-event-cat');
+      const capInput = document.getElementById('partner-event-capacity');
+      const locInput = document.getElementById('partner-event-location');
+      const descInput = document.getElementById('partner-event-desc');
+
+      if (titleInput) titleInput.value = preset.title;
+      if (daySelect) daySelect.value = preset.day;
+      if (timeInput) timeInput.value = preset.time;
+      if (catSelect) catSelect.value = preset.cat;
+      if (capInput) capInput.value = preset.capacity;
+      if (locInput) locInput.value = preset.location;
+      if (descInput) descInput.value = preset.desc;
+      showToast(`Loaded "${preset.title}" template — customize or tap Publish!`);
+    }
+
+    function deleteLivePartnerEvent(eventId) {
+      if (!eventId) return;
+      const existing = getStoredLivePartnerEvents();
+      const target = existing.find(e => e.id === eventId);
+      const next = existing.filter(e => e.id !== eventId);
+      try {
+        localStorage.setItem('common_need_live_partner_events', JSON.stringify(next));
+      } catch (e) {}
+      syncLiveSurplusAndEventsToMemberPwa();
+      showToast(`Unpublished "${target ? target.title : 'event'}" from the Member Calendar.`);
     }
 
     function postPartnerCalendarEvent() {
       const titleInput = document.getElementById('partner-event-title');
       const daySelect = document.getElementById('partner-event-day');
+      const timeInput = document.getElementById('partner-event-time');
       const catInput = document.getElementById('partner-event-cat');
       const locInput = document.getElementById('partner-event-location');
       const capInput = document.getElementById('partner-event-capacity');
@@ -2358,11 +3022,23 @@
 
       const title = (titleInput?.value || '').trim() || 'Pop-Up Winter Coat & Hot Soup Distribution';
       const dayVal = daySelect ? daySelect.value : 'Thu Nov 5';
-      const dayLabel = daySelect ? daySelect.options[daySelect.selectedIndex].text : 'Thu Nov 5 • 5:00 PM';
+      const rawTime = (timeInput?.value || '').trim();
+      const baseDayText = daySelect ? daySelect.options[daySelect.selectedIndex].text : dayVal;
+      const dayLabel = rawTime && !baseDayText.includes('•') ? `${dayVal} • ${rawTime}` : baseDayText;
       const catLabel = (catInput?.value || '').trim() || '🤝 MUTUAL AID • 🍎 FOOD';
       const location = (locInput?.value || '').trim() || '7800 MacArthur Blvd';
-      const capacity = Math.max(1, parseInt(capInput?.value || '40', 10) || 40);
+      const capacity = Math.max(1, parseInt(capInput?.value || '50', 10) || 50);
       const desc = (descInput?.value || '').trim() || 'Newly posted partner community event on the local node calendar. Open to all neighbors with zero means-testing.';
+
+      const childcare = document.getElementById('partner-ev-opt-childcare') ? document.getElementById('partner-ev-opt-childcare').classList.contains('active') : true;
+      const ada = document.getElementById('partner-ev-opt-ada') ? document.getElementById('partner-ev-opt-ada').classList.contains('active') : true;
+      const interp = document.getElementById('partner-ev-opt-interp') ? document.getElementById('partner-ev-opt-interp').classList.contains('active') : false;
+      const delivery = document.getElementById('partner-ev-opt-delivery') ? document.getElementById('partner-ev-opt-delivery').classList.contains('active') : false;
+
+      const inst = getActiveInstanceInfo();
+      const hostName = (inst.userName && !/rosa|marcus/i.test(inst.userName) && inst.userName.includes(' '))
+        ? (inst.userName === 'Elena Rostova' ? 'East Oakland Collective Pantry' : inst.userName)
+        : 'East Oakland Collective Pantry';
 
       const newEv = {
         id: 'ev-' + Date.now(),
@@ -2373,7 +3049,11 @@
         location,
         capacity,
         desc,
-        hostName: 'East Oakland Collective Pantry',
+        childcare,
+        ada,
+        interp,
+        delivery,
+        hostName,
         orgCode: 'east_oakland',
         postedAt: new Date().toISOString()
       };
@@ -2381,16 +3061,15 @@
       try {
         const existing = getStoredLivePartnerEvents();
         existing.unshift(newEv);
-        localStorage.setItem('common_need_live_partner_events', JSON.stringify(existing.slice(0, 20)));
+        localStorage.setItem('common_need_live_partner_events', JSON.stringify(existing.slice(0, 25)));
       } catch (e) {}
 
       renderPartnerEventCardDom(newEv);
-      filterMemberCalendar();
       syncLiveSurplusAndEventsToMemberPwa();
       if (titleInput) titleInput.value = '';
       if (locInput) locInput.value = '';
       if (descInput) descInput.value = '';
-      showToast(`Published "${title}" to the Member Calendar — Members can now RSVP!`);
+      showToast(`Published "${title}" (${dayLabel}) — Live now on Member PWA Calendar!`);
     }
 
     function toggleDeliveryUpdatesBanner(forceOpen) {
@@ -2440,6 +3119,7 @@
 
     function openAiPaperworkFor(formTitle) {
       switchMemberTab(5);
+      toggleMemberGeminiMode('task');
       const selectEl = document.getElementById('ai-form-template');
       if (selectEl) {
         for (let i = 0; i < selectEl.options.length; i++) {
@@ -2465,6 +3145,16 @@
       return String(str || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
     }
 
+    function getActiveInstanceInfo() {
+      try {
+        const s = JSON.parse(sessionStorage.getItem('common_need_decidim_sso') || 'null');
+        if (s && s.instanceCode) {
+          return { code: s.instanceCode, name: s.instanceName || 'Local Node', userName: s.name || '' };
+        }
+      } catch (e) {}
+      return { code: '<%= current_local_node_code %>', name: 'East Oakland Local Node', userName: '' };
+    }
+
     function getStoredLiveSurplusItems() {
       try {
         const parsed = JSON.parse(localStorage.getItem('common_need_live_surplus_items') || '[]');
@@ -2485,23 +3175,90 @@
       if (/seed|compost|soil|plant|garden/.test(lower)) return 'garden';
       if (/laptop|computer|book|ged|esl|study/.test(lower)) return 'education';
       if (/boot|ppe|hardhat|vest|tool|union/.test(lower)) return 'employment';
+      if (/paint|brush|sketch|art|canvas/.test(lower)) return 'arts';
+      if (/soccer|ball|yoga|bike|park/.test(lower)) return 'recreation';
       return 'food';
+    }
+
+    function syncCalendarDateOptionsAndGrid() {
+      const allCards = Array.from(document.querySelectorAll('#member-calendar-events-list .calendar-event-card'));
+      const dayCounts = {};
+      allCards.forEach(c => {
+        const d = (c.dataset.day || '').trim();
+        if (d) dayCounts[d] = (dayCounts[d] || 0) + 1;
+      });
+
+      const dateSelect = document.getElementById('calendar-date-select');
+      if (dateSelect) {
+        const existingVals = new Set(Array.from(dateSelect.options).map(o => o.value));
+        Object.keys(dayCounts).forEach(dayStr => {
+          if (!existingVals.has(dayStr)) {
+            const opt = document.createElement('option');
+            opt.value = dayStr;
+            opt.textContent = dayStr;
+            dateSelect.appendChild(opt);
+          }
+        });
+      }
+
+      const gridEl = document.getElementById('november-calendar-grid');
+      if (gridEl) {
+        const dayNumMap = {
+          'Tue Nov 3': 3,
+          'Thu Nov 5': 5,
+          'Sat Nov 7': 7,
+          'Sun Nov 8': 8,
+          'Wed Nov 11': 11,
+          'Sat Nov 14': 14,
+          'Sun Nov 15': 15,
+          'Thu Nov 19': 19
+        };
+        const numToDayStr = {};
+        Object.entries(dayNumMap).forEach(([label, num]) => { numToDayStr[num] = label; });
+
+        Array.from(gridEl.querySelectorAll('.cal-day-cell')).forEach(cell => {
+          const numSpan = cell.querySelector('span:first-child');
+          const dayNum = numSpan ? parseInt(numSpan.textContent || '0', 10) : 0;
+          const dayLabel = cell.dataset.gridDay || numToDayStr[dayNum];
+          if (!dayLabel) return;
+          const cnt = dayCounts[dayLabel] || 0;
+          let pill = cell.querySelector('.cal-event-dot-pill');
+          if (cnt > 0) {
+            cell.classList.add('has-events');
+            cell.dataset.gridDay = dayLabel;
+            cell.onclick = () => selectCalendarDayFromGrid(dayLabel);
+            if (!pill) {
+              pill = document.createElement('span');
+              pill.className = 'cal-event-dot-pill';
+              cell.appendChild(pill);
+            }
+            pill.textContent = `${cnt} ${cnt === 1 ? 'Event' : 'Events'}`;
+          } else if (pill && !['Tue Nov 3', 'Thu Nov 5', 'Sat Nov 7', 'Sun Nov 8'].includes(dayLabel)) {
+            pill.remove();
+            cell.classList.remove('has-events', 'selected-day');
+            cell.onclick = null;
+          }
+        });
+      }
     }
 
     function syncLiveSurplusAndEventsToMemberPwa() {
       const surplusItems = getStoredLiveSurplusItems();
       const memberFeedEl = document.getElementById('member-live-surplus-feed');
+      const partnerInvEl = document.getElementById('live-inventory-list');
+
       if (memberFeedEl) {
         memberFeedEl.innerHTML = surplusItems.map(item => {
           const safeTitle = escapeNavHtml(item.title);
           const jsTitle = escapeJsArg(item.title);
+          const cat = escapeNavHtml(item.category || 'food');
           return `
-            <div class="item-lime-card" data-category="${escapeNavHtml(item.category || 'food')}" data-live-surplus="true" style="border-color:rgba(197,255,41,0.42); background:rgba(197,255,41,0.06);">
+            <div class="item-lime-card" data-category="${cat}" data-live-surplus="true" data-surplus-id="${escapeNavHtml(item.id)}" style="border-color:rgba(197,255,41,0.42); background:rgba(197,255,41,0.06);">
               <div>
-                <span class="cat-tag-chip">🆕 LIVE PARTNER SURPLUS</span>
+                <span class="cat-tag-chip" style="background:rgba(197,255,41,0.2); color:var(--lime-bright);">🆕 LIVE PARTNER SURPLUS</span>
                 <div class="item-title">${safeTitle}</div>
-                <div class="mono-sub" style="margin:0;">Fresh Partner Surplus • Zero Means-Testing</div>
-                <div style="font-size:11px; color:#F4F7E8; margin-top:2px;">Yield: ${escapeNavHtml(item.qty)} Live Shares Available Now</div>
+                <div class="mono-sub" style="margin:0;">Fresh Partner Surplus • Zero Means-Testing • ${escapeNavHtml(item.instanceCode || '<%= current_local_node_code %>')}</div>
+                <div style="font-size:11px; color:#F4F7E8; margin-top:2px;">Yield: ${escapeNavHtml(item.qty)} Live Shares Available Now • Free Courier Delivery</div>
               </div>
               <button class="olive-badge" style="cursor:pointer; border-color:var(--lime-bright);" onclick="addItemToBasket(this, '${jsTitle}', 'Live Partner Surplus • East Oakland Hub')">+ Add Share</button>
             </div>
@@ -2509,8 +3266,35 @@
         }).join('');
       }
 
+      if (partnerInvEl) {
+        partnerInvEl.querySelectorAll('[data-live-partner-surplus-id]').forEach(el => el.remove());
+        surplusItems.slice().reverse().forEach(item => {
+          const jsSid = escapeJsArg(item.id);
+          const card = document.createElement('div');
+          card.className = 'dark-card';
+          card.dataset.livePartnerSurplusId = item.id;
+          card.style.cssText = 'display:flex; justify-content:space-between; align-items:center; gap:10px; border-color:rgba(197,255,41,0.35);';
+          card.innerHTML = `
+            <div style="min-width:0;">
+              <div class="item-title">${escapeNavHtml(item.title)}</div>
+              <div class="mono-sub" style="margin:2px 0 0;">Live Surplus Synced to Member PWA • ${escapeNavHtml(item.instanceCode || '<%= current_local_node_code %>')}</div>
+            </div>
+            <div style="display:inline-flex; align-items:center; gap:6px; flex-shrink:0;">
+              <span class="olive-badge">${escapeNavHtml(item.qty)} left</span>
+              <button type="button" class="basket-remove-btn" title="Remove surplus listing" aria-label="Remove surplus listing" onclick="removeLiveSurplusItem('${jsSid}')">✕</button>
+            </div>
+          `;
+          partnerInvEl.prepend(card);
+        });
+      }
+
       const partnerEvents = getStoredLivePartnerEvents();
+      const validLiveIds = new Set(partnerEvents.map(e => e.id));
+      document.querySelectorAll('#member-calendar-events-list [data-live-event-id]').forEach(el => {
+        if (!validLiveIds.has(el.dataset.liveEventId)) el.remove();
+      });
       partnerEvents.slice().reverse().forEach(ev => renderPartnerEventCardDom(ev));
+      syncCalendarDateOptionsAndGrid();
       syncAllEventRsvpStates();
       if (typeof filterMemberCalendar === 'function') filterMemberCalendar();
 
@@ -2656,10 +3440,24 @@
     }
 
     function switchNonProfitTab(tabIndex) {
-      [1, 2, 3].forEach(i => {
-        document.getElementById('nonprofit-tab-' + i).classList.toggle('hidden', i !== tabIndex);
-        document.getElementById('np-nav-' + i).classList.toggle('active', i === tabIndex);
+      togglePartnerNavDropdown(false);
+      [1, 2, 3, 4, 5].forEach(i => {
+        const tabEl = document.getElementById('nonprofit-tab-' + i);
+        const navEl = document.getElementById('np-nav-' + i);
+        if (tabEl) tabEl.classList.toggle('hidden', i !== tabIndex);
+        if (navEl) navEl.classList.toggle('active', i === tabIndex);
       });
+      const partnerPageNames = {
+        1: 'Handoff',
+        2: 'Surplus & Stock',
+        4: 'Calendar Publisher',
+        5: 'Organizing Hub',
+        3: 'Accountability'
+      };
+      const indEl = document.getElementById('partner-top-page-indicator');
+      if (indEl) indEl.textContent = partnerPageNames[tabIndex] || 'Handoff';
+      const activeBody = document.getElementById('nonprofit-tab-' + tabIndex);
+      if (activeBody) activeBody.scrollTop = 0;
     }
 
     function switchLocalNodeTab(tabIndex) {
@@ -2903,17 +3701,33 @@
       showToast('Stop #' + stopNum + ' confirmed! Member delivery window narrowed to 2:38 PM – 2:45 PM.');
     }
 
+    function removeLiveSurplusItem(itemId) {
+      if (!itemId) return;
+      const existing = getStoredLiveSurplusItems();
+      const target = existing.find(i => i.id === itemId);
+      const next = existing.filter(i => i.id !== itemId);
+      try {
+        localStorage.setItem('common_need_live_surplus_items', JSON.stringify(next));
+      } catch (e) {}
+      syncLiveSurplusAndEventsToMemberPwa();
+      showToast(`Removed "${target ? target.title : 'surplus item'}" from live catalog.`);
+    }
+
     function postSurplusItem() {
       const nameInput = document.getElementById('surplus-name-input');
       const qtyInput = document.getElementById('surplus-qty-input');
+      const catSelect = document.getElementById('surplus-cat-select');
       const name = (nameInput.value || '').trim() || 'Fresh Bok Choy & Ginger Bundle';
       const qty = qtyInput.value || '20';
+      const chosenCat = catSelect ? catSelect.value : 'auto';
+      const inst = getActiveInstanceInfo();
 
       const newItem = {
         id: 'surplus-' + Date.now(),
         title: name,
         qty: String(qty),
-        category: inferSurplusCategory(name),
+        category: (!chosenCat || chosenCat === 'auto') ? inferSurplusCategory(name) : chosenCat,
+        instanceCode: inst.code,
         postedAt: new Date().toISOString()
       };
 
@@ -2923,20 +3737,718 @@
         localStorage.setItem('common_need_live_surplus_items', JSON.stringify(existing.slice(0, 25)));
       } catch (e) {}
 
-      const card = document.createElement('div');
-      card.className = 'dark-card';
-      card.style.cssText = 'display:flex; justify-content:space-between; align-items:center;';
-      card.innerHTML = `
-        <div>
-          <div style="font-size:13.5px; font-weight:700;">${escapeNavHtml(name)}</div>
-          <div class="mono-sub" style="margin:6px 0 0;">Live Surplus Synced to Member PWA</div>
-        </div>
-        <span class="olive-badge">${escapeNavHtml(qty)}<br>left</span>
-      `;
-      document.getElementById('live-inventory-list').prepend(card);
       syncLiveSurplusAndEventsToMemberPwa();
-      nameInput.value = '';
+      if (nameInput) nameInput.value = '';
       showToast(`Posted ${qty}x "${name}" — Live in Member Catalog & Resource Navigator!`);
+    }
+
+    /* =========================================================================
+       PARTNER COMMUNITY ORGANIZING HUB (Guides, Coalition Logistics, Popular Ed)
+       ========================================================================= */
+    const DEFAULT_LAUNCH_PLAYBOOK = [
+      {
+        step: 1,
+        title: '1. Neighborhood Listening & Survival Needs Map',
+        short: 'Block-level 1-on-1s, survival needs survey & 5–7 neighbor anchor crew',
+        done: true,
+        guide: 'Start with 25–40 porch, laundromat, or school-pickup conversations asking: "What bills, food, rent, or care needs keep households up at night?" Map nearby elders, transit gaps, and bilingual anchors before designing programs.'
+      },
+      {
+        step: 2,
+        title: '2. Points of Unity & Zero-Means-Testing Charter',
+        short: 'Unconditional solidarity ("Solidarity, Not Charity"), anti-gatekeeping & language justice',
+        done: true,
+        guide: 'Ratify clear Points of Unity: $0 unconditional access without ID/income checks, zero cooperation with carceral/immigration enforcement, simultaneous interpretation budgets, and mutual respect agreements.'
+      },
+      {
+        step: 3,
+        title: '3. Horizontal Assembly & Working-Group Governance',
+        short: '1 Member = 1 Vote Decidim assemblies, rotating facilitation & recallable stewards',
+        done: false,
+        guide: 'Run biweekly 75-minute assemblies with rotating facilitator, stack-keeper, and note-taker. Delegate day-to-day execution to autonomous working groups (Nourishment, Courier Logistics, Tenant/Legal Defense, Popular Ed) accountable to the assembly.'
+      },
+      {
+        step: 4,
+        title: '4. Cooperative Treasury, Sponsorship & Open Ledger',
+        short: '501(c)(3) fiscal sponsorship or solidarity dues + dual-signer open books',
+        done: false,
+        guide: 'Separate grassroots member dues (unrestricted political/campaign agility) from 501(c)(3) grant-funded pantry/clinic infrastructure. Publish monthly participatory budgets on your Local Node accountability ledger.'
+      },
+      {
+        step: 5,
+        title: '5. Safe Hub Operations, De-Escalation & Courier Loops',
+        short: 'Accessible ramp flow, non-carceral care protocols & OSRM courier batching',
+        done: false,
+        guide: 'Establish calm, dignified choice-pantry staging, Narcan + first-aid stations, peer de-escalation leads, and consolidated Volunteer Courier route loops for homebound/immunocompromised neighbors.'
+      },
+      {
+        step: 6,
+        title: '6. Federated Node Peering & Community Audits',
+        short: 'Peer across regional hubs with 0 Bytes PII exposed + quarterly member reviews',
+        done: false,
+        guide: 'Connect your Decidim Local Node to neighboring collectives for surplus transfers and coalition campaigns while keeping 100% of household addresses encrypted locally.'
+      }
+    ];
+
+    const CHARTER_STARTER_TEMPLATES = {
+      mutual_aid_hub: {
+        label: 'Mutual-Aid Pantry & Care Collective',
+        quorum: '25% of active stewards • 2/3 solidarity vote (or modified consensus)',
+        groups: 'Nourishment & Procurement • Courier Logistics • Care & De-Escalation • Popular Education',
+        agenda: '1) Grounding & Shared Meal (15m) • 2) Hub & Surplus Report-Back (15m) • 3) Working-Group Proposals & 1-Member-1-Vote Decisions (30m) • 4) Upcoming Shifts & Study Circle Announcements (15m)'
+      },
+      tenant_union: {
+        label: 'Building / Neighborhood Tenant Union',
+        quorum: '50% + 1 of member apartments per building council',
+        groups: 'Building Captains • Habitability & Legal Defense • Rent-Strike Mutual-Aid Fund • Landlord/LLC Research',
+        agenda: '1) Tenant Check-Ins & Urgent Notices (15m) • 2) LLC Ownership & Code Violation Map (20m) • 3) Escalation Ladder Vote (Demand Delivery / Inspection / Rent Escrow) (25m) • 4) Court Solidarity Roles (15m)'
+      },
+      worker_coop: {
+        label: 'Democratic Worker Cooperative',
+        quorum: '60% of worker-owners • 1 Worker = 1 Vote regardless of seniority',
+        groups: 'Operations & Production • Open-Book Finance • Member Onboarding & Skill-Share • Community Solidarity Surplus',
+        agenda: '1) Shop-Floor & Safety Check (10m) • 2) Open-Book Cashflow & Patronage Review (20m) • 3) Shift & Role Rotation Decisions (25m) • 4) 5% Community Surplus Allocation (15m)'
+      },
+      care_pod: {
+        label: 'Block-Level Resilience & Care Pod',
+        quorum: 'Simple majority of block stewards • Instant rapid-response autonomy',
+        groups: 'Elder & Disability Check-In • Street Medicine & Clean Air • Shared Childcare Co-op • Outage/Emergency Comms',
+        agenda: '1) Neighbor Wellness & Access Check (15m) • 2) Emergency Kit & Medical Supply Audit (20m) • 3) Weekly Porch-Drop & Errand Pairing (20m) • 4) Skill-Share Topic Selection (15m)'
+      }
+    };
+
+    const DEFAULT_COALITION_TIMELINE = [
+      {
+        id: 'ms-1',
+        title: 'Multi-Hub Door-to-Door Listening & Winter Coat / Heater Intake',
+        day: 'Thu Nov 5',
+        hubs: 'East Oakland + Fruitvale Hubs',
+        status: 'In Progress'
+      },
+      {
+        id: 'ms-2',
+        title: 'Coalition Mass Pack-Out: 300 Weatherization, N95 & Grain Kits',
+        day: 'Sat Nov 7',
+        hubs: 'All 4 #OAK-01 Partner Hubs',
+        status: 'Ready'
+      },
+      {
+        id: 'ms-3',
+        title: 'Tenant Defense & Utility Shutoff Moratorium Neighborhood Assembly',
+        day: 'Sat Nov 14',
+        hubs: 'East Oakland • Fruitvale • West County',
+        status: 'Mobilizing'
+      }
+    ];
+
+    const DEFAULT_COALITION_ROLES = [
+      { id: 'role-intake', title: 'Bilingual Intake & Door Canvassers (ES / Mam / EN)', committed: 14, target: 18 },
+      { id: 'role-safety', title: 'Community De-Escalation & Accessibility Marshals', committed: 8, target: 8 },
+      { id: 'role-care', title: 'Childcare Co-op & Hot Meal Hospitality Crew', committed: 5, target: 6 },
+      { id: 'role-legal', title: 'Legal Observers, Tenant Scribes & Court Accompaniment', committed: 5, target: 6 }
+    ];
+
+    const DEFAULT_RESOURCE_POOL = [
+      { id: 'pool-1', item: '30x Wireless Interpretation Headsets + Battery PA', hub: 'Fruitvale Civic Hub', claimed: false },
+      { id: 'pool-2', item: '4x 20-Gal Insulated Soup Cambros & Propane Burners', hub: 'East Oakland Pantry', claimed: false },
+      { id: 'pool-3', item: '6x 10x10 Pop-Up Canopies, Folding Tables & ADA Ramps', hub: 'San Antonio Center', claimed: true },
+      { id: 'pool-4', item: 'Wheelchair-Accessible Transit Van + 2 E-Cargo Trikes', hub: 'West County Sanctuary', claimed: false }
+    ];
+
+    const DEFAULT_CROSS_HUB_DISPATCHES = [
+      {
+        id: 'disp-1',
+        urgency: 'RAPID RESPONSE',
+        from: 'Fruitvale Hub (#OAK-01)',
+        msg: 'Need 3 bilingual court-support stewards Thu 8:30 AM at Dept 511 for 12-unit senior building unlawful detainer hearing.',
+        time: '14m ago'
+      },
+      {
+        id: 'disp-2',
+        urgency: 'RESOURCE ASK',
+        from: 'West County Sanctuary (#RCH-03)',
+        msg: 'Walk-in cooler at 95% capacity — 18 crates of organic greens & oat milk ready for inter-hub pickup today.',
+        time: '42m ago'
+      }
+    ];
+
+    const POPULAR_ED_CURRICULUM_TRACKS = [
+      {
+        id: 'track-mutual-aid',
+        tag: '4 SESSIONS • CORE FOUNDATION',
+        title: 'Mutual Aid vs. Charity & Political Economy of the Neighborhood',
+        summary: 'Why scarcity is engineered, historic survival programs, and turning material aid into durable neighborhood power.',
+        sessions: [
+          'Session 1: Mapping Who Owns & Extracts From Our Neighborhood',
+          'Session 2: Charity Gatekeeping vs. Unconditional Solidarity ("Survival Pending Transformation")',
+          'Session 3: Co-Designing Base-Building Pantries, Clinics & Care Pods',
+          'Session 4: Practicum — Leading 1-on-1 Organizing Conversations at Handoff'
+        ],
+        prompt: 'Generative Question: Where do neighbors already keep each other alive informally, and what blocks us from governing those resources together?'
+      },
+      {
+        id: 'track-tenant',
+        tag: '4 SESSIONS • HOUSING POWER',
+        title: 'Tenant Unions, Land Trusts & Collective Bargaining',
+        summary: 'Corporate landlord/LLC power mapping, building committees, habitability escalations, and decommodifying land.',
+        sessions: [
+          'Session 1: Unmasking Shell LLCs, Real-Estate Speculation & Debt',
+          'Session 2: Forming a Majority Building Committee & Collective Demand Letter',
+          'Session 3: Escalation Tactics — Code Enforcement, Rent Escrow & Court Solidarity',
+          'Session 4: Long-Term Stewardship — Community Land Trusts & Limited-Equity Co-ops'
+        ],
+        prompt: 'Generative Question: What changes when 15 households on the same landlord portfolio bargain as one union instead of isolated tenants?'
+      },
+      {
+        id: 'track-coop',
+        tag: '4 SESSIONS • SOLIDARITY ECONOMY',
+        title: 'Worker Co-ops, Workplace Organizing & Solidarity Economics',
+        summary: 'Democratic worker-ownership, wage-theft defense, labor-community coalitions, and cooperative supply chains.',
+        sessions: [
+          'Session 1: Understanding Surplus Value, Wage Theft & Shop-Floor Power',
+          'Session 2: 1 Worker = 1 Vote — Governance & Open-Book Cooperative Finance',
+          'Session 3: Linking Farms, Worker Bakeries & Community Pantries Without Middlemen',
+          'Session 4: Launching a Neighborhood Worker Collective or Hiring Hall'
+        ],
+        prompt: 'Generative Question: What skills already exist on our block that could become democratically owned livelihoods?'
+      },
+      {
+        id: 'track-abolition',
+        tag: '3 SESSIONS • CARE & DEMOCRACY',
+        title: 'Participatory Democracy, Abolitionist Care & Community Safety',
+        summary: 'Non-carceral crisis response, restorative conflict resolution, and facilitating 1 Member = 1 Vote assemblies.',
+        sessions: [
+          'Session 1: Bystander De-Escalation, Narcan & Mental-Health First Response',
+          'Session 2: Transformative Accountability — Navigating Conflict Without Disposability',
+          'Session 3: Facilitating Inclusive, Multilingual General Assemblies'
+        ],
+        prompt: 'Generative Question: What concrete skills and relationships allow our block to resolve harm and crisis without calling carceral systems?'
+      }
+    ];
+
+    const DEFAULT_POPULAR_ED_COHORTS = [
+      {
+        id: 'coh-1',
+        type: 'Study Circle',
+        title: 'Mutual Aid vs. Charity & Neighborhood Political Economy (Wk 2)',
+        dayLabel: 'Wed Nov 11 • 6:00 PM',
+        facilitator: 'Elena R. & Popular Ed Crew',
+        location: '7800 MacArthur Blvd',
+        synced: true
+      },
+      {
+        id: 'coh-2',
+        type: 'Skill-Share',
+        title: 'Tenant LLC Research, UD-105 Filing & Street Medic De-Escalation Lab',
+        dayLabel: 'Sat Nov 7 • 2:00 PM',
+        facilitator: 'Fruitvale + West County Stewards',
+        location: '3301 E 12th St',
+        synced: true
+      }
+    ];
+
+    const DEFAULT_LEADERSHIP_PIPELINE = [
+      { id: 'ldr-1', name: 'Camila O.', stage: 2, focus: 'Co-anchoring Thu Harvest Meal & Spanish Study Circle' },
+      { id: 'ldr-2', name: 'Devon K.', stage: 3, focus: 'Facilitating Tenant Union Intake & Courier Dispatch' },
+      { id: 'ldr-3', name: 'Tuan N.', stage: 1, focus: 'Joined Saturday Seed Swap • Shadowing Ramp Handoff' }
+    ];
+
+    let expandedPlaybookSteps = new Set([1]);
+    let expandedCurriculumTracks = new Set(['track-mutual-aid']);
+
+    function readOrgStore(key, fallback) {
+      try {
+        const raw = localStorage.getItem(key);
+        if (!raw) return JSON.parse(JSON.stringify(fallback));
+        const parsed = JSON.parse(raw);
+        return parsed || JSON.parse(JSON.stringify(fallback));
+      } catch (_e) {
+        return JSON.parse(JSON.stringify(fallback));
+      }
+    }
+
+    function writeOrgStore(key, val) {
+      try {
+        localStorage.setItem(key, JSON.stringify(val));
+      } catch (_e) {}
+    }
+
+    function switchOrganizingPillar(pillar) {
+      ['guides', 'coalition', 'education'].forEach(p => {
+        const panel = document.getElementById('org-pillar-' + p);
+        const btn = document.getElementById('org-pillar-btn-' + p);
+        if (panel) panel.classList.toggle('hidden', p !== pillar);
+        if (btn) btn.classList.toggle('active', p === pillar);
+      });
+    }
+
+    function renderPlaybookSteps() {
+      const stepsEl = document.getElementById('org-playbook-steps-list');
+      const fillEl = document.getElementById('org-playbook-progress-fill');
+      const lblEl = document.getElementById('org-playbook-progress-label');
+      if (!stepsEl) return;
+
+      const savedDone = readOrgStore('common_need_org_playbook_done', { 1: true, 2: true });
+      let doneCount = 0;
+
+      stepsEl.innerHTML = DEFAULT_LAUNCH_PLAYBOOK.map(item => {
+        const isDone = !!savedDone[item.step];
+        if (isDone) doneCount += 1;
+        const isOpen = expandedPlaybookSteps.has(item.step);
+        return `
+          <div class="org-step-row ${isDone ? 'completed' : ''}">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px;">
+              <div style="flex:1; cursor:pointer;" onclick="togglePlaybookDetail(${item.step})">
+                <div style="font-size:13px; font-weight:700; color:${isDone ? 'var(--lime-bright)' : 'var(--text-white)'};">${escapeNavHtml(item.title)}</div>
+                <div class="mono-sub" style="margin:2px 0 0; font-size:11px;">${escapeNavHtml(item.short)}</div>
+              </div>
+              <div style="display:inline-flex; align-items:center; gap:8px; flex-shrink:0;">
+                <button type="button" onclick="togglePlaybookDetail(${item.step})" style="background:transparent; border:none; color:rgba(244,247,232,0.65); font-size:11px; cursor:pointer; padding:2px 4px;">${isOpen ? '▲' : '▼'}</button>
+                <input type="checkbox" ${isDone ? 'checked' : ''} onchange="togglePlaybookStep(${item.step}, this.checked)" style="width:18px; height:18px; accent-color:var(--lime-bright); cursor:pointer;" title="Mark step complete">
+              </div>
+            </div>
+            ${isOpen ? `<div style="margin-top:8px; padding-top:8px; border-top:1px solid rgba(255,255,255,0.08); font-size:12px; line-height:1.45; color:rgba(244,247,232,0.86);">${escapeNavHtml(item.guide)}</div>` : ''}
+          </div>
+        `;
+      }).join('');
+
+      const pct = Math.round((doneCount / DEFAULT_LAUNCH_PLAYBOOK.length) * 100);
+      if (fillEl) fillEl.style.width = `${pct}%`;
+      if (lblEl) lblEl.textContent = `${doneCount} / ${DEFAULT_LAUNCH_PLAYBOOK.length} Done`;
+    }
+
+    function togglePlaybookStep(stepNum, checked) {
+      const savedDone = readOrgStore('common_need_org_playbook_done', { 1: true, 2: true });
+      savedDone[stepNum] = !!checked;
+      writeOrgStore('common_need_org_playbook_done', savedDone);
+      renderPlaybookSteps();
+      showToast(checked ? `Completed Collective Launch Step #${stepNum}!` : `Reopened Step #${stepNum}.`);
+    }
+
+    function togglePlaybookDetail(stepNum) {
+      if (expandedPlaybookSteps.has(stepNum)) expandedPlaybookSteps.delete(stepNum);
+      else expandedPlaybookSteps.add(stepNum);
+      renderPlaybookSteps();
+    }
+
+    function renderCollectiveCharterPreview() {
+      const previewEl = document.getElementById('org-charter-preview');
+      if (!previewEl) return;
+      const nameInput = document.getElementById('org-charter-collective-name');
+      const modelSelect = document.getElementById('org-charter-model-select');
+      const name = (nameInput?.value || '').trim() || 'Neighborhood Solidarity Collective';
+      const key = modelSelect ? modelSelect.value : 'mutual_aid_hub';
+      const tpl = CHARTER_STARTER_TEMPLATES[key] || CHARTER_STARTER_TEMPLATES.mutual_aid_hub;
+      const inst = getActiveInstanceInfo();
+
+      previewEl.innerHTML = `
+        <div style="font-weight:700; color:var(--lime-bright); font-size:12px;">${escapeNavHtml(name)} (${escapeNavHtml(inst.code)})</div>
+        <div>• <strong>Structure:</strong> ${escapeNavHtml(tpl.label)}</div>
+        <div>• <strong>Quorum &amp; Voting:</strong> ${escapeNavHtml(tpl.quorum)}</div>
+        <div>• <strong>Working Groups:</strong> ${escapeNavHtml(tpl.groups)}</div>
+        <div>• <strong>First Assembly Flow:</strong> ${escapeNavHtml(tpl.agenda)}</div>
+      `;
+    }
+
+    function copyCollectiveCharter() {
+      const previewEl = document.getElementById('org-charter-preview');
+      const text = previewEl ? previewEl.innerText : '';
+      if (navigator.clipboard && text) {
+        navigator.clipboard.writeText(text).catch(() => {});
+      }
+      showToast('Copied Democratic Charter & First Assembly Agenda to clipboard!');
+    }
+
+    function renderCoalitionLogistics() {
+      const tlEl = document.getElementById('org-timeline-list');
+      const timeline = readOrgStore('common_need_org_timeline', DEFAULT_COALITION_TIMELINE);
+      if (tlEl) {
+        tlEl.innerHTML = timeline.map(ms => {
+          const jsId = escapeJsArg(ms.id);
+          return `
+            <div class="item-lime-card" style="margin:0; flex-direction:column; align-items:stretch; gap:6px;">
+              <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px;">
+                <div style="min-width:0;">
+                  <div style="font-size:12.5px; font-weight:700; color:var(--text-white);">${escapeNavHtml(ms.title)}</div>
+                  <div class="mono-sub" style="margin:2px 0 0; font-size:11px;">📅 ${escapeNavHtml(ms.day)} • ${escapeNavHtml(ms.hubs)}</div>
+                </div>
+                <button type="button" class="olive-badge" style="font-size:10px; padding:3px 8px; cursor:pointer;" onclick="cycleTimelineStatus('${jsId}')">${escapeNavHtml(ms.status)}</button>
+              </div>
+              <div style="display:flex; justify-content:flex-end;">
+                <button type="button" onclick="publishMilestoneToCalendar('${jsId}')" style="background:transparent; border:none; color:var(--lime-bright); font-size:11px; font-weight:700; cursor:pointer; padding:0;">📅 Push Action to Member Calendar →</button>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      const rolesEl = document.getElementById('org-roles-list');
+      const badgeEl = document.getElementById('org-turnout-badge');
+      const fillEl = document.getElementById('org-turnout-progress-fill');
+      const roles = readOrgStore('common_need_org_roles', DEFAULT_COALITION_ROLES);
+      let totalCommitted = 0;
+      let totalTarget = 0;
+      roles.forEach(r => {
+        totalCommitted += (parseInt(r.committed, 10) || 0);
+        totalTarget += Math.max(1, parseInt(r.target, 10) || 1);
+      });
+      if (badgeEl) badgeEl.textContent = `${totalCommitted} / ${totalTarget} Stewards`;
+      if (fillEl) fillEl.style.width = `${Math.min(100, Math.round((totalCommitted / Math.max(1, totalTarget)) * 100))}%`;
+      if (rolesEl) {
+        rolesEl.innerHTML = roles.map(r => {
+          const jsId = escapeJsArg(r.id);
+          return `
+            <div class="item-lime-card" style="margin:0; padding:9px 12px;">
+              <div style="min-width:0;">
+                <div style="font-size:12.5px; font-weight:650; color:var(--text-white);">${escapeNavHtml(r.title)}</div>
+                <div class="mono-sub" style="margin:1px 0 0; font-size:11px;">Coverage: ${r.committed} of ${r.target} slots filled</div>
+              </div>
+              <div class="stepper-pill" style="padding:4px 10px; font-size:12px;">
+                <span onclick="adjustOrgRoleCount('${jsId}', -1)">−</span>
+                <span>${r.committed}</span>
+                <span onclick="adjustOrgRoleCount('${jsId}', 1)">+</span>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      const poolEl = document.getElementById('org-resource-pool-list');
+      const pool = readOrgStore('common_need_org_resource_pool', DEFAULT_RESOURCE_POOL);
+      if (poolEl) {
+        poolEl.innerHTML = pool.map(p => {
+          const jsId = escapeJsArg(p.id);
+          return `
+            <div class="item-lime-card" style="margin:0; padding:10px 12px;">
+              <div style="min-width:0;">
+                <div style="font-size:12.5px; font-weight:650; color:var(--text-white);">${escapeNavHtml(p.item)}</div>
+                <div class="mono-sub" style="margin:2px 0 0; font-size:11px;">Stewarded by ${escapeNavHtml(p.hub)}</div>
+              </div>
+              <button type="button" class="olive-badge" style="cursor:pointer; font-size:10.5px; padding:5px 10px; ${p.claimed ? 'background:rgba(197,255,41,0.22); border-color:var(--lime-bright);' : ''}" onclick="togglePoolResourceClaim('${jsId}')">
+                ${p.claimed ? '✓ Reserved' : 'Borrow'}
+              </button>
+            </div>
+          `;
+        }).join('');
+      }
+
+      const dispEl = document.getElementById('org-dispatches-list');
+      const dispatches = readOrgStore('common_need_org_dispatches', DEFAULT_CROSS_HUB_DISPATCHES);
+      if (dispEl) {
+        dispEl.innerHTML = dispatches.map(d => `
+          <div class="item-lime-card" style="margin:0; flex-direction:column; align-items:flex-start; gap:4px;">
+            <div style="display:flex; justify-content:space-between; width:100%; align-items:center;">
+              <span class="cat-tag-chip" style="margin:0;">${escapeNavHtml(d.urgency)}</span>
+              <span class="mono-sub" style="margin:0; font-size:10.5px;">${escapeNavHtml(d.from)} • ${escapeNavHtml(d.time || 'Just now')}</span>
+            </div>
+            <div style="font-size:12px; line-height:1.42; color:var(--text-cream);">${escapeNavHtml(d.msg)}</div>
+          </div>
+        `).join('');
+      }
+    }
+
+    function cycleTimelineStatus(id) {
+      const states = ['Mobilizing', 'In Progress', 'Ready', '✓ Done'];
+      const timeline = readOrgStore('common_need_org_timeline', DEFAULT_COALITION_TIMELINE);
+      const item = timeline.find(m => m.id === id);
+      if (!item) return;
+      const idx = states.indexOf(item.status);
+      item.status = states[(idx + 1) % states.length];
+      writeOrgStore('common_need_org_timeline', timeline);
+      renderCoalitionLogistics();
+    }
+
+    function addCoalitionMilestone() {
+      const titleInput = document.getElementById('org-milestone-title-input');
+      const dayInput = document.getElementById('org-milestone-day-input');
+      const title = (titleInput?.value || '').trim() || 'Neighborhood Coalition Action & Mutual-Aid Canvass';
+      const day = dayInput ? dayInput.value : 'Sat Nov 14';
+      const inst = getActiveInstanceInfo();
+      const timeline = readOrgStore('common_need_org_timeline', DEFAULT_COALITION_TIMELINE);
+      timeline.unshift({
+        id: 'ms-' + Date.now(),
+        title,
+        day,
+        hubs: `${inst.name} (${inst.code}) + Coalition`,
+        status: 'Mobilizing'
+      });
+      writeOrgStore('common_need_org_timeline', timeline.slice(0, 15));
+      if (titleInput) titleInput.value = '';
+      renderCoalitionLogistics();
+      showToast(`Added "${title}" (${day}) to shared coalition timeline!`);
+    }
+
+    function publishMilestoneToCalendar(id) {
+      const timeline = readOrgStore('common_need_org_timeline', DEFAULT_COALITION_TIMELINE);
+      const ms = timeline.find(m => m.id === id);
+      if (!ms) return;
+      const newEv = {
+        id: 'ev-ms-' + Date.now(),
+        title: ms.title,
+        dayVal: ms.day,
+        dayLabel: `${ms.day} • 12:00 PM`,
+        catLabel: '✊ COALITION ACTION • 🤝 MUTUAL AID',
+        location: '7800 MacArthur Blvd',
+        capacity: 80,
+        desc: `Shared coalition action coordinated across ${ms.hubs}. Open to all community members — interpretation & hospitality crew on site.`,
+        childcare: true,
+        ada: true,
+        interp: true,
+        hostName: ms.hubs,
+        orgCode: 'east_oakland',
+        postedAt: new Date().toISOString()
+      };
+      try {
+        const existing = getStoredLivePartnerEvents();
+        existing.unshift(newEv);
+        localStorage.setItem('common_need_live_partner_events', JSON.stringify(existing.slice(0, 25)));
+      } catch (_e) {}
+      syncLiveSurplusAndEventsToMemberPwa();
+      showToast(`Synced "${ms.title}" live to the Member PWA Calendar!`);
+    }
+
+    function adjustOrgRoleCount(roleId, delta) {
+      const roles = readOrgStore('common_need_org_roles', DEFAULT_COALITION_ROLES);
+      const item = roles.find(r => r.id === roleId);
+      if (!item) return;
+      item.committed = Math.max(0, (parseInt(item.committed, 10) || 0) + delta);
+      writeOrgStore('common_need_org_roles', roles);
+      renderCoalitionLogistics();
+    }
+
+    function togglePoolResourceClaim(poolId) {
+      const pool = readOrgStore('common_need_org_resource_pool', DEFAULT_RESOURCE_POOL);
+      const item = pool.find(p => p.id === poolId);
+      if (!item) return;
+      item.claimed = !item.claimed;
+      writeOrgStore('common_need_org_resource_pool', pool);
+      renderCoalitionLogistics();
+      showToast(item.claimed ? `Reserved "${item.item}" for your hub's upcoming action!` : `Released "${item.item}" back to the coalition pool.`);
+    }
+
+    function addPooledResource() {
+      const itemInput = document.getElementById('org-pool-item-input');
+      const hubInput = document.getElementById('org-pool-hub-input');
+      const item = (itemInput?.value || '').trim();
+      if (!item) {
+        showToast('Enter equipment or shared resource name to pledge to the coalition pool.');
+        return;
+      }
+      const hub = (hubInput?.value || '').trim() || 'East Oakland Hub';
+      const pool = readOrgStore('common_need_org_resource_pool', DEFAULT_RESOURCE_POOL);
+      pool.unshift({ id: 'pool-' + Date.now(), item, hub, claimed: false });
+      writeOrgStore('common_need_org_resource_pool', pool.slice(0, 20));
+      if (itemInput) itemInput.value = '';
+      renderCoalitionLogistics();
+      showToast(`Pledged "${item}" to the inter-hub Mutual-Aid Resource Pool!`);
+    }
+
+    function postCrossHubDispatch() {
+      const urgEl = document.getElementById('org-dispatch-urgency');
+      const msgEl = document.getElementById('org-dispatch-msg-input');
+      const msg = (msgEl?.value || '').trim() || 'Need 2 volunteer couriers & 15 extra blankets for tonight\'s cold-snap check-in loop.';
+      const urgency = urgEl ? urgEl.value : 'RAPID RESPONSE';
+      const inst = getActiveInstanceInfo();
+      const dispatches = readOrgStore('common_need_org_dispatches', DEFAULT_CROSS_HUB_DISPATCHES);
+      dispatches.unshift({
+        id: 'disp-' + Date.now(),
+        urgency,
+        from: `${inst.name} (${inst.code})`,
+        msg,
+        time: 'Just now'
+      });
+      writeOrgStore('common_need_org_dispatches', dispatches.slice(0, 15));
+      if (msgEl) msgEl.value = '';
+      renderCoalitionLogistics();
+      showToast(`Broadcasted ${urgency} dispatch to all peered neighborhood hubs!`);
+    }
+
+    function renderPopularEducationHub() {
+      const curEl = document.getElementById('org-curriculum-list');
+      if (curEl) {
+        curEl.innerHTML = POPULAR_ED_CURRICULUM_TRACKS.map(tr => {
+          const isOpen = expandedCurriculumTracks.has(tr.id);
+          const jsId = escapeJsArg(tr.id);
+          return `
+            <div class="org-step-row ${isOpen ? 'completed' : ''}">
+              <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px; cursor:pointer;" onclick="toggleCurriculumTrack('${jsId}')">
+                <div style="min-width:0;">
+                  <span class="cat-tag-chip" style="margin:0 0 3px 0;">${escapeNavHtml(tr.tag)}</span>
+                  <div style="font-size:13px; font-weight:700; color:var(--text-white);">${escapeNavHtml(tr.title)}</div>
+                  <div class="mono-sub" style="margin:2px 0 0; font-size:11px;">${escapeNavHtml(tr.summary)}</div>
+                </div>
+                <span style="color:rgba(244,247,232,0.7); font-size:11.5px; padding:2px 4px;">${isOpen ? '▲' : '▼'}</span>
+              </div>
+              ${isOpen ? `
+                <div style="margin-top:8px; padding-top:8px; border-top:1px solid rgba(255,255,255,0.08); font-size:11.5px; line-height:1.45; display:flex; flex-direction:column; gap:4px;">
+                  ${tr.sessions.map(s => `<div style="color:rgba(244,247,232,0.88);">• ${escapeNavHtml(s)}</div>`).join('')}
+                  <div style="margin-top:4px; padding:7px 9px; background:rgba(197,255,41,0.08); border-radius:9px; color:var(--lime-bright); font-size:11px;">
+                    ${escapeNavHtml(tr.prompt)}
+                  </div>
+                  <button type="button" class="olive-badge" style="margin-top:6px; cursor:pointer; text-align:center; border-color:var(--lime-bright);" onclick="prefillCohortFromTrack('${jsId}')">
+                    + Load Track into Cohort Scheduler ↓
+                  </button>
+                </div>
+              ` : ''}
+            </div>
+          `;
+        }).join('');
+      }
+
+      const cohEl = document.getElementById('org-cohorts-list');
+      const cohorts = readOrgStore('common_need_org_cohorts', DEFAULT_POPULAR_ED_COHORTS);
+      if (cohEl) {
+        cohEl.innerHTML = cohorts.map(c => `
+          <div class="item-lime-card" style="margin:0; flex-direction:column; align-items:flex-start; gap:3px;">
+            <div style="display:flex; justify-content:space-between; width:100%; align-items:center; gap:8px;">
+              <span class="cat-tag-chip" style="margin:0;">${escapeNavHtml(c.type.toUpperCase())}</span>
+              <span class="olive-badge" style="font-size:10px; padding:2px 8px;">${escapeNavHtml(c.dayLabel)}</span>
+            </div>
+            <div style="font-size:13px; font-weight:700; color:var(--text-white); margin-top:2px;">${escapeNavHtml(c.title)}</div>
+            <div class="mono-sub" style="margin:0; font-size:11px;">Facilitated by ${escapeNavHtml(c.facilitator)} • 📍 ${escapeNavHtml(c.location)}${c.synced ? ' • ✓ Live on Member Calendar' : ''}</div>
+          </div>
+        `).join('');
+      }
+
+      const pipeRosterEl = document.getElementById('org-pipeline-roster');
+      const roster = readOrgStore('common_need_org_pipeline', DEFAULT_LEADERSHIP_PIPELINE);
+      const stageNames = {
+        1: 'Stage 1 • Neighbor Participant',
+        2: 'Stage 2 • Circle & Shift Steward',
+        3: 'Stage 3 • Working-Group Anchor',
+        4: 'Stage 4 • Recallable Delegate'
+      };
+      if (pipeRosterEl) {
+        pipeRosterEl.innerHTML = roster.map(m => {
+          const jsId = escapeJsArg(m.id);
+          return `
+            <div class="item-lime-card" style="margin:0; padding:10px 12px;">
+              <div style="min-width:0;">
+                <div style="font-size:12.5px; font-weight:700; color:var(--text-white);">${escapeNavHtml(m.name)} <span style="color:var(--lime-bright); font-weight:600; font-size:11px;">(${escapeNavHtml(stageNames[m.stage] || stageNames[1])})</span></div>
+                <div class="mono-sub" style="margin:2px 0 0; font-size:11px;">${escapeNavHtml(m.focus)}</div>
+              </div>
+              <button type="button" class="olive-badge" style="cursor:pointer; font-size:10.5px; padding:5px 9px; flex-shrink:0;" onclick="advancePipelineMember('${jsId}')">
+                ${m.stage < 4 ? 'Advance →' : '★ Mentor'}
+              </button>
+            </div>
+          `;
+        }).join('');
+      }
+    }
+
+    function toggleCurriculumTrack(trackId) {
+      if (expandedCurriculumTracks.has(trackId)) expandedCurriculumTracks.delete(trackId);
+      else expandedCurriculumTracks.add(trackId);
+      renderPopularEducationHub();
+    }
+
+    function prefillCohortFromTrack(trackId) {
+      const tr = POPULAR_ED_CURRICULUM_TRACKS.find(t => t.id === trackId);
+      if (!tr) return;
+      const titleInput = document.getElementById('org-cohort-title-input');
+      const typeSelect = document.getElementById('org-cohort-type-select');
+      if (titleInput) {
+        titleInput.value = `${tr.title} — Cohort Session 1`;
+        titleInput.focus();
+      }
+      if (typeSelect) typeSelect.value = '4-Week Cohort';
+      showToast(`Loaded "${tr.title}" into Cohort Scheduler!`);
+    }
+
+    function schedulePopularEdCohort() {
+      const titleInput = document.getElementById('org-cohort-title-input');
+      const typeSelect = document.getElementById('org-cohort-type-select');
+      const daySelect = document.getElementById('org-cohort-day-select');
+      const facInput = document.getElementById('org-cohort-facilitator-input');
+      const locInput = document.getElementById('org-cohort-location-input');
+      const syncChk = document.getElementById('org-cohort-sync-cal');
+
+      const type = typeSelect ? typeSelect.value : 'Study Circle';
+      const title = (titleInput?.value || '').trim() || 'Tenant Rights, Solidarity Economics & Organizing Study Circle';
+      const dayVal = daySelect ? daySelect.value : 'Sat Nov 7';
+      const dayLabel = daySelect ? daySelect.options[daySelect.selectedIndex].text : 'Sat Nov 7 • 2:00 PM';
+      const facilitator = (facInput?.value || '').trim() || 'Popular Ed Working Group';
+      const location = (locInput?.value || '').trim() || '7800 MacArthur Blvd';
+      const syncToCal = syncChk ? !!syncChk.checked : true;
+
+      const cohorts = readOrgStore('common_need_org_cohorts', DEFAULT_POPULAR_ED_COHORTS);
+      const newCoh = {
+        id: 'coh-' + Date.now(),
+        type,
+        title,
+        dayVal,
+        dayLabel,
+        facilitator,
+        location,
+        synced: syncToCal
+      };
+      cohorts.unshift(newCoh);
+      writeOrgStore('common_need_org_cohorts', cohorts.slice(0, 20));
+
+      if (syncToCal) {
+        const inst = getActiveInstanceInfo();
+        const calEv = {
+          id: 'ev-ed-' + Date.now(),
+          title: `${type}: ${title}`,
+          dayVal,
+          dayLabel,
+          catLabel: '📚 POPULAR ED • ✊ ORGANIZING',
+          location,
+          capacity: 35,
+          desc: `Popular education ${type.toLowerCase()} facilitated by ${facilitator}. Free dinner, study materials, and childcare provided — all neighbors welcome.`,
+          childcare: true,
+          ada: true,
+          interp: true,
+          hostName: `${inst.name} Popular Ed Hub`,
+          orgCode: 'east_oakland',
+          postedAt: new Date().toISOString()
+        };
+        try {
+          const existing = getStoredLivePartnerEvents();
+          existing.unshift(calEv);
+          localStorage.setItem('common_need_live_partner_events', JSON.stringify(existing.slice(0, 25)));
+        } catch (_e) {}
+        syncLiveSurplusAndEventsToMemberPwa();
+      }
+
+      if (titleInput) titleInput.value = '';
+      renderPopularEducationHub();
+      showToast(syncToCal ? `Scheduled "${title}" & published live to Member PWA Calendar!` : `Scheduled "${title}" in Popular Education Hub!`);
+    }
+
+    function advancePipelineMember(memberId) {
+      const roster = readOrgStore('common_need_org_pipeline', DEFAULT_LEADERSHIP_PIPELINE);
+      const item = roster.find(m => m.id === memberId);
+      if (!item) return;
+      item.stage = item.stage < 4 ? item.stage + 1 : 1;
+      writeOrgStore('common_need_org_pipeline', roster);
+      renderPopularEducationHub();
+      showToast(`Updated ${item.name} in Solidarity Leadership Pipeline (Stage ${item.stage})!`);
+    }
+
+    function addPipelineMember() {
+      const nameInput = document.getElementById('org-pipe-name-input');
+      const focusInput = document.getElementById('org-pipe-focus-input');
+      const name = (nameInput?.value || '').trim();
+      if (!name) {
+        showToast('Enter a neighbor or steward name to add to the leadership pipeline.');
+        return;
+      }
+      const focus = (focusInput?.value || '').trim() || 'Joining Popular Ed Study Circle & Shadowing Shift Anchor';
+      const roster = readOrgStore('common_need_org_pipeline', DEFAULT_LEADERSHIP_PIPELINE);
+      roster.unshift({ id: 'ldr-' + Date.now(), name, stage: 1, focus });
+      writeOrgStore('common_need_org_pipeline', roster.slice(0, 20));
+      if (nameInput) nameInput.value = '';
+      if (focusInput) focusInput.value = '';
+      renderPopularEducationHub();
+      showToast(`Added ${name} to the Solidarity Leadership Pipeline!`);
+    }
+
+    function initPartnerOrganizingHub() {
+      renderPlaybookSteps();
+      renderCollectiveCharterPreview();
+      renderCoalitionLogistics();
+      renderPopularEducationHub();
     }
 
     function initLeafletMap() {
@@ -2963,10 +4475,275 @@
       leafletMap.fitBounds(stopCoords, { padding: [20, 20] });
     }
 
+    let selectedDecidimSsoType = 'member';
+    let decidimAuthMode = 'signin';
+
+    const DECIDIM_FEDERATED_INSTANCES = [
+      { code: '#BRK-02', name: 'Berkeley Cooperative Node', host: 'berkeley-02.common-need.org', zips: ['94701','94702','94703','94704','94705','94706','94707','94708','94709','94710','94720'], keywords: /berkeley|shattuck|telegraph|albany|university ave/i },
+      { code: '#RCH-03', name: 'Richmond / West County Node', host: 'richmond-03.common-need.org', zips: ['94801','94803','94804','94805','94806','94530'], keywords: /richmond|san pablo|el cerrito|pinole|west county|macdonald/i },
+      { code: '#SLN-04', name: 'South County Solidarity Node', host: 'southcounty-04.common-need.org', zips: ['94577','94578','94579','94580','94541','94544','94545'], keywords: /san leandro|hayward|san lorenzo|castro valley|ashland|cherryland/i },
+      { code: '#WOK-05', name: 'West Oakland Commons Node', host: 'westoakland-05.common-need.org', zips: ['94607','94608','94609','94611','94612','94618'], keywords: /west oakland|emeryville|temescal|mandela|adeline|7th st/i },
+      { code: '#OAK-01', name: 'East Oakland Local Node', host: 'oakland-01.common-need.org', zips: ['94601','94602','94603','94605','94606','94619','94621'], keywords: /east oakland|fruitvale|san antonio|macarthur|62nd|international|oakland/i }
+    ];
+
+    const DECIDIM_SSO_PROFILES = {
+      member: { userType: 'member', name: 'Rosa Morales', email: 'rosa@oakland-node.org', address: '1420 62nd Ave, Oakland, CA 94621', portalLabel: 'Member PWA' },
+      volunteer: { userType: 'volunteer', name: 'Marcus Vance', email: 'marcus@oakland-node.org', address: '3115 San Pablo Ave, Oakland, CA 94608', portalLabel: 'Volunteer PWA' },
+      nonprofit: { userType: 'nonprofit', name: 'Elena Rostova', email: 'elena@eastoaklandpantry.org', address: '7800 MacArthur Blvd, Oakland, CA 94605', portalLabel: 'Partner PWA' }
+    };
+
+    function resolveDecidimInstanceFromAddress(rawAddress) {
+      const addr = (rawAddress || '').trim();
+      if (addr) {
+        const zipMatch = addr.match(/\b(\d{5})\b/);
+        if (zipMatch) {
+          const byZip = DECIDIM_FEDERATED_INSTANCES.find(inst => inst.zips.includes(zipMatch[1]));
+          if (byZip) return byZip;
+        }
+        const byKeyword = DECIDIM_FEDERATED_INSTANCES.find(inst => inst.keywords.test(addr));
+        if (byKeyword) return byKeyword;
+      }
+      return DECIDIM_FEDERATED_INSTANCES[DECIDIM_FEDERATED_INSTANCES.length - 1];
+    }
+
+    function updateDecidimInstancePreview(rawAddress) {
+      const pillEl = document.getElementById('decidim-sso-instance-pill');
+      if (!pillEl) return;
+      const trimmed = (rawAddress || '').trim();
+      if (!trimmed) {
+        pillEl.textContent = '📍 Enter your address or ZIP to link your local Decidim instance';
+        return;
+      }
+      const inst = resolveDecidimInstanceFromAddress(trimmed);
+      pillEl.textContent = `📍 Linked Instance: ${inst.name} (${inst.code})`;
+    }
+
+    function updateMemberGeminiHeaderIdentity(session) {
+      if (!session) return;
+      const firstName = ((session.name || 'Rosa').trim().split(/\s+/)[0]) || 'Rosa';
+      const initial = firstName.charAt(0).toUpperCase() || 'R';
+      const firstEl = document.getElementById('member-gemini-first-name');
+      const initEl = document.getElementById('member-top-avatar-initial');
+      if (firstEl) firstEl.textContent = firstName;
+      if (initEl) initEl.textContent = initial;
+    }
+
+    function updatePartnerHeaderIdentity(session) {
+      if (!session) return;
+      const rawName = (session.name || 'Elena Rostova').trim();
+      const initial = rawName.charAt(0).toUpperCase() || 'E';
+      const initEl = document.getElementById('partner-top-avatar-initial');
+      if (initEl) initEl.textContent = initial;
+      const subEl = document.getElementById('partner-hub-org-subtitle');
+      if (subEl && session.userType === 'nonprofit') {
+        const displayOrg = rawName === 'Elena Rostova' ? 'East Oakland Collective Pantry' : rawName;
+        subEl.textContent = `${displayOrg} • ${session.instanceCode || '<%= current_local_node_code %>'}`;
+      }
+    }
+
+    function syncActiveSessionForRole(role) {
+      if (!DECIDIM_SSO_PROFILES[role]) return;
+      let activeSession = null;
+      try {
+        activeSession = JSON.parse(sessionStorage.getItem('common_need_decidim_sso') || 'null');
+      } catch (e) {}
+      if (!activeSession || activeSession.userType !== role) {
+        const profile = DECIDIM_SSO_PROFILES[role];
+        const inst = resolveDecidimInstanceFromAddress(profile.address);
+        activeSession = {
+          authenticated: true,
+          userType: profile.userType,
+          name: profile.name,
+          email: profile.email,
+          address: profile.address,
+          instanceCode: inst.code,
+          instanceName: inst.name,
+          instanceHost: inst.host
+        };
+      }
+      if (role === 'member') updateMemberGeminiHeaderIdentity(activeSession);
+      if (role === 'nonprofit') updatePartnerHeaderIdentity(activeSession);
+      const instBarEl = document.getElementById('pwa-active-instance-bar');
+      const instTextEl = document.getElementById('pwa-active-instance-text');
+      const instHostEl = document.getElementById('pwa-active-instance-host');
+      if (role === 'member' || role === 'nonprofit') {
+        if (instBarEl) instBarEl.classList.add('hidden');
+      } else if (instBarEl) {
+        instBarEl.classList.remove('hidden');
+        if (instTextEl) instTextEl.textContent = `📍 ${activeSession.instanceName} (${activeSession.instanceCode})`;
+        if (instHostEl) instHostEl.textContent = activeSession.instanceHost;
+      }
+    }
+
+    function selectDecidimSsoType(userType) {
+      if (!DECIDIM_SSO_PROFILES[userType]) userType = 'member';
+      selectedDecidimSsoType = userType;
+      ['member', 'volunteer', 'nonprofit'].forEach(type => {
+        const card = document.getElementById('sso-card-' + type);
+        const isSelected = (type === userType);
+        if (card) {
+          card.style.background = isSelected ? 'var(--lime-card)' : 'transparent';
+          card.style.color = isSelected ? 'var(--text-white)' : 'var(--text-cream)';
+          card.style.border = isSelected ? '1.5px solid var(--lime-bright)' : '1.5px solid transparent';
+        }
+      });
+      if (decidimAuthMode === 'signin') {
+        const emailEl = document.getElementById('decidim-sso-email');
+        if (emailEl) emailEl.value = DECIDIM_SSO_PROFILES[userType].email;
+      }
+    }
+
+    function toggleDecidimAuthMode(mode) {
+      decidimAuthMode = (mode === 'register') ? 'register' : 'signin';
+      const isRegister = (decidimAuthMode === 'register');
+      const headingEl = document.getElementById('decidim-sso-heading');
+      const nameGroupEl = document.getElementById('decidim-sso-name-group');
+      const addrGroupEl = document.getElementById('decidim-sso-address-group');
+      const submitBtnEl = document.getElementById('decidim-sso-submit-btn');
+      if (headingEl) headingEl.textContent = isRegister ? 'Create Account' : 'Sign In';
+      if (nameGroupEl) nameGroupEl.classList.toggle('hidden', !isRegister);
+      if (addrGroupEl) addrGroupEl.classList.toggle('hidden', !isRegister);
+      if (submitBtnEl) submitBtnEl.textContent = isRegister ? 'Create Account →' : 'Sign In →';
+    }
+
+    function openProfileModal() {
+      let session = null;
+      try {
+        session = JSON.parse(sessionStorage.getItem('common_need_decidim_sso') || 'null');
+      } catch (e) {}
+      const activeRole = ['member', 'volunteer', 'nonprofit'].find(r => {
+        const el = document.getElementById('role-view-' + r);
+        return el && !el.classList.contains('hidden');
+      }) || 'member';
+      const profile = DECIDIM_SSO_PROFILES[activeRole];
+      const inst = resolveDecidimInstanceFromAddress(session?.address || profile.address);
+      const cur = session || {
+        userType: profile.userType,
+        name: profile.name,
+        email: profile.email,
+        address: profile.address,
+        instanceCode: inst.code,
+        instanceName: inst.name
+      };
+      const roleBadges = { member: '🛍️ MEMBER PROFILE', volunteer: '🚚 VOLUNTEER PROFILE', nonprofit: '🏢 PARTNER PROFILE' };
+      const badgeEl = document.getElementById('pwa-profile-role-badge');
+      const nameEl = document.getElementById('pwa-profile-name-display');
+      const emailEl = document.getElementById('pwa-profile-email-display');
+      const addrInputEl = document.getElementById('pwa-profile-address-input');
+      const modalEl = document.getElementById('pwa-profile-modal');
+      if (badgeEl) badgeEl.textContent = roleBadges[cur.userType] || '🛍️ MEMBER PROFILE';
+      if (nameEl) nameEl.textContent = cur.name;
+      if (emailEl) emailEl.textContent = cur.email;
+      if (addrInputEl) {
+        addrInputEl.value = cur.address || '';
+        updateProfileInstancePreview(addrInputEl.value);
+      }
+      if (modalEl) modalEl.classList.remove('hidden');
+    }
+
+    function closeProfileModal() {
+      const modalEl = document.getElementById('pwa-profile-modal');
+      if (modalEl) modalEl.classList.add('hidden');
+    }
+
+    function updateProfileInstancePreview(rawAddress) {
+      const previewEl = document.getElementById('pwa-profile-instance-preview');
+      if (!previewEl) return;
+      const trimmed = (rawAddress || '').trim();
+      if (!trimmed) {
+        previewEl.textContent = '📍 Enter your street address or ZIP code to link your local instance';
+        return;
+      }
+      const inst = resolveDecidimInstanceFromAddress(trimmed);
+      previewEl.textContent = `📍 Linked Instance: ${inst.name} (${inst.code}) • ${inst.host}`;
+    }
+
+    function saveProfileAddressUpdate() {
+      const addrInputEl = document.getElementById('pwa-profile-address-input');
+      const newAddress = addrInputEl ? addrInputEl.value.trim() : '';
+      if (!newAddress) return;
+      const activeRole = ['member', 'volunteer', 'nonprofit'].find(r => {
+        const el = document.getElementById('role-view-' + r);
+        return el && !el.classList.contains('hidden');
+      }) || 'member';
+      const profile = DECIDIM_SSO_PROFILES[activeRole] || DECIDIM_SSO_PROFILES.member;
+      const inst = resolveDecidimInstanceFromAddress(newAddress);
+      const updated = {
+        authenticated: true,
+        userType: activeRole,
+        name: profile.name,
+        email: profile.email,
+        address: newAddress,
+        instanceCode: inst.code,
+        instanceName: inst.name,
+        instanceHost: inst.host
+      };
+      try {
+        sessionStorage.setItem('common_need_decidim_sso', JSON.stringify(updated));
+      } catch (e) {}
+      syncActiveSessionForRole(activeRole);
+      renderCollectiveCharterPreview();
+      closeProfileModal();
+      showToast(`✓ Profile address updated — Linked to ${inst.name} (${inst.code})`);
+    }
+
+    function openDecidimSignOn(defaultType) {
+      selectDecidimSsoType(defaultType || 'member');
+      ['member', 'volunteer', 'nonprofit', 'localnode', 'network'].forEach(r => {
+        const viewEl = document.getElementById('role-view-' + r);
+        if (viewEl) viewEl.classList.add('hidden');
+      });
+      closeProfileModal();
+      const ssoGate = document.getElementById('decidim-sso-gate');
+      if (ssoGate) ssoGate.classList.remove('hidden');
+    }
+
+    function submitDecidimSignOn() {
+      const profile = DECIDIM_SSO_PROFILES[selectedDecidimSsoType] || DECIDIM_SSO_PROFILES.member;
+      const addrEl = document.getElementById('decidim-sso-address');
+      const nameEl = document.getElementById('decidim-sso-name');
+      const emailEl = document.getElementById('decidim-sso-email');
+      const addr = (addrEl?.value || '').trim() || profile.address;
+      const inst = resolveDecidimInstanceFromAddress(addr);
+      const session = {
+        authenticated: true,
+        userType: profile.userType,
+        name: (nameEl?.value || '').trim() || profile.name,
+        email: (emailEl?.value || '').trim() || profile.email,
+        address: addr,
+        instanceCode: inst.code,
+        instanceName: inst.name,
+        instanceHost: inst.host
+      };
+      try {
+        sessionStorage.setItem('common_need_decidim_sso', JSON.stringify(session));
+      } catch (e) {}
+      switchRole(profile.userType);
+      renderCollectiveCharterPreview();
+      showToast(`✓ Signed In & Linked to ${inst.name} (${inst.code}) — Opened ${profile.portalLabel}`);
+    }
+
+    function signOutDecidim() {
+      const lastRole = ['member', 'volunteer', 'nonprofit'].find(r => {
+        const el = document.getElementById('role-view-' + r);
+        return el && !el.classList.contains('hidden');
+      }) || '<%= @active_role %>';
+      try {
+        sessionStorage.removeItem('common_need_decidim_sso');
+      } catch (e) {}
+      toggleMemberNavDropdown(false);
+      togglePartnerNavDropdown(false);
+      closeProfileModal();
+      openDecidimSignOn(lastRole);
+      showToast('Signed out of Decidim Local Node session.');
+    }
+
+    initPartnerOrganizingHub();
     syncLiveSurplusAndEventsToMemberPwa();
     window.addEventListener('storage', (ev) => {
-      if (!ev.key || ev.key.startsWith('common_need_live_')) {
+      if (!ev.key || ev.key.startsWith('common_need_live_') || ev.key.startsWith('common_need_org_')) {
         syncLiveSurplusAndEventsToMemberPwa();
+        initPartnerOrganizingHub();
       }
     });
     switchRole('<%= @active_role %>');
