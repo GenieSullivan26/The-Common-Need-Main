@@ -718,7 +718,7 @@
       </div>
 
       <div class="pwa-header hidden" id="member-pwa-header">
-        <!-- Search & Local Resource Navigator Quick Bar -->
+        <!-- Search Quick Bar -->
         <div id="member-search-row" style="display:flex; gap:8px; margin-bottom:10px; align-items:center;">
           <input type="text"
                  id="member-catalog-search"
@@ -728,11 +728,6 @@
                  data-catalog-filter-target="searchInput"
                  data-action="input->catalog-filter#search"
                  oninput="searchMemberCatalog(this.value)">
-          <button class="olive-badge"
-                  style="cursor:pointer;"
-                  onclick="switchMemberTab(5)">
-            🧭 Resource Navigator
-          </button>
         </div>
 
         <!-- 19 Decidim Taxonomy Categories Bar -->
@@ -762,13 +757,6 @@
 
       <!-- MEMBER TAB 1: Expanded Goods & Community Services Catalog (All 19 Categories) -->
       <div class="pwa-body" id="member-tab-1">
-        <div style="display:flex; justify-content:space-between; align-items:center; padding:0 2px;">
-          <div style="font-size:12px; color:rgba(244,247,232,0.75); font-weight:500;" id="active-cat-banner-text" data-catalog-filter-target="bannerText">
-            4 Neighborhood Hubs • 19 Community Categories
-          </div>
-          <span style="font-size:10px; color:var(--lime-bright); font-weight:700; letter-spacing:0.4px; opacity:0.9;">UNCONDITIONAL SOLIDARITY</span>
-        </div>
-
         <turbo-frame id="member-catalog-frame" data-catalog-filter-target="turboFrame">
           <div id="member-live-surplus-feed" class="member-hub-card"></div>
           <% @hubs.each do |hub| %>
@@ -2020,11 +2008,6 @@
       });
 
       updateHubCardVisibility();
-
-      const bannerText = document.getElementById('active-cat-banner-text');
-      if (bannerText) {
-        bannerText.textContent = categoryDisplayNames[cat] || 'Showing matching community offerings';
-      }
     }
 
     function searchMemberCatalog(query) {

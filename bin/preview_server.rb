@@ -69,7 +69,7 @@ MANIFEST_JSON = JSON.pretty_generate(
 )
 
 SERVICE_WORKER_JS = <<~JS
-  const CACHE_NAME = "common-need-pwa-v0.32.4";
+  const CACHE_NAME = "common-need-pwa-v4";
   const OFFLINE_URLS = ["/", "/manifest.json", "/volunteer/routes/OAK-409/offline_bundle.json"];
 
   self.addEventListener("install", (event) => {
@@ -77,9 +77,43 @@ SERVICE_WORKER_JS = <<~JS
     self.skipWaiting();
   });
 
+  self.addEventListener("activate", (event) => {
+    event.waitUntil(
+      (async () => {
+        const keys = await caches.keys();
+        await Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k)));
+        await self.clients.claim();
+      })()
+    );
+  });
+
   self.addEventListener("fetch", (event) => {
+    const req = event.request;
+    if (req.method !== "GET") return;
+
+    const isHtmlNavigation =
+      req.mode === "navigate" ||
+      req.destination === "document" ||
+      req.url.endsWith("/") ||
+      req.url.endsWith(".html");
+
+    if (isHtmlNavigation) {
+      event.respondWith(
+        fetch(req, { cache: "no-store" })
+          .then(async (networkRes) => {
+            if (networkRes && networkRes.ok) {
+              const cache = await caches.open(CACHE_NAME);
+              cache.put(req, networkRes.clone());
+            }
+            return networkRes;
+          })
+          .catch(() => caches.match(req))
+      );
+      return;
+    }
+
     event.respondWith(
-      caches.match(event.request).then((cached) => cached || fetch(event.request))
+      caches.match(req).then((cached) => cached || fetch(req))
     );
   });
 JS

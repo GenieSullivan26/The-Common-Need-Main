@@ -787,12 +787,9 @@
       </div>
 
       <div class="pwa-header hidden" id="member-pwa-header">
-        <!-- Search & Local Resource Navigator Quick Bar -->
+        <!-- Search Quick Bar -->
         <div id="member-search-row" style="display:flex; gap:8px; margin-bottom:10px; align-items:center;">
           <input type="text" id="member-catalog-search" class="dark-input" style="margin:0; flex:1;" placeholder="🔍 Search food, health, legal, housing..." oninput="searchMemberCatalog(this.value)">
-          <button class="olive-badge" style="cursor:pointer;" onclick="switchMemberTab(5)">
-            🧭 Resource Navigator
-          </button>
         </div>
 
         <!-- 19 Decidim Taxonomy Categories Bar -->
@@ -822,13 +819,6 @@
 
       <!-- MEMBER TAB 1: Expanded Goods & Community Services Catalog (All 19 Categories) -->
       <div class="pwa-body hidden" id="member-tab-1">
-        <div style="display:flex; justify-content:space-between; align-items:center; padding:0 2px;">
-          <div style="font-size:12px; color:rgba(244,247,232,0.75); font-weight:500;" id="active-cat-banner-text">
-            4 Neighborhood Hubs • 19 Community Categories
-          </div>
-          <span style="font-size:10px; color:var(--lime-bright); font-weight:700; letter-spacing:0.4px; opacity:0.9;">UNCONDITIONAL SOLIDARITY</span>
-        </div>
-
         <!-- =======================================================
              HUB 1: East Oakland Nourishment, Garden, Pets & Co-op Commons
              Categories: Food, Mutual Aid, Co-ops, Garden, Pets
@@ -2665,11 +2655,6 @@
       });
 
       updateHubCardVisibility();
-
-      const bannerText = document.getElementById('active-cat-banner-text');
-      if (bannerText) {
-        bannerText.textContent = categoryDisplayNames[cat] || 'Showing matching community offerings';
-      }
     }
 
     function searchMemberCatalog(query) {
