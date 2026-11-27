@@ -105,7 +105,7 @@ RSpec.describe "The Common Need 5-Role PWA Suite System Specs", type: :system do
       expect(page).to have_content("Calendar")
       expect(page).to have_content("Vote")
       expect(page).not_to have_content("NO MEANS-TESTING")
-      expect(page).to have_content("UNCONDITIONAL SOLIDARITY")
+      expect(page).not_to have_content("UNCONDITIONAL SOLIDARITY")
     end
 
     it "renders all 19 community taxonomy category filter pills and 4 neighborhood hubs in Tab 1 (Browse)" do
@@ -134,10 +134,10 @@ RSpec.describe "The Common Need 5-Role PWA Suite System Specs", type: :system do
       expect(page).to have_content("Veteran Services: VA Disability Claim & DD-214 Support Packet")
     end
 
-    it "renders Tab 3 (Multi-Hub Care Basket) with Low-Data Dynamic Delivery Banner, De-Commodified Care Ledger, and Handoff toggles" do
+    it "renders Tab 3 (Multi-Hub Care Basket) with Low-Data Dynamic Delivery Banner and Handoff toggles" do
       expect(page).to have_content("LOW-DATA DYNAMIC WINDOW • ZERO MAP TILES")
       expect(page).to have_content("Window: 2:35 PM – 2:50 PM (2 Stops Away)")
-      expect(page).to have_content("39 Meals + 20 N95s (29 lbs)")
+      expect(page).not_to have_content("COMMUNITY VALUE & CARE LEDGER")
       expect(page).to have_content("Bring up porch steps to door")
       expect(page).to have_content("Wait 60s at door (Mobility Aid / Senior)")
       expect(page).to have_content("DISPATCH VOLUNTEER CARE COURIER →")

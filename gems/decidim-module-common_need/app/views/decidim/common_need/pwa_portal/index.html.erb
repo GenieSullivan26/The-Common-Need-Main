@@ -814,16 +814,6 @@
             </label>
           </div>
 
-          <div class="lime-dashed-banner" style="font-family:monospace; font-size:12px; line-height:1.5;">
-            <div style="display:flex; justify-content:space-between; font-weight:800; margin-bottom:6px;">
-              <span>COMMUNITY VALUE & CARE LEDGER</span>
-              <span style="color:#120924; background:var(--lime-bright); padding:2px 6px; border-radius:4px;">DE-COMMODIFIED</span>
-            </div>
-            <div>Nourishment & Care Load: <strong style="color:var(--text-white)" id="ledger-summary-load">39 Meals + 20 N95s (29 lbs)</strong></div>
-            <div>Federated Routing Node: <strong style="color:var(--text-white)">East Oakland Local Instance</strong></div>
-            <div>Access Principle: <strong style="color:var(--lime-bright)">UNCONDITIONAL SOLIDARITY</strong></div>
-          </div>
-
           <button class="cta-olive-btn" onclick="submitFreeDelivery()">
             DISPATCH VOLUNTEER CARE COURIER →
           </button>
@@ -2331,10 +2321,6 @@
     function updateBasketLabels() {
       document.getElementById('nav-basket-label').textContent = `Basket (${basketCount})`;
       document.getElementById('basket-item-count').textContent = basketCount;
-      const loadEl = document.getElementById('ledger-summary-load');
-      if (loadEl) {
-        loadEl.textContent = `${basketCount} Community Shares (39 Meals + Care Items)`;
-      }
     }
 
     function syncHandoffNotes() {
