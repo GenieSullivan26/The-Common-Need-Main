@@ -530,6 +530,35 @@
       display: none;
     }
 
+    .basket-item-row + .basket-item-row {
+      border-top: 1px solid rgba(255, 255, 255, 0.16);
+      padding-top: 10px;
+    }
+
+    .basket-remove-btn {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      color: rgba(244, 247, 232, 0.78);
+      font-size: 12px;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      padding: 0;
+      flex-shrink: 0;
+      transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .basket-remove-btn:hover {
+      background: rgba(255, 107, 107, 0.18);
+      border-color: rgba(255, 107, 107, 0.55);
+      color: #ff9b9b;
+    }
+
     .hidden { display: none !important; }
   </style>
 </head>
@@ -772,31 +801,39 @@
 
           <div class="dark-card">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-              <span style="font-family:monospace; font-size:11.5px; font-weight:700;">
-                MULTI-HUB CARE BASKET (<span id="basket-item-count">2</span> SHARES)
+              <span class="pantry-title" style="margin:0; font-size:15px;">
+                Mutual-Aid Basket
               </span>
               <span class="mono-sub" style="margin:0; cursor:pointer;" onclick="switchMemberTab(1)">+ Add More</span>
             </div>
             <hr style="border-color: var(--lime-bright); margin-bottom:10px;">
 
             <div id="dynamic-basket-items-list" style="display:flex; flex-direction:column; gap:10px;">
-              <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-                <div>
-                  <div style="font-size:13px; font-weight:700;">1x Organic Collard Greens, Kale & Grain Box</div>
-                  <div class="mono-sub" style="margin-top:4px;">Food • East Oakland Collective Pantry</div>
+              <div class="basket-item-row" data-stepper-id="collards" data-qty="1" data-item-name="Organic Collard Greens, Kale &amp; Grain Box" style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
+                <div style="min-width:0;">
+                  <div style="font-size:13px; font-weight:700;"><span class="basket-row-qty">1</span>x Organic Collard Greens, Kale &amp; Grain Box</div>
+                  <div class="mono-sub" style="margin:4px 0 0;">Food • East Oakland Collective Pantry</div>
                 </div>
-                <span class="olive-badge">28 lbs / 39 Meals</span>
+                <div style="display:flex; align-items:center; gap:8px; flex-shrink:0;">
+                  <span class="olive-badge">28 lbs / 39 Meals</span>
+                  <button type="button" class="basket-remove-btn" title="Remove from basket" aria-label="Remove item" onclick="removeBasketItem(this)">✕</button>
+                </div>
               </div>
 
-              <hr style="border-color: rgba(255,255,255,0.2);">
-
-              <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-                <div>
-                  <div style="font-size:13px; font-weight:700;">1x N95 Particulate Respirator Masks (20-Pack)</div>
-                  <div class="mono-sub" style="margin-top:4px;">Health • West County Health Sanctuary</div>
+              <div class="basket-item-row" data-stepper-id="masks" data-qty="1" data-item-name="N95 Particulate Respirator Masks (20-Pack)" style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
+                <div style="min-width:0;">
+                  <div style="font-size:13px; font-weight:700;"><span class="basket-row-qty">1</span>x N95 Particulate Respirator Masks (20-Pack)</div>
+                  <div class="mono-sub" style="margin:4px 0 0;">Health • West County Health Sanctuary</div>
                 </div>
-                <span class="olive-badge">20 N95s / Air</span>
+                <div style="display:flex; align-items:center; gap:8px; flex-shrink:0;">
+                  <span class="olive-badge">20 N95s / Air</span>
+                  <button type="button" class="basket-remove-btn" title="Remove from basket" aria-label="Remove item" onclick="removeBasketItem(this)">✕</button>
+                </div>
               </div>
+            </div>
+
+            <div id="basket-empty-state" class="hidden" style="text-align:center; padding:12px 6px; color:rgba(244,247,232,0.68); font-size:12.5px;">
+              Your basket is empty. Tap <strong style="color:var(--lime-bright); cursor:pointer;" onclick="switchMemberTab(1)">+ Add More</strong> to browse offerings.
             </div>
           </div>
 
@@ -2289,38 +2326,127 @@
       showToast('Your verified member vote was signed & syndicated to the Network Assembly tally!');
     }
 
+    const STEPPER_BASKET_DEFAULTS = {
+      collards: {
+        name: 'Organic Collard Greens, Kale & Grain Box',
+        hub: 'Food • East Oakland Collective Pantry',
+        badge: '28 lbs / 39 Meals'
+      },
+      masks: {
+        name: 'N95 Particulate Respirator Masks (20-Pack)',
+        hub: 'Health • West County Health Sanctuary',
+        badge: '20 N95s / Air'
+      }
+    };
+
+    function createBasketRowElement({ itemName, hubLabel, badgeLabel, qty = 1, stepperId = '' }) {
+      const row = document.createElement('div');
+      row.className = 'basket-item-row';
+      if (stepperId) row.dataset.stepperId = stepperId;
+      row.dataset.qty = String(qty);
+      row.dataset.itemName = itemName || 'Community Share';
+      row.style.cssText = 'display:flex; justify-content:space-between; align-items:center; gap:10px;';
+      const safeName = escapeNavHtml(itemName || 'Community Share');
+      const safeHub = escapeNavHtml(hubLabel || 'Local Community Hub');
+      const safeBadge = escapeNavHtml(badgeLabel || 'Solidarity Share');
+      row.innerHTML = `
+        <div style="min-width:0;">
+          <div style="font-size:13px; font-weight:700;"><span class="basket-row-qty">${qty}</span>x ${safeName}</div>
+          <div class="mono-sub" style="margin:4px 0 0;">${safeHub}</div>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px; flex-shrink:0;">
+          <span class="olive-badge">${safeBadge}</span>
+          <button type="button" class="basket-remove-btn" title="Remove from basket" aria-label="Remove item" onclick="removeBasketItem(this)">✕</button>
+        </div>
+      `;
+      return row;
+    }
+
     function adjustQty(id, delta) {
       const el = document.getElementById('qty-' + id);
-      let next = Math.max(0, parseInt(el.textContent, 10) + delta);
+      if (!el) return;
+      const next = Math.max(0, parseInt(el.textContent, 10) + delta);
       el.textContent = next;
-      basketCount = Math.max(1, basketCount + delta);
+
+      const listEl = document.getElementById('dynamic-basket-items-list');
+      if (listEl) {
+        const existingRow = listEl.querySelector(`.basket-item-row[data-stepper-id="${id}"]`);
+        if (next === 0) {
+          if (existingRow) existingRow.remove();
+        } else if (existingRow) {
+          existingRow.dataset.qty = String(next);
+          const qtySpan = existingRow.querySelector('.basket-row-qty');
+          if (qtySpan) qtySpan.textContent = String(next);
+        } else if (STEPPER_BASKET_DEFAULTS[id]) {
+          const meta = STEPPER_BASKET_DEFAULTS[id];
+          listEl.prepend(createBasketRowElement({
+            itemName: meta.name,
+            hubLabel: meta.hub,
+            badgeLabel: meta.badge,
+            qty: next,
+            stepperId: id
+          }));
+        }
+      }
       updateBasketLabels();
     }
 
     function addItemToBasket(btn, itemName, hubLabel) {
-      basketCount += 1;
-      if (btn) btn.textContent = '✓ Added';
-      updateBasketLabels();
+      if (btn) {
+        if (!btn.dataset.origLabel) btn.dataset.origLabel = btn.textContent.trim();
+        btn.textContent = '✓ Added';
+      }
 
       const listEl = document.getElementById('dynamic-basket-items-list');
       if (listEl && itemName) {
-        const row = document.createElement('div');
-        row.style.cssText = 'display:flex; justify-content:space-between; align-items:flex-start; padding-top:8px; border-top:1px solid rgba(255,255,255,0.2);';
-        row.innerHTML = `
-          <div>
-            <div style="font-size:13px; font-weight:700;">1x ${itemName}</div>
-            <div class="mono-sub" style="margin-top:4px;">${hubLabel || 'Local Community Hub'}</div>
-          </div>
-          <span class="olive-badge">Solidarity Share</span>
-        `;
+        const row = createBasketRowElement({
+          itemName,
+          hubLabel: hubLabel || 'Local Community Hub',
+          badgeLabel: 'Solidarity Share',
+          qty: 1
+        });
+        if (btn) {
+          row._sourceButton = btn;
+          row._sourceButtonLabel = btn.dataset.origLabel;
+        }
         listEl.appendChild(row);
+      } else {
+        basketCount += 1;
       }
-      showToast(`Added "${itemName || 'Community Share'}" to your Multi-Hub Care Basket!`);
+      updateBasketLabels();
+      showToast(`Added "${itemName || 'Community Share'}" to your Mutual-Aid Basket!`);
+    }
+
+    function removeBasketItem(btn) {
+      const row = btn ? btn.closest('.basket-item-row') : null;
+      if (!row) return;
+      const itemName = row.dataset.itemName || 'Item';
+      const stepperId = row.dataset.stepperId;
+      if (stepperId) {
+        const qtyEl = document.getElementById('qty-' + stepperId);
+        if (qtyEl) qtyEl.textContent = '0';
+      }
+      if (row._sourceButton && row._sourceButtonLabel) {
+        row._sourceButton.textContent = row._sourceButtonLabel;
+      }
+      row.remove();
+      updateBasketLabels();
+      showToast(`Removed "${itemName}" from your Mutual-Aid Basket.`);
     }
 
     function updateBasketLabels() {
-      document.getElementById('nav-basket-label').textContent = `Basket (${basketCount})`;
-      document.getElementById('basket-item-count').textContent = basketCount;
+      const listEl = document.getElementById('dynamic-basket-items-list');
+      const emptyEl = document.getElementById('basket-empty-state');
+      if (listEl) {
+        const rows = Array.from(listEl.querySelectorAll('.basket-item-row'));
+        basketCount = rows.reduce((sum, r) => sum + Math.max(1, parseInt(r.dataset.qty || '1', 10) || 1), 0);
+        listEl.classList.toggle('hidden', rows.length === 0);
+        if (emptyEl) emptyEl.classList.toggle('hidden', rows.length > 0);
+      }
+      const navLabel = document.getElementById('nav-basket-label');
+      if (navLabel) navLabel.textContent = `Basket (${basketCount})`;
+      const countEl = document.getElementById('basket-item-count');
+      if (countEl) countEl.textContent = basketCount;
     }
 
     function syncHandoffNotes() {
@@ -2336,6 +2462,10 @@
     }
 
     function submitFreeDelivery() {
+      if (basketCount === 0) {
+        showToast('Your Mutual-Aid Basket is empty — tap "+ Add More" to select items first.');
+        return;
+      }
       syncHandoffNotes();
       switchMemberTab(2);
       toggleDeliveryUpdatesBanner(true);

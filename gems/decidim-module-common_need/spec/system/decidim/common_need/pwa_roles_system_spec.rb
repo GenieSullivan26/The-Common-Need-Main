@@ -134,7 +134,9 @@ RSpec.describe "The Common Need 5-Role PWA Suite System Specs", type: :system do
       expect(page).to have_content("Veteran Services: VA Disability Claim & DD-214 Support Packet")
     end
 
-    it "renders Tab 3 (Multi-Hub Care Basket) with Low-Data Dynamic Delivery Banner and Handoff toggles" do
+    it "renders Tab 3 (Mutual-Aid Basket) with item remove buttons, Low-Data Dynamic Delivery Banner, and Handoff toggles" do
+      expect(page).to have_content("Mutual-Aid Basket")
+      expect(page.body).to include('class="basket-remove-btn"')
       expect(page).to have_content("LOW-DATA DYNAMIC WINDOW • ZERO MAP TILES")
       expect(page).to have_content("Window: 2:35 PM – 2:50 PM (2 Stops Away)")
       expect(page).not_to have_content("COMMUNITY VALUE & CARE LEDGER")
